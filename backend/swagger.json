@@ -1,0 +1,188 @@
+{
+    "swagger": "2.0",
+    "info": {
+      "version": "1.0.0",
+      "title": "UR Market API",
+      "description": "UR Market Project Application API",
+      "license": {
+        "name": "MIT",
+        "url": "https://opensource.org/licenses/MIT"
+      }
+    },
+    "host": "localhost:5000",
+    "basePath": "/api",
+    "tags": [
+      {
+        "name": "Users",
+        "description": "API for users in the system"
+      }
+    ],
+    "paths": {
+      "/user/list": {
+        "get": {
+          "tags": ["Users"],
+          "summary": "Get all users in system",
+          "responses": {
+            "200": {
+              "description": "OK",
+              "schema": {
+                "$ref": "#/definitions/Users"
+              }
+            }
+          }
+        }
+      },
+      "/user/register": {
+        "post": {
+          "tags": ["Users"],
+          "description": "Register new user in system",
+          "parameters": [
+            {
+              "name": "user",
+              "in": "body",
+              "description": "User that we want to create",
+              "schema": {
+                "$ref": "#/definitions/User"
+              }
+            }
+          ],
+          "produces": ["application/json"],
+          "responses": {
+            "200": {
+              "description": "New user is created",
+              "schema": {
+                "$ref": "#/definitions/User"
+              }
+            }
+          }
+        }
+      },
+      "/user/login": {
+        "post": {
+          "tags": ["Users"],
+          "description": "Login a user in system",
+          "parameters": [
+            {
+              "name": "login",
+              "in": "body",
+              "description": "Email and password to login",
+              "schema": {
+                "$ref": "#/definitions/Login"
+              }
+            }
+          ],
+          "produces": ["application/json"],
+          "responses": {
+            "200": {
+              "description": "Logged in successfully",
+              "schema": {
+                "$ref": "#/definitions/LoginResult"
+              }
+            }
+          }
+        }
+      },
+      "/advert/list": {
+        "post": {
+          "tags": ["Product"],
+          "summary": "Get all users in system",
+          "parameters": [
+            {
+              "name": "category",
+              "in": "body",
+              "description": "Category",
+              "schema": {
+                "$ref": "#/definitions/Product"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "schema": {
+                "$ref": "#/definitions/Users"
+              }
+            }
+          }
+        }
+      },
+      "/advert/create": {
+        "post": {
+          "tags": ["Product"],
+          "description": "Create a product in the system",
+          "parameters": [
+            {
+              "name": "product",
+              "in": "body",
+              "description": "Content of a product",
+              "schema": {
+                "$ref": "#/definitions/Product"
+              }
+            }
+          ],
+          "produces": ["application/json"],
+          "responses": {
+            "200": {
+              "description": "Created a product successfully",
+              "schema": {
+                "$ref": "#/definitions/CreateProductResult"
+              }
+            }
+          }
+        }
+      }  
+    },
+    "definitions": {
+      "User": {
+        "required": ["_id", "firstName", "lastName", "email", "password"],
+        "properties": {
+          "_id": { "type": "integer", "uniqueItems": true },
+          "firstName": { "type": "string" },
+          "lastName": { "type": "string" },
+          "email": { "type": "string" },
+          "password": { "type": "string" }
+        }
+      },
+      "Users": {
+        "type": "array",
+        "$ref": "#/definitions/User"
+      },
+      "Login": {
+        "required": ["email", "password"],
+        "properties": {
+            "email": { "type": "string" },
+            "password": { "type": "string" }
+        }
+      },
+      "LoginResult": {
+        "required": ["_id", "name", "email", "token"],
+        "properties": {
+            "_id": { "type": "string", "uniqueItems": true},
+            "name": { "type": "string"},
+            "email": { "type": "string"},
+            "token": { "type": "string"}
+        }
+      },
+      "Product": {
+        "required": ["_id", "title", "price", "description", "category", "condition"],
+        "properties": {
+            "_id": { "type": "string"},
+            "title": { "type": "string"},
+            "price": { "type": "number"},
+            "description": { "type": "string"},
+            "category": { "type": "string"},
+            "condition": { "type": "string"}
+        }
+      },
+      "CreateProductResult": {
+        "required": ["_id", "message"],
+        "properties": {
+            "_id": { "type": "string", "uniqueItems": true},
+            "message": { "type": "string"}
+        }
+      }
+    },
+    "schemes": ["http"],
+    "consumes": ["application/json"],
+    "produces": ["application/json"]
+}
