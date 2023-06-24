@@ -7,7 +7,7 @@ import { MD3LightTheme as DefaultTheme, PaperProvider } from 'react-native-paper
 import { useEffect } from 'react';
 
 const HomeScreen = ({ navigation, route }) => {
-  const { setUserToken } = route.params;
+  //const { setUserToken } = route.params;
   return (
     <View style={styles.container}>
       <Text>Home Screen</Text>
@@ -20,7 +20,7 @@ const HomeScreen = ({ navigation, route }) => {
         />
 
         <Button title="Sign Out"
-          onPress={() => setUserToken(null) }
+          //onPress={() => setUserToken(null) }
           />
     </View>
   );

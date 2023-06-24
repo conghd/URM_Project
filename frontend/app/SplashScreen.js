@@ -22,6 +22,10 @@ const SplashScreen = () => {
     const [key, onChangeKey] = useState("user.token");
     const [value, onChangeValue] = useState("No values");
 
+    useEffect(() => {
+        console.log("Splash Screen");
+    }, []);
+
     return (
         <View style={styles.container}>
             <Text>Splash Screen</Text>
@@ -30,7 +34,13 @@ const SplashScreen = () => {
 }
 
 const styles = StyleSheet.create({
-    container: {},
+    container: {
+        backgroundColor: "#ffffff",
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        flexDirection: "column",
+    },
 
 });
 

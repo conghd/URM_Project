@@ -24,13 +24,19 @@ const ResetPassword = () => {
 
     return (
         <View style={styles.container}>
-            <Text>Splash Screen</Text>
+            <Text>Reset Password</Text>
         </View>
     );
 }
 
 const styles = StyleSheet.create({
-    container: {},
+    container: {
+        backgroundColor: "#ffffff",
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        flexDirection: "column",
+    },
 
 });
 

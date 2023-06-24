@@ -12,6 +12,8 @@ import ResetPassword from './app/ResetPassword';
 import DetailsScreen from './app/DetailsScreen';
 import HomeScreen from './app/HomeScreen';
 import ActivationScreen from './app/ActivationScreen';
+import { store } from './app/store';
+import { Provider } from 'react-redux';
 
 const theme = {
   ...DefaultTheme,
@@ -28,16 +30,17 @@ export default function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [userToken, setUserToken] = useState(null);
   let state = {
-    isLoading: false,
+    isLoading: true,
     isSignOut: false,
     userToken: null,
   };
 
   const getUserToken = async () => {
+    console.log("getUserToken()");
     const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
     try {
-      await sleep(8000);
+      await sleep(3000);
       //const token = "BBBBBBBBBB";
       const token = null;
       setUserToken(token);
@@ -51,40 +54,57 @@ export default function App() {
     getUserToken();
   }, []);
 
-  if (state.isLoading) {
+  if (isLoading) {
     return <SplashScreen />
   }
 
   return (
-    <PaperProvider>
-      <NavigationContainer>
-        <Stack.Navigator initialRouteName="Home">
-          { userToken == null ? (
-            <>
-              <Stack.Screen name="SignIn" component={SignInScreen} 
-                initialParams={{ setUserToken}}
-                options={{
-                  headerShown:false,
-                  ...TransitionPresets.DefaultTransition
-                }} 
+    <Provider store={store}>
+      <PaperProvider>
+        <NavigationContainer>
+          <Stack.Navigator initialRouteName="Home">
+            { userToken == null ? (
+              <>
+                <Stack.Screen name="SignIn" component={SignInScreen} 
+                  options={{
+                    headerShown:false,
+                    ...TransitionPresets.DefaultTransition
+                  }} 
+                  />
+                <Stack.Screen name="SignUp" component={SignUpScreen}
+                  options={{
+                    headerShown:false,
+                    ...TransitionPresets.DefaultTransition
+                  }} 
+                
                 />
-              <Stack.Screen name="SignUp" component={SignUpScreen} />
-              <Stack.Screen name="ResetPassword" component={ResetPassword} />
-              <Stack.Screen name="Activation" component={ActivationScreen} />
-            </>
-          ) : (
-            <>
-              <Stack.Screen name="Home" component={HomeScreen}
-                initialParams={{ setUserToken }}
-                options={{ title: "ABC",
-                ...TransitionPresets.ScaleFromCenterAndroid }} 
+                <Stack.Screen name="ResetPassword" component={ResetPassword}
+                  options={{
+                    headerShown:false,
+                    ...TransitionPresets.DefaultTransition
+                  }} 
+
+                  />
+                <Stack.Screen name="Activation" component={ActivationScreen}
+                  options={{
+                    headerShown:false,
+                    ...TransitionPresets.DefaultTransition
+                  }} 
                 />
-              <Stack.Screen name="Details" component={DetailsScreen} />
-            </>
-          ) }
-        </Stack.Navigator>
-      </NavigationContainer>
-    </PaperProvider>
+              </>
+            ) : (
+              <>
+                <Stack.Screen name="Home" component={HomeScreen}
+                  options={{ title: "ABC",
+                  ...TransitionPresets.ScaleFromCenterAndroid }} 
+                  />
+                <Stack.Screen name="Details" component={DetailsScreen} />
+              </>
+            ) }
+          </Stack.Navigator>
+        </NavigationContainer>
+      </PaperProvider>
+    </Provider>
   );
 }
 
