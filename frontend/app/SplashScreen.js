@@ -23,7 +23,7 @@ const SplashScreen = () => {
     const [value, onChangeValue] = useState("No values");
 
     useEffect(() => {
-        console.log("Splash Screen");
+        console.log("SplashScreen::useEffect()");
     }, []);
 
     return (

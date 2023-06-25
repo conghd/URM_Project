@@ -69,7 +69,7 @@ const SignInScreen = ({ navigation, route }) => {
                         to={{ screen: 'ResetPassword'}}>Forgot Password</Link>
                 </View>
                 <View
-                    style={{...styles.half, justifyContent: "flex-end", marginRight: 50}}
+                    style={{...styles.half, justifyContent: "flex-end", marginRight: 10}}
                     >
                     <Link style={styles.link}
                         to={{ screen: 'SignUp'}} >Sign Up</Link>
@@ -86,6 +86,8 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         flexDirection: "column",
+        paddingLeft: 20,
+        paddingRight: 20,
     },
     sub: {
         marginTop: 10,
@@ -96,13 +98,13 @@ const styles = StyleSheet.create({
         height: 60,
         flex: 1,
         flexDirection: "row",
-        marginLeft: 50,
+        marginLeft: 'auto',
     },
     input: {
-        flex: 0.75,
+        flex: 1,
     },
     input2: {
-        flex: 0.75,
+        flex: 1,
     },
     link: {
         textDecorationColor: "red",
