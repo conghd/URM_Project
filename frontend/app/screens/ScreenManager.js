@@ -14,7 +14,7 @@ import MainScreen from './MainScreen';
 import HomeScreen from './HomeScreen';
 import ProfileScreen from './ProfileScreen';
 import BookmarkScreen from './BookmarkScreen';
-import ActivationScreen from './screens/ActivationScreen';
+import ActivationScreen from './ActivationScreen';
 import {useSelector, useDispatch } from 'react-redux';
 import { load } from '../services/auth/authSlice';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';

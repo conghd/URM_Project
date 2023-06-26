@@ -1,6 +1,5 @@
 import axios from 'axios'
-
-import * as MyConfig from '../../config'
+import * as MyConfig from '../../../config'
 
 const API_URL = `${MyConfig.BE_BASE_URL}/advert/`
 const configure = (token) => {

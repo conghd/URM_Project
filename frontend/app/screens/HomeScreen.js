@@ -1,19 +1,39 @@
 import 'react-native-gesture-handler';
 import { StatusBar } from 'expo-status-bar';
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
-import { StyleSheet, Text, View, Button } from 'react-native';
-import { MD3LightTheme as DefaultTheme, PaperProvider } from 'react-native-paper';
-import { useEffect } from 'react';
-import { Appbar } from 'react-native-paper';
+import { StyleSheet, Text, View, FlatList } from 'react-native';
+import { useEffect, useState } from 'react';
+import { Appbar, Button } from 'react-native-paper';
+import { useDispatch, useSelector } from 'react-redux';
+import Product from '../components/Product';
+import { getAdverts, reset } from '../services/advert/advertSlice';
+
+
 
 const HomeScreen = ({ navigation, route }) => {
-  //const { setUserToken } = route.params;
-  useEffect(() => {
-    console.log("HomeScreen::useEffect()");
-  }, []);
+    const dispatch = useDispatch();
+    const {user } = useSelector((state) => state.auth);
+    const {adverts, isLoading, isError, isSuccess, message } = useSelector((state) => state.advert)
+    const [condition, setCondition] = useState({keyword: "Statistics", category: "Science"})
+    const {keyword, category} = condition;
+  
+    
+    function renderProduct({ item }) {
+        return (
+          <Product key={item._id} {...item}
+            onPress={() => {
+              navigation.navigate('ProductDetailsScreen', {
+                item: item,
+                //productId: product.id,
+              });
+            }}
+          />
+        );
+      }
 
-
+    useEffect(() => {
+        console.log("HomeScreen::useEffect()");
+        dispatch(getAdverts({params: {keyword: keyword, category: category }}));
+    }, []);
 
   return (
     <>
@@ -23,29 +43,58 @@ const HomeScreen = ({ navigation, route }) => {
         <Appbar.Action icon="magnify" onPress={() => {navigation.navigate("Search")}} />
       </Appbar.Header>
     <View style={styles.container}>
-      <Text>Home Screen</Text>
-      <Button
-        title="Go to Details"
-        onPress={() => { navigation.navigate('Details', {
-          itemId: 85,
-          otherParam: 'Anything Bla bla',
-        }); }}
+    <View style={styles.header}>
+          <Button style={styles.button} icon="tag" mode="contained" onPress={() => {
+            navigation.navigate("ProductCreationScreen");
+          }} >Sell</Button>
+          <Button style={[styles.button, {marginLeft: 50}] } icon="format-list-bulleted" mode="contained" onPress={() => console.log("Categories Pressed")} >Categories</Button>
+        </View>
+        <FlatList
+          numColumns={2}
+          horizontal={false}
+          style={styles.productsList}
+          contentContainerStyle={styles.productsListContainer}
+          keyExtractor={(product) => product._id}
+          data={adverts}
+          renderItem={renderProduct}
+          onRefresh={() => {dispatch(getAdverts(condition))}}
+          refreshing={false}
         />
-
-        <Button title="Sign Out"
-          //onPress={() => setUserToken(null) }
-          />
     </View>
     </>
   );
 };
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-    },
-
+  container: {
+    flexDirection: 'column',
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingLeft: 0,
+    paddingRight: 0,
+    paddingTop: 0,
+    paddingBottom: 0,
+    marginVertical: 0,
+  },
+  header: {
+    marginTop: 10,
+    marginBottom: 10,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  button: {
+   //color: '#686868',
+   //buttonColor: '#686868',
+  },
+  productsList: {
+    backgroundColor: '#eeeeee',
+  },
+  productsListContainer: {
+    backgroundColor: '#eeeeee',
+    paddingVertical: 0,
+    marginHorizontal: 0,
+  },
 });
 export default HomeScreen;

@@ -1,6 +1,6 @@
 import axios from 'axios'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import * as MyConfig from '../../config'
+import * as MyConfig from '../../../config'
 
 const API_URL = `${MyConfig.BE_BASE_URL}/user/`
 
