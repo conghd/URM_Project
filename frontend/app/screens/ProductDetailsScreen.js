@@ -12,6 +12,9 @@ import MapView, { Marker } from 'react-native-maps';
 const ProductDetailsScreen = ({ navigation, route }) => {
   const { item } = route.params;
   const images = item.images.map((image) => { return {url: Config.BE_RESOURCE_URL + image} });
+  if (images.length == 0) {
+    images.push({url: Config.BE_RESOURCE_URL + "/images/no-image-available.jpeg" });
+  }
   const coordinate = {
     latitude: +50.445210,
     longitude: -104.618896
@@ -32,8 +35,8 @@ const ProductDetailsScreen = ({ navigation, route }) => {
       <View style={styles.container} >
         <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.sliderBox}>
-          <Slideshow 
-            dataSource={ images }/>
+            <Slideshow 
+              dataSource={ images }/>
         </View>
         <View style={styles.header}>
             <View style={{flex: 5}}>
@@ -63,12 +66,13 @@ const ProductDetailsScreen = ({ navigation, route }) => {
             <Text style={[styles.detailsHeader, {fontWeight: "bold"}]}>Seller</Text>
             </View>
         <View style={[styles.sellerHeader, {marginTop: 0}] }>
-            <Text style={styles.seller}>{item.user.name}</Text>
+            <Text style={styles.seller}>{item.user != null ? item.user.name : "Unknown"}</Text>
             {/** 
             <Button mode="outlined" icon="send" style={styles.seller}>Message</Button >
             */}
         </View>
 
+        {/**
         <View style={styles.locationHeader}>
           <View style={styles.mapSection}>
                   <View style={styles.mapHeader} >
@@ -85,6 +89,7 @@ const ProductDetailsScreen = ({ navigation, route }) => {
                   </View>
           </View>
         </View>
+        */}
         <View style={styles.details} >
           <Text style={styles.detailsHeader}>Details</Text>
           <Text style={styles.condition}>Condition: {item.condition}</Text>
