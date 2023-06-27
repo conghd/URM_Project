@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { View, StyleSheet } from 'react-native';
-import { Button, TextInput, Text } from 'react-native-paper';
+import { Button, TextInput, Text, ActivityIndicator } from 'react-native-paper';
 import * as SecureStore from 'expo-secure-store';
 import { useState } from 'react';
 import { Link } from '@react-navigation/native';
@@ -10,7 +10,8 @@ import { login, reset } from '../services/auth/authSlice'
 
 const SignInScreen = ({ navigation, route }) => {
     const dispatch = useDispatch();
-    const {users, isSuccess, isLoading, isError, message} = useSelector((state) => state.auth);
+    const {users, isSuccess, isError, message} = useSelector((state) => state.auth);
+    const {isLoading } = useSelector((state) => state.auth.loginState);
 
     const [formData, setFormData] = useState({ email: "", password: ""});
     const {email, password} = formData;
@@ -26,6 +27,15 @@ const SignInScreen = ({ navigation, route }) => {
           return {...prev, ...value}
         });
       }
+
+      React.useEffect(() => {
+        console.log("SignIn::useEffect()");
+
+      }, []);
+
+      React.useEffect(() => {
+
+      }, [isLoading]);
 
       const handleBlur = (element) => {
         if (element === "email") {
@@ -63,6 +73,12 @@ const SignInScreen = ({ navigation, route }) => {
 
     return (
         <View style={styles.container}>
+            <View style={styles.header}>
+              <Text style={{ flex: 1, textAlign: "center", color:"#0055d2", fontSize: 40,
+                fontWeight: "bold"}}>UR MARKETPLACE</Text>
+              <View style={{ flexDirection: "row", width: "100%", justifyContent: "flex-start"}}>
+              </View>
+            </View>
             <View style={styles.sub}>
                 <Text variant="titleLarge">Sign In</Text>
             </View>
@@ -100,7 +116,7 @@ const SignInScreen = ({ navigation, route }) => {
                     onChangeText={text => { handleTextChange({password: text} )}}
                     value={password}
                     secureTextEntry
-                    right={<TextInput.Icon icon="eye" />}
+                    rigkoht={<TextInput.Icon icon="eye" />}
                     />
             </View>
 
@@ -115,10 +131,12 @@ const SignInScreen = ({ navigation, route }) => {
                 </>
             </View>
 
+            <ActivityIndicator animating={isLoading} />
+
             {/** Sign In button */}
             <View style={styles.sub}>
                 <Button 
-                    icon="camera"
+                    //icon="camera"
                     mode="contained"
                     onPress={() => handleSubmit() }
                     >
@@ -129,13 +147,13 @@ const SignInScreen = ({ navigation, route }) => {
             <View style={styles.sub}>
                 <View style={styles.half} >
                     <Link
-                        style={styles.link}
+                        style={styles.linkText}
                         to={{ screen: 'ResetPassword'}}>Forgot Password</Link>
                 </View>
                 <View
                     style={{...styles.half, justifyContent: "flex-end", marginRight: 10}}
                     >
-                    <Link style={styles.link}
+                    <Link style={styles.linkText}
                         to={{ screen: 'SignUp'}} >Sign Up</Link>
                 </View>
             </View>
@@ -160,6 +178,11 @@ const styles = StyleSheet.create({
         paddingLeft: 20,
         paddingRight: 20,
     },
+    header: {
+        marginTop: 100,
+        flex: 1,
+        flexDirection: "column",
+      },
     sub: {
         marginTop: 10,
         flexDirection: "row",
@@ -182,6 +205,11 @@ const styles = StyleSheet.create({
         textDecorationStyle: "solid",
         textDecorationLine: "underline",
     },
+    linkText: {
+        color: "#176fdb",
+        fontSize: 16,
+        textDecorationLine: "underline",
+    },
     bottom: {
         marginTop: 80,
         flex: 1,
@@ -189,6 +217,13 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "center",
         width: 360,
+      },
+    
+      errorText: {
+        flex: 1,
+        paddingLeft: 40,
+        fontSize: 12,
+        color: 'red',
       },
 
 });

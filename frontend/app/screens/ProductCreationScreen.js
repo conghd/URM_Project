@@ -182,13 +182,13 @@ const ProductCreationScreen = ({ navigation, route }) => {
         <View style={styles.input}>
           <TextInput label="Title" value={title}
           onChangeText={text => {handleTextChange({title: text})}}
-          mode="outlined" outlineColor='red'
+          mode="outlined" 
           />
         </View>
         <View style={styles.input}>
           <TextInput label="Description" value={description}
           onChangeText={text => { handleTextChange({description: text})}}
-          mode="outlined" multiline={true} numberOfLines={3}
+          mode="outlined" multiline={true} 
           />
         </View>
         <View style={styles.input}>

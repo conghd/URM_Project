@@ -119,7 +119,7 @@ const SignUpScreen = ({navigation}) => {
       <View style={styles.container} >
         <View style={styles.header}>
           <Text style={{ flex: 1, textAlign: "center", color:"#0055d2", fontSize: 40,
-            fontWeight: "bold"}}>UR MARKET</Text>
+            fontWeight: "bold"}}>UR MARKETPLACE</Text>
           <Text style={styles.text}>Create a new account</Text>
           <View style={{ flexDirection: "row", width: "100%", justifyContent: "flex-start"}}>
           </View>
@@ -147,6 +147,7 @@ const SignUpScreen = ({navigation}) => {
             onChangeText={text => { handleTextChange({email: text} )}}
             value={email}
             keyboardType="email-address"
+            right={<TextInput.Affix text="@uregina.ca" />}
           />
           <View style={{ flexDirection: "row", width: "100%", justifyContent: "flex-start"}}>
             {(errors.email ) &&
