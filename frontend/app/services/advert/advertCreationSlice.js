@@ -48,6 +48,7 @@ export const advertCreationSlice = createSlice({
       .addCase(createAdvert.fulfilled, (state, action) => {
         state.isLoading = false
         state.isSuccess = true
+        console.log(action.payload);
         //state.adverts.push(action.payload)
       })
       .addCase(createAdvert.rejected, (state, action) => {

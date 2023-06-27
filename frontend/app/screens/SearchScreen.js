@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { Text, View, StyleSheet, TextInput, Button } from 'react-native';
 import * as SecureStore from 'expo-secure-store';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useNavigation } from '@react-navigation/native';
 
 
 async function save(key, value) {
@@ -18,10 +19,30 @@ async function getValueFor(key) {
     }
 }
 
-const SearchScreen = () => {
+const SearchScreen = ({navigation, route}) => {
     const [key, onChangeKey] = useState("user.token");
     const [value, onChangeValue] = useState("No values");
+    const nav = useNavigation();
 
+    useEffect(() => {
+        console.log("SearchScreen::useEffect()");
+
+    }, []);
+
+    useEffect(() => {
+        navigation.setOptions({
+            headerTitle: "TEST",
+            
+            headerSearchBarOptions: {
+            },
+
+            headerSearchBarOptions: {
+                placeholder: "Search",
+                
+            }
+        });
+
+    }, []);
     return (
         <View style={styles.container}>
             <Text>Search Screen</Text>

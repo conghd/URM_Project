@@ -3,6 +3,7 @@ import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState } from "react";
 import { NavigationContainer } from '@react-navigation/native';
 import { TransitionPresets, createStackNavigator } from '@react-navigation/stack';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { StyleSheet, Text, View, Button } from 'react-native';
 import { MD3LightTheme as DefaultTheme, PaperProvider } from 'react-native-paper';
 import SplashScreen from "./SplashScreen";
@@ -19,6 +20,8 @@ import {useSelector, useDispatch } from 'react-redux';
 import { load } from '../services/auth/authSlice';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import SearchScreen from './SearchScreen';
+import ProductCreationScreen from './ProductCreationScreen';
+import ProductDetailsScreen from './ProductDetailsScreen';
 
 const theme = {
   ...DefaultTheme,
@@ -30,7 +33,8 @@ const theme = {
   },
 };
 
-const Stack = createStackNavigator();
+//const Stack = createStackNavigator();
+const Stack = createNativeStackNavigator();
 const Tab = createMaterialBottomTabNavigator();
 
 export default function ScreenManager() {
@@ -85,17 +89,30 @@ export default function ScreenManager() {
                 />
               </>
             ) : (
-              <>
+              <Stack.Group>
                 <Stack.Screen name="Main" component={MainScreen}
-                  options={{ title: "UR Marketplace",
-                  headerShown:false,
-                  headerTintColor: 'white',
-                  headerStyle: { backgroundColor: '#004e2e' },
-                  ...TransitionPresets.ModalFadeTransition}} 
+                  options={{
+                    //title: "UR Marketplace",
+                    headerShown:false,
+                    headerTintColor: 'white',
+                    headerStyle: { backgroundColor: '#004e2e' },
+                    ...TransitionPresets.ScaleFromCenterAndroid
+                  }} 
                   />
                 <Stack.Screen name="Details" component={DetailsScreen} />
                 <Stack.Screen name="Search" component={SearchScreen} />
-              </>
+                <Stack.Screen name="ProductCreation" component={ProductCreationScreen}
+                  options={{
+                    headerTitle: "New Listing"
+                  }
+                  } />
+                <Stack.Screen name="ProductDetails" component={ProductDetailsScreen}
+                  options={{
+                    headerTitle: ""
+                  }}
+                
+                />
+              </Stack.Group>
             ) }
           </Stack.Navigator>
         </NavigationContainer>

@@ -1,15 +1,33 @@
 import React from 'react';
+import { useEffect } from 'react';
 
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import HomeScreen from './HomeScreen'
+import HomeStackScreen from './HomeStackScreen';
 import ProfileScreen from './ProfileScreen'
 import MessengerScreen from './MessengerScreen';
 import BookmarkScreen from './BookmarkScreen';
+import SearchScreen from './SearchScreen';
 
 const Tab = createMaterialBottomTabNavigator();
 
 const MainScreen = ({ navigation }) => {
+    useEffect(() => {
+        console.log("MainScreen::useEffect()");
+        navigation.setOptions({
+            headerTitle: "MAIN",
+            
+            headerSearchBarOptions: {
+            },
+
+            headerSearchBarOptions: {
+                placeholder: "Search",
+                
+            }
+        });
+    }, []);
+
     return (
         <Tab.Navigator
             initialRouteName="Home" 
@@ -21,8 +39,7 @@ const MainScreen = ({ navigation }) => {
                 name="Home"
                 component={HomeScreen}
                 options={{
-                    headerShown: true,
-                    headerTitle: "UR Market",
+                    headerShown: false,
                     tabBarLabel: "Home",
                     tabBarIcon: ({ color }) => (
                         <MaterialCommunityIcons name="home" color={color} size={26} />
@@ -30,6 +47,19 @@ const MainScreen = ({ navigation }) => {
                     headerTitleAlign: "center",
                 }}
             />
+            {/**
+            <Tab.Screen
+                name="Search"
+                component={SearchScreen}
+                options={{
+                    headerTitle: "Search",
+                    tabBarLabel: "Search",
+                    tabBarIcon: ({ color }) => (
+                        <MaterialCommunityIcons name="magnify" color={color} size={26} />
+                    ),
+                }}
+            />
+             */}
             <Tab.Screen
                 name="BookmarkScreen"
                 component={BookmarkScreen}
@@ -41,6 +71,7 @@ const MainScreen = ({ navigation }) => {
                     ),
                 }}
             />
+            {/**
             <Tab.Screen
                 name="Messenger"
                 component={MessengerScreen}
@@ -52,6 +83,7 @@ const MainScreen = ({ navigation }) => {
                     ),
                 }}
             />
+            */ }
             <Tab.Screen
                 name="Profile"
                 component={ProfileScreen}

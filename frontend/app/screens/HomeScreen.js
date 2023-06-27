@@ -21,7 +21,7 @@ const HomeScreen = ({ navigation, route }) => {
         return (
           <Product key={item._id} {...item}
             onPress={() => {
-              navigation.navigate('ProductDetailsScreen', {
+              navigation.navigate('ProductDetails', {
                 item: item,
                 //productId: product.id,
               });
@@ -35,20 +35,23 @@ const HomeScreen = ({ navigation, route }) => {
         dispatch(getAdverts({params: {keyword: keyword, category: category }}));
     }, []);
 
+
+    useEffect(() => {
+      console.log("HomeScreen::useEffect - navigation");
+    }, [navigation]);
+
   return (
     <>
-      <Appbar.Header >
-        <Appbar.Content title="UR Marketplace" />
-        <Appbar.Action icon="plus" onPress={() => {}} />
-        <Appbar.Action icon="magnify" onPress={() => {navigation.navigate("Search")}} />
+      <Appbar.Header 
+        style={{backgroundColor: '#004e2e'}}
+      >
+        <Appbar.Content title="UR Marketplace" color='white'/>
+        <Appbar.Action icon="plus"
+          onPress={() => { navigation.navigate("ProductCreation")}}
+          color='white' backgroundColor='#004e2e' />
       </Appbar.Header>
+
     <View style={styles.container}>
-    <View style={styles.header}>
-          <Button style={styles.button} icon="tag" mode="contained" onPress={() => {
-            navigation.navigate("ProductCreationScreen");
-          }} >Sell</Button>
-          <Button style={[styles.button, {marginLeft: 50}] } icon="format-list-bulleted" mode="contained" onPress={() => console.log("Categories Pressed")} >Categories</Button>
-        </View>
         <FlatList
           numColumns={2}
           horizontal={false}
