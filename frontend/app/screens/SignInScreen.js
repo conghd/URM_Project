@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import { Button, TextInput, Text, ActivityIndicator } from 'react-native-paper';
 import * as SecureStore from 'expo-secure-store';
 import { useState } from 'react';
@@ -22,6 +22,10 @@ const SignInScreen = ({ navigation, route }) => {
     const [activationCode, setActivationCode] = useState("");
     //const { setUserToken } = route.params;
 
+    const resetForm = () => {
+        setFormData((prev) => {return {email: "", password: ""}});
+        setErrors({email: "", password: ""});
+    }
     const handleTextChange = (value) => {
         return setFormData((prev) => {
           return {...prev, ...value}
@@ -103,7 +107,7 @@ const SignInScreen = ({ navigation, route }) => {
                 <TextInput style={styles.input}
                     mode="outlined"
                     label="Email"
-                    placeholder="Email"
+                    placeholder="User ID"
                     onBlur={() => handleBlur("email")}
                     onChangeText={text => { handleTextChange({email: text} )}}
                     value={email} 
@@ -164,8 +168,13 @@ const SignInScreen = ({ navigation, route }) => {
                 <View
                     style={{...styles.half, justifyContent: "flex-end", marginRight: 10}}
                     >
+                    <TouchableOpacity onPress={() => { navigation.navigate("SignUp") }}>
+                      <Text style={[styles.linkText, {flex: 1, textAlign: "center"} ]}>Sign Up</Text>
+                    </TouchableOpacity>
+                    {/** 
                     <Link style={styles.linkText}
                         to={{ screen: 'SignUp'}} >Sign Up</Link>
+                    */}
                 </View>
             </View>
 

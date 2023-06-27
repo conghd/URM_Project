@@ -17,7 +17,7 @@ import { TextInput, ActivityIndicator, Button } from 'react-native-paper';
 
 import { register, reset } from '../services/auth/registerSlice';
 
-const SignUpScreen = ({navigation}) => {
+const SignUpScreen = ({navigation, route}) => {
   const [registerFirst, setRegisterFirst] = useState(true); 
   const dispatch = useDispatch();
   //const [formData, setFormData] = useState({ name: "Hoang Duc Cong", email: "conghd@gmail.com", password: "abc13579"});
@@ -147,6 +147,7 @@ const SignUpScreen = ({navigation}) => {
           <TextInput
             mode='outlined'
             label="Email (Required)"
+            placeholder="User ID"
             style={styles.textInput}
             onBlur={() => handleBlur("email")}
             onChangeText={text => { handleTextChange({email: text} )}}
@@ -196,7 +197,9 @@ const SignUpScreen = ({navigation}) => {
          */}
         <View style={{ flex: 1, flexDirection: "column", alignItems: "center", marginTop: 0}}>
           <Text style={[styles.text, {flex: 1, textAlign: "center", marginTop: 10 } ]}>or</Text>
-          <TouchableOpacity onPress={() => { navigation.navigate("SignIn") }}>
+          <TouchableOpacity onPress={() => { 
+            navigation.navigate("SignIn");
+             }}>
             <Text style={[styles.linkText, {flex: 1, textAlign: "center"} ]}>Sign In</Text>
           </TouchableOpacity>
         </View>
