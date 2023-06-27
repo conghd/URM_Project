@@ -37,8 +37,7 @@ const SignInScreen = ({ navigation, route }) => {
 
       }, [isLoading]);
 
-      const handleBlur = (element) => {
-        if (element === "email") {
+      const validateEmail = () => {
           //let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
           let reg = /^\w+([\.-]?\w+)*$/;
           let msg = "Email address format is invalid";
@@ -46,29 +45,44 @@ const SignInScreen = ({ navigation, route }) => {
             msg = ""
           }
     
-          setErrors((prev) => {return {...prev, email: msg}});
-        } else if (element === "password") {
+          return msg;
+          //setErrors((prev) => {return {...prev, email: msg}});
+      }
+      const validatePassword = () => {
+        console.log("validatePassword");
+        console.log(password);
           let msg = "Password must be at least 8 characters.";
-          if (password && password.length >= 8) {
+          if (password !== "" && password.length >= 8) {
               msg = "";
           }
-          setErrors((prev) => {return {...prev, password: msg}});
+          return msg;
+          //setErrors((prev) => {return {...prev, password: msg}});
+      }
+      const handleBlur = (element) => {
+        let msg;
+        if (element === "email") {
+            msg = validateEmail();
+            setErrors((prev) => {return {...prev, email: msg}});
+        } else if (element === "password") {
+            msg = validatePassword();
+            setErrors((prev) => {return {...prev, password: msg}});
         }
-    
+
         console.log(element);
       }
     
       const handleSubmit = (e) => {
         //e.preventDefault();
-        if (errors.email != "" || errors.password != "") {
+        let emailMsg = validateEmail();
+        let pwMsg = validatePassword();
+        setErrors((prev) => { return {email: emailMsg, password: pwMsg}; });
+        if (errors.email != "" || errors.password != "" ) {
           return;
         }
 
         //dispatch(reset());
         //setAnimating(true);
-        setTimeout(() => {
-          dispatch(login({email: `${email}@uregina.ca`, password: password}));
-        }, 1000);
+        dispatch(login({email: `${email}@uregina.ca`, password: password}));
       }
 
     return (
@@ -120,13 +134,10 @@ const SignInScreen = ({ navigation, route }) => {
                     />
             </View>
 
-            <View style={{ alignSelf: "flex-start", flexDirection: "column", width: "100%", alignItems: "flex-start" }}>
+            <View style={{ alignSelf: "flex-start", flexDirection: "row", width: "100%", alignItems: "flex-start" }}>
                 <>
                 {(errors.password) &&
-                  <Text style={[styles.errorText, {flex: 1}] }>{errors.password}</Text>
-                }
-                {(errors.other) &&
-                  <Text style={[styles.errorText, {paddingTop: 15}] }>{errors.other}</Text>
+                  <Text style={styles.errorText }>{errors.password}</Text>
                 }
                 </>
             </View>

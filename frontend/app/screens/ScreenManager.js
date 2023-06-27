@@ -72,8 +72,8 @@ export default function ScreenManager() {
                     headerShown:false,
                     ...TransitionPresets.DefaultTransition
                   }} 
-                
                 />
+
                 <Stack.Screen name="ResetPassword" component={ResetPassword}
                   options={{
                     headerShown:false,

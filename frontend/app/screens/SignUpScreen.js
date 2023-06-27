@@ -73,18 +73,23 @@ const SignUpScreen = ({navigation}) => {
   }
 
   useEffect(() => {
+    dispatch(reset());
+
+  }, []);
+
+  useEffect(() => {
     console.log("RegisterScreen::useEffect");
     console.log("isSuccess: " + isSuccess);
     console.log("isError: " + isError);
     console.log("message: " + message);
     console.log("isLoading: " + isLoading);
-    if (registerFirst) {
-      console.log("registerFirst");
-      dispatch(reset());
-      setTimeout(() => {
-        setRegisterFirst(false);
-      }, 1000);
-    }
+    //if (registerFirst) {
+    //  console.log("registerFirst");
+    //  dispatch(reset());
+    //  setTimeout(() => {
+    //    setRegisterFirst(false);
+    //  }, 1000);
+    //}
     if (isError) {
       console.log("Message: " + JSON.stringify(message));
     }
@@ -176,7 +181,7 @@ const SignUpScreen = ({navigation}) => {
         <ActivityIndicator animating={animating} />
             <View style={styles.sub}>
                 <Button 
-                    icon="camera"
+                    //icon="camera"
                     mode="contained"
                     onPress={() => handleSubmit() }
                     >
