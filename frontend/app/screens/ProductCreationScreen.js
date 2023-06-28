@@ -29,8 +29,8 @@ const ProductCreationScreen = ({ navigation, route }) => {
     price: 0,
     description: "",
     phoneNumber: "1111111",
-    location: "",
-    category: "",
+    location: "Regina, SK",
+    category: "CS",
     condition: "",
   });
   const [images, setImages] = useState([
@@ -204,11 +204,13 @@ const ProductCreationScreen = ({ navigation, route }) => {
           mode="outlined"
           />
         </View>
+        {/** 
         <View style={styles.input}>
           <TextInput label="Category" value={category} onChangeText={text => { handleTextChange({category: text})}}
           mode="outlined"
           />
         </View>
+        */}
         <View style={styles.input}>
           <TextInput label="Condition" value={condition} onChangeText={text => { handleTextChange({condition: text })}}
           mode="outlined"

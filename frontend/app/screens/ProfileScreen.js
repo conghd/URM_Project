@@ -77,7 +77,7 @@ const ProfileScreen = () => {
               style={styles.productsList}
               contentContainerStyle={styles.productsListContainer}
               keyExtractor={(product) => product._id}
-              data={adverts.filter(advert => advert.user === user._id)}
+              data={adverts}
               renderItem={renderProduct}
               onRefresh={() => {dispatch(getAdverts(condition))}}
               refreshing={false}
