@@ -59,7 +59,7 @@ export default function ScreenManager() {
             initialRouteName="Home"
             
             >
-            { user == null ? (
+            { (user == null || user.activated == false) ? (
               <>
                 <Stack.Screen name="SignIn" component={SignInScreen} 
                   options={{

@@ -14,7 +14,7 @@ const Product = ({ _id, title, price, images, onPress }) => {
                 ({uri: Config.BE_RESOURCE_URL + "/images/no-image-available.jpeg"})
           } />
           <Text style={styles.name}>{title}</Text>
-          <Text style={styles.price}>$ {price}</Text>
+          <Text style={styles.price}>{(price === '0' || price === 0 || price === '') ? "FREE": `$${price}` }</Text>
         </View>
       </TouchableOpacity>
   );

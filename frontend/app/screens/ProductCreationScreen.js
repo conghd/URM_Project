@@ -85,7 +85,7 @@ const ProductCreationScreen = ({ navigation, route }) => {
 
   useEffect(() => {
     if (isSuccess) {
-        Alert.alert("Success", "The new listing has been created successfully");
+        //Alert.alert("Success", "The new listing has been created successfully");
         navigation.navigate("Main", {screen: "Home"});
     }
 

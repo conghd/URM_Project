@@ -10,16 +10,12 @@ import { login, reset } from '../services/auth/authSlice'
 
 const SignInScreen = ({ navigation, route }) => {
     const dispatch = useDispatch();
-    const {users, isSuccess, isError, message} = useSelector((state) => state.auth);
-    const {isLoading } = useSelector((state) => state.auth.loginState);
+    const {users, isSuccess, isError } = useSelector((state) => state.auth);
+    const {isLoading, message } = useSelector((state) => state.auth.loginState);
 
     const [formData, setFormData] = useState({ email: "", password: ""});
     const {email, password} = formData;
     const [errors, setErrors] = useState({email: "", password: "", other: ""});
-    const [animating, setAnimating] = useState(false);
-    const [modalAnimating, setModalAnimating] = useState(false);
-    const [modalVisible, setModalVisible] = useState(false);
-    const [activationCode, setActivationCode] = useState("");
     //const { setUserToken } = route.params;
 
     const resetForm = () => {
@@ -93,7 +89,7 @@ const SignInScreen = ({ navigation, route }) => {
         <View style={styles.container}>
             <View style={styles.header}>
               <Text style={{ flex: 1, textAlign: "center", color:"#0055d2", fontSize: 40,
-                fontWeight: "bold"}}>UR MARKETPLACE</Text>
+                fontWeight: "bold"}}>URM</Text>
               <View style={{ flexDirection: "row", width: "100%", justifyContent: "flex-start"}}>
               </View>
             </View>
@@ -120,6 +116,7 @@ const SignInScreen = ({ navigation, route }) => {
                     {(errors.email ) &&
                       <Text style={styles.errorText}>{errors.email}</Text>
                     }
+                    
                     </>
                 </View>
 
@@ -138,10 +135,13 @@ const SignInScreen = ({ navigation, route }) => {
                     />
             </View>
 
-            <View style={{ alignSelf: "flex-start", flexDirection: "row", width: "100%", alignItems: "flex-start" }}>
+            <View style={{ alignSelf: "flex-start", flexDirection: "column", width: "100%", alignItems: "flex-start" }}>
                 <>
                 {(errors.password) &&
                   <Text style={styles.errorText }>{errors.password}</Text>
+                }
+                {(message) &&
+                    <Text style={styles.errorText}>{message}</Text>
                 }
                 </>
             </View>
@@ -161,9 +161,14 @@ const SignInScreen = ({ navigation, route }) => {
             {/* This is the links to others  */}
             <View style={styles.sub}>
                 <View style={styles.half} >
+                    {/** 
                     <Link
                         style={styles.linkText}
                         to={{ screen: 'ResetPassword'}}>Forgot Password</Link>
+                    */}
+                    <TouchableOpacity onPress={() => { navigation.navigate("ResetPassword") }}>
+                      <Text style={[styles.linkText, {flex: 1, textAlign: "center"} ]}>Forgot Password</Text>
+                    </TouchableOpacity>
                 </View>
                 <View
                     style={{...styles.half, justifyContent: "flex-end", marginRight: 10}}
@@ -223,12 +228,10 @@ const styles = StyleSheet.create({
     link: {
         textDecorationColor: "red",
         textDecorationStyle: "solid",
-        textDecorationLine: "underline",
     },
     linkText: {
         color: "#176fdb",
         fontSize: 16,
-        textDecorationLine: "underline",
     },
     bottom: {
         marginTop: 80,

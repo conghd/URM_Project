@@ -7,7 +7,7 @@ import { Text,
 } from 'react-native'
 import { Button, IconButton } from 'react-native-paper';
 import Slideshow from 'react-native-image-slider-show';
-import MapView, { Marker } from 'react-native-maps';
+//import MapView, { Marker } from 'react-native-maps';
 
 const ProductDetailsScreen = ({ navigation, route }) => {
   const { item } = route.params;
@@ -15,6 +15,7 @@ const ProductDetailsScreen = ({ navigation, route }) => {
   if (images.length == 0) {
     images.push({url: Config.BE_RESOURCE_URL + "/images/no-image-available.jpeg" });
   }
+  const [bookmark, setBookmark] = useState(false);
   const coordinate = {
     latitude: +50.445210,
     longitude: -104.618896
@@ -42,13 +43,13 @@ const ProductDetailsScreen = ({ navigation, route }) => {
             <View style={{flex: 5}}>
               <Text style={styles.title }>{item.title}</Text>
               <Text style={styles.price}>
-              { (item.price === 0 || item.price === "") ? ("FREE") : ("$" + item.price)}
+              { (item.price === 0 || item.price === "0" || item.price === "") ? ("FREE") : ("$" + item.price)}
               </Text>
             </View>
             <View style={{flex: 1}}>
-              <IconButton icon="bookmark"
+              <IconButton icon={bookmark ? "bookmark" : "bookmark-outline"}
                 size={50}
-                onPress={() => console.log("Bookmark")}
+                onPress={() => { setBookmark(!bookmark)}}
                 iconColor='gray'
                 
                 />

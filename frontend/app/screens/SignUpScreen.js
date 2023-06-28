@@ -103,7 +103,7 @@ const SignUpScreen = ({navigation, route}) => {
       console.log("Message: " + message);
       setAnimating(false);
       setTimeout(() => {
-      Alert.alert("Success", "Account registration has been completed. An activation code has been sent to your email. You should activate in the first log in");
+        //Alert.alert("Success", "Account registration has been completed. An activation code has been sent to your email. You should activate in the first log in");
         navigation.navigate('SignIn');
       }, 1000)
     }
@@ -124,7 +124,7 @@ const SignUpScreen = ({navigation, route}) => {
       <View style={styles.container} >
         <View style={styles.header}>
           <Text style={{ flex: 1, textAlign: "center", color:"#0055d2", fontSize: 40,
-            fontWeight: "bold"}}>UR MARKETPLACE</Text>
+            fontWeight: "bold"}}>URM</Text>
           <Text style={styles.text}>Create a new account</Text>
           <View style={{ flexDirection: "row", width: "100%", justifyContent: "flex-start"}}>
           </View>
@@ -140,8 +140,8 @@ const SignUpScreen = ({navigation, route}) => {
             keyboardType="name-phone-pad"
           />
           <View style={{ flexDirection: "row", width: "100%", justifyContent: "flex-start"}}>
-            {(errors.email ) &&
-              <Text style={styles.errorText}>{errors.email}</Text>
+            {(errors.name) &&
+              <Text style={styles.errorText}>{errors.name}</Text>
             }
           </View>
           <TextInput
