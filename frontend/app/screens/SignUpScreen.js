@@ -13,9 +13,12 @@ import {
   //Button,
   Alert
 } from 'react-native';
-import { TextInput, ActivityIndicator, Button } from 'react-native-paper';
-
+import { HelperText, TextInput, ActivityIndicator, Button } from 'react-native-paper';
+import { theme } from '../constants';
 import { register, reset } from '../services/auth/registerSlice';
+import EmailInput from '../components/EmailInput';
+import PasswordInput from '../components/PasswordInput';
+import AuthFooter from '../components/AuthFooter';
 
 const SignUpScreen = ({navigation, route}) => {
   const [registerFirst, setRegisterFirst] = useState(true); 
@@ -55,7 +58,6 @@ const SignUpScreen = ({navigation, route}) => {
       let msg = (name && name.length > 0) ? "" : "Name must be not empty";
       setErrors((prev) => {return {...prev, name: msg}});
     }
-
   }
 
   const handleSubmit = (e) => {
@@ -74,22 +76,9 @@ const SignUpScreen = ({navigation, route}) => {
 
   useEffect(() => {
     dispatch(reset());
-
   }, []);
 
   useEffect(() => {
-    console.log("RegisterScreen::useEffect");
-    console.log("isSuccess: " + isSuccess);
-    console.log("isError: " + isError);
-    console.log("message: " + message);
-    console.log("isLoading: " + isLoading);
-    //if (registerFirst) {
-    //  console.log("registerFirst");
-    //  dispatch(reset());
-    //  setTimeout(() => {
-    //    setRegisterFirst(false);
-    //  }, 1000);
-    //}
     if (isError) {
       console.log("Message: " + JSON.stringify(message));
     }
@@ -120,16 +109,14 @@ const SignUpScreen = ({navigation, route}) => {
   }, [isSuccess, isError, message]);
 
     return (
-      <ScrollView showsVerticalScrollIndicator={false}>
-      <View style={styles.container} >
-        <View style={styles.header}>
-          <Text style={{ flex: 1, textAlign: "center", color:"#0055d2", fontSize: 40,
-            fontWeight: "bold"}}>URM</Text>
-          <Text style={styles.text}>Create a new account</Text>
-          <View style={{ flexDirection: "row", width: "100%", justifyContent: "flex-start"}}>
-          </View>
+      <View style={theme.STYLE.container} >
+        <View style={theme.STYLE.header}>
+          <Text style={theme.STYLE.headerText}>URM</Text>
         </View>
-        <View style={styles.loginSection}>
+        <View style={theme.STYLE.sub}>
+          <Text variant="titleLarge">Create a new account</Text>
+        </View>
+        <View style={theme.STYLE.sub}>
           <TextInput
             mode='outlined'
             label="Name (Required)"
@@ -139,47 +126,26 @@ const SignUpScreen = ({navigation, route}) => {
             value={name}
             keyboardType="name-phone-pad"
           />
-          <View style={{ flexDirection: "row", width: "100%", justifyContent: "flex-start"}}>
-            {(errors.name) &&
-              <Text style={styles.errorText}>{errors.name}</Text>
-            }
+        </View>
+          <View style={theme.STYLE.sub}>
+              <EmailInput 
+                  handleTextChange={handleTextChange}
+                  handleErrors={console.log("handleErrors")}
+                  />
+          
           </View>
-          <TextInput
-            mode='outlined'
-            label="Email (Required)"
-            placeholder="User ID"
-            style={styles.textInput}
-            onBlur={() => handleBlur("email")}
-            onChangeText={text => { handleTextChange({email: text} )}}
-            value={email}
-            keyboardType="email-address"
-            right={<TextInput.Affix text="@uregina.ca" />}
-          />
-          <View style={{ flexDirection: "row", width: "100%", justifyContent: "flex-start"}}>
-            {(errors.email ) &&
-              <Text style={styles.errorText}>{errors.email}</Text>
-            }
+          <View style={theme.STYLE.sub}>
+            <PasswordInput
+              handleTextChange={handleTextChange}
+            />
           </View>
-          <TextInput
-            mode='outlined'
-            label="Password (Required)"
-            style={styles.textInput}
-            onBlur={() => handleBlur("password")}
-            onChangeText={text => { handleTextChange({password: text} )}}
-            value={password}
-            secureTextEntry
-          />
-          <View style={{ flexDirection: "row", width: "100%", justifyContent: "flex-start"}}>
-          {(errors.password) &&
-            <Text style={styles.errorText}>{errors.password}</Text>
-          }
-          </View>
-          <View style={{ flexDirection: "row", width: "100%", justifyContent: "flex-start"}}>
-          {(errors.other) &&
-            <Text style={[styles.errorText, {paddingTop: 15}] }>{errors.other}</Text>
-          }
-          </View>
-        <ActivityIndicator animating={animating} />
+            <View style={theme.STYLE.sub}>
+              <HelperText type="error" visible={message != ""}>
+                {message}
+              </HelperText>
+            </View>
+
+            <ActivityIndicator animating={isLoading} />
             <View style={styles.sub}>
                 <Button 
                     //icon="camera"
@@ -189,50 +155,27 @@ const SignUpScreen = ({navigation, route}) => {
                     Sign Up
                 </Button>
             </View>
-        {/**
-         * 
-            <TouchableOpacity onPress={handleSubmit} style={styles.btn}>
-              <Text style={styles.btn_text}>Create New Account</Text>
-            </TouchableOpacity>
-         */}
-        <View style={{ flex: 1, flexDirection: "column", alignItems: "center", marginTop: 0}}>
-          <Text style={[styles.text, {flex: 1, textAlign: "center", marginTop: 10 } ]}>or</Text>
-          <TouchableOpacity onPress={() => { 
-            navigation.navigate("SignIn");
-             }}>
-            <Text style={[styles.linkText, {flex: 1, textAlign: "center"} ]}>Sign In</Text>
-          </TouchableOpacity>
-        </View>
 
-        </View>
-        <View style={styles.bottom}>
-            <Text style={{ textAlign: "center", color: "#272727"}}>By creating an account, you accepted UR Market's 
-            <Text style={{ color: "#0362e0" }}> Terms of Service </Text>and
-            <Text style={{ color: "#0362e0" }}> Privacy Policy.</Text>
-            </Text>
-        </View>
+         <View style={theme.STYLE.sub}>
+                <View style={theme.STYLE.leftHalf} >
+                    <Button mode='text'
+                      onPress={() => { navigation.navigate("ResetPassword")}}
+                      >Reset Password</Button>
+                </View>
+          <View
+            style={theme.STYLE.rightHalf}
+            >
+              <Button mode='text'
+              onPress={() => { navigation.navigate("SignIn")}}
+              >Sign In</Button>
+          </View>
+          </View>
+      <AuthFooter />
       </View>
-      </ScrollView>
     );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexDirection: 'column',
-    backgroundColor: "#FFFFFF",
-  },
-    sub: {
-        marginTop: 10,
-        flexDirection: "row",
-    },
-  header: {
-    marginTop: 100,
-    flex: 1,
-    flexDirection: "column",
-  },
   logo: {
     resizeMode: "cover",
   },
@@ -272,8 +215,9 @@ const styles = StyleSheet.create({
   },
   textInput: {
     marginTop: 20,
-    height: 40,
-    width: 360,
+    //height: 40,
+    //width: 360,
+    flex: 1,
     backgroundColor: 'white',
     borderRadius: 10,
   },
