@@ -2,7 +2,7 @@ import * as React from 'react';
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import { HelperText, Button, TextInput, Text, ActivityIndicator } from 'react-native-paper';
 import * as SecureStore from 'expo-secure-store';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import { login, reset } from '../services/auth/authSlice'
@@ -16,16 +16,12 @@ const SignInScreen = ({ navigation, route }) => {
     const dispatch = useDispatch();
     const {users, isSuccess, isError } = useSelector((state) => state.auth);
     const {isLoading, message } = useSelector((state) => state.auth.loginState);
+    const [userId, setUserId] = useState("");
+    const [password, setPassword] = useState("");
 
-    const [formData, setFormData] = useState({ email: "", password: ""});
-    const {email, password} = formData;
     const [errors, setErrors] = useState({email: "", password: "", other: ""});
     //const { setUserToken } = route.params;
 
-    const resetForm = () => {
-        setFormData((prev) => {return {email: "", password: ""}});
-        setErrors({email: "", password: ""});
-    }
     const handleTextChange = (value) => {
         console.log(value);
         /*
@@ -35,15 +31,26 @@ const SignInScreen = ({ navigation, route }) => {
         */
       }
 
-      React.useEffect(() => {
+      useEffect(() => {
         console.log("SignIn::useEffect()");
 
       }, []);
 
-      React.useEffect(() => {
+      useEffect(() => {
 
       }, [isLoading]);
 
+      useEffect(() => {
+        const unsubscrible = navigation.addListener("focus", () => {
+          console.log("RESETTING");
+          setUserId("");
+
+        });
+
+        return unsubscrible;
+      }, [navigation]);
+
+      React.useEffect
       const handleSubmit = (e) => {
         //e.preventDefault();
         let emailMsg = validateEmail();
@@ -55,7 +62,7 @@ const SignInScreen = ({ navigation, route }) => {
 
         //dispatch(reset());
         //setAnimating(true);
-        dispatch(login({email: `${email}@uregina.ca`, password: password}));
+        dispatch(login({email: `${userId}@uregina.ca`, password: password}));
       }
 
     return (
@@ -119,33 +126,6 @@ const SignInScreen = ({ navigation, route }) => {
 }
 
 const styles = StyleSheet.create({
-    subHorizontal: {
-        flex: 1,
-        marginTop: 10,
-        flexDirection: "row",
-    },
-    input: {
-        flex: 1,
-    },
-    input2: {
-        flex: 1,
-    },
-    link: {
-        textDecorationColor: "red",
-        textDecorationStyle: "solid",
-    },
-    linkText: {
-        color: "#176fdb",
-        fontSize: 16,
-    },
-    
-      errorText: {
-        flex: 1,
-        paddingLeft: 40,
-        fontSize: 12,
-        color: 'red',
-      },
-
 });
 
 export default SignInScreen;

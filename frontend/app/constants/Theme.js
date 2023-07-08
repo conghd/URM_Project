@@ -64,6 +64,11 @@ export default {
       justifyContent: "flex-end",
       marginRight: 10
     },
+    textInput: {
+      marginTop: 20,
+      flex: 1,
+      borderRadius: 10,
+    }
 
 	}
 }

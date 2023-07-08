@@ -1,11 +1,13 @@
+import { useNavigation } from "@react-navigation/native";
 import * as React from "react";
 import { useState, useEffect } from "react";
 import { StyleSheet, View } from "react-native";
 import { Button, TextInput, Text, HelperText } from "react-native-paper";
 
 const EmailInput = ({handleTextChange}) => {
-    const [email, setEmail] = useState("");
+    const [userId, setUserId] = useState("");
     const [error, setError] = useState("");
+    const navigation = useNavigation();
 
     const validateEmail = (text) => {
       //let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
@@ -20,13 +22,17 @@ const EmailInput = ({handleTextChange}) => {
       let msg = validateEmail(text);
       handleTextChange({email: text, emailError: msg})
 
-      setEmail(text);
+      setUserId(text);
       setError(msg);
     }
 
     useEffect(() => {
+      const unsubscrible = navigation.addListener("focus", () => {
+        setUserId("");
+      });
 
-    }, []);
+      return unsubscrible;
+    }, [navigation]);
 
     return(
       <View style={styles.email}>
@@ -36,7 +42,7 @@ const EmailInput = ({handleTextChange}) => {
           placeholder="User ID"
           onBlur={() => {}}
           onChangeText={text => { onTextChange(text)}}
-          value={email}
+          value={userId}
           keyboardType="email-address"
           maxLength={20}
           right={<TextInput.Affix text="@uregina.ca" />}
@@ -51,6 +57,9 @@ const EmailInput = ({handleTextChange}) => {
 const styles = StyleSheet.create({
   email: {
     flex: 1,
+  },
+  input: {
+    //flex: 1,
   },
   errorText: {
     color: "#dd0000",
