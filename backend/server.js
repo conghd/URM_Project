@@ -10,6 +10,8 @@ const app = express();
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./swagger.json');
 
+const logger = require('./util/logger')
+
 require("dotenv").config({ path: "./config.env"  });
 const port = process.env.PORT || 5000;
 const mongoURI = process.env.ATLAS_URI;
@@ -67,6 +69,7 @@ app.listen(port, () => {
     var db = mongoose.connection;
     db.on('error', console.error.bind(console, 'MongoDB connection error:'));
     db.once("open", function() {
+      logger.info("Connected to MongoDB successfully.");
       console.log("Connected to MongoDB successfully.");
     });
 
