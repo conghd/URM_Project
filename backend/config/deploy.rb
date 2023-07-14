@@ -1,14 +1,14 @@
 # config valid for current version and patch releases of Capistrano
 lock "~> 3.17.3"
 
-set :application, "my_app_name"
-set :repo_url, "git@example.com:me/my_repo.git"
+set :application, "urm"
+set :repo_url, "git@github.com:conghd/CS739_Capstone_Project.git"
 
 # Default branch is :master
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
 
 # Default deploy_to directory is /var/www/my_app_name
-# set :deploy_to, "/var/www/my_app_name"
+set :deploy_to, "/var/www/apps/urm"
 
 # Default value for :format is :airbrussh.
 # set :format, :airbrussh
@@ -37,3 +37,13 @@ set :repo_url, "git@example.com:me/my_repo.git"
 
 # Uncomment the following to require manually verifying the host key before first deploy.
 # set :ssh_options, verify_host_key: :secure
+#set :ssh_options, { :forward_agent => true }
+
+namespace :deploy do
+    desc 'Restart application'
+    task :restart do
+        invoke 'pm2:restart'
+    end
+
+    after :publishing, :restart
+end
