@@ -1,14 +1,23 @@
 const winston = require("winston");
+const { createLogger, format, transports } = require('winston');
+const { combine, timestamp, label, printf } = format;
 
-const logger = winston.createLogger({
+const myFormat = printf(({ level, message, label, timestamp }) => {
+  return `${timestamp} [${level}]: ${message}`;
+});
+
+const logger = createLogger({
   level: "info",
-  format: winston.format.combine(
-    winston.format.timestamp(),
-    winston.format.json()
+  format: format.combine(
+    format.colorize(),
+    format.timestamp(),
+    format.splat(),
+    myFormat,
+    //winston.format.simple()
   ),
   transports: [
-    new winston.transports.File({ filename: "log/error.log", level: "warn" }),
-    new winston.transports.File({ filename: "log/app.log" }),
+    new transports.File({ filename: "log/error.log", level: "warn" }),
+    new transports.File({ filename: "log/info.log" }),
   ],
 });
 
