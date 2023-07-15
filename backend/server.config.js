@@ -3,8 +3,8 @@ module.exports = {
       {
         name: 'urm',
         script: './server.js',
-        instances: 0,
-        exec_mode: 'cluster',
+        instances: 1,
+        exec_mode: 'fork',
         watch: true,
         env: {
           NODE_ENV: 'production',
