@@ -1,6 +1,6 @@
 const util = require("util");
 const multer = require("multer");
-uuidv4 = require('uuid/v4');
+const { uuid } = require('uuidv4');
 
 /**  */
 const DIR = __dirname + './public/upload/images';
@@ -14,7 +14,8 @@ const storage = multer.diskStorage({
         console.log("MIDDLEWARE::filename")
         const fileName = file.originalname.toLowerCase().split(' ').join('-');
         console.log("MIDDLEWARE::filename: " + fileName)
-        cb(null, uuidv4() + '-' + fileName)
+        //cb(null, uuidv4() + '-' + fileName)
+        cb(null, uuid() + '-' + fileName)
     }
 });
 var uploadFile = multer({
