@@ -2,14 +2,14 @@
     "swagger": "2.0",
     "info": {
       "version": "1.0.0",
-      "title": "UR Market API",
-      "description": "UR Market Project Application API",
+      "title": "UR Marketplace API",
+      "description": "UR Marketplace Project Application API",
       "license": {
         "name": "MIT",
         "url": "https://opensource.org/licenses/MIT"
       }
     },
-    "host": "localhost:5000",
+    "host": "http://34.127.7.253",
     "basePath": "/api",
     "tags": [
       {
