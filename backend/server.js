@@ -23,11 +23,6 @@ app.use(bodyParser.json())
 
 //app.use(express.json());
 
-//app.use(require("./routes/record"));
-//app.use(require("./routes/user"));
-// get driver connection
-//const dbo = require("./db/conn");
-
 // Routes
 app.use('/api/user', require('./routes/user_routes'))
 app.use('/api/post', require('./routes/post_routes'))
@@ -35,16 +30,6 @@ app.use('/api/advert', require('./routes/advert_routes'))
 app.use('/api/comment', require('./routes/comment_routes'))
 app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-/*
-const upload = multer({dest: "public/upload/images"})
-app.post("/api/post/create", upload.array("files"), createPost2);
-function createPost2(req, res) {
-  console.log("createPost2");
-  console.log(req.body);
-  console.log(req.files);
-  res.json({"message": "OK"})
-}
-*/
 app.use(errorHandler)
 
 app.use(express.static('public'));
@@ -58,20 +43,23 @@ app.get('/*', (req, res) => {
 */
 app.listen(port, () => {
   // perform a database connection when server starts
-    //dbo.connectToServer(function (err) {
-    //    if (err) console.error(err);
-    //});
     mongoose.connect(mongoURI, {
       useNewUrlParser: true,
       useUnifiedTopology: true
     });
 
     var db = mongoose.connection;
-    db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+    //db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+    db.on('error', () => {
+      logger.error("MongoDB connection error.");
+      console.log("MongoDB connection error.");
+    })
+
     db.once("open", function() {
       logger.info("Connected to MongoDB successfully.");
       console.log("Connected to MongoDB successfully.");
     });
 
+    logger.info(`Server is running on port: ${port}`);
     console.log(`Server is running on port: ${port}`);
 });
