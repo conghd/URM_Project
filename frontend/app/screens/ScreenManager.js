@@ -7,21 +7,22 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { StyleSheet, Text, View, Button } from 'react-native';
 import { MD3LightTheme as DefaultTheme, PaperProvider } from 'react-native-paper';
 import SplashScreen from "./SplashScreen";
-import SignInScreen from './SignInScreen';
-import SignUpScreen from './SignUpScreen';
-import ResetPassword from './ResetPassword';
+import SignInScreen from './auth/SignInScreen';
+import SignUpScreen from './auth/SignUpScreen';
+import ResetPassword from './auth/ResetPassword';
 import DetailsScreen from './DetailsScreen';
 import MainScreen from './MainScreen';
 import HomeScreen from './HomeScreen';
 import ProfileScreen from './ProfileScreen';
 import BookmarkScreen from './BookmarkScreen';
-import ActivationScreen from './ActivationScreen';
+import ActivationScreen from './auth/ActivationScreen';
 import {useSelector, useDispatch } from 'react-redux';
 import { load } from '../services/auth/authSlice';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import SearchScreen from './SearchScreen';
 import ProductCreationScreen from './ProductCreationScreen';
 import ProductDetailsScreen from './ProductDetailsScreen';
+import ActivationComplete from './auth/ActivationComplete';
 
 const theme = {
   ...DefaultTheme,
@@ -60,7 +61,7 @@ export default function ScreenManager() {
             
             >
             { (user == null || user.activated == false) ? (
-              <>
+              <Stack.Group>
                 <Stack.Screen name="SignIn" component={SignInScreen} 
                   options={{
                     headerShown:false,
@@ -87,7 +88,13 @@ export default function ScreenManager() {
                     ...TransitionPresets.DefaultTransition
                   }} 
                 />
-              </>
+                <Stack.Screen name="ActivationComplete" component={ActivationComplete}
+                  options={{
+                    headerShown:false,
+                    ...TransitionPresets.DefaultTransition
+                  }} 
+                />
+              </Stack.Group>
             ) : (
               <Stack.Group>
                 <Stack.Screen name="Main" component={MainScreen}

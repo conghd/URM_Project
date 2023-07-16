@@ -3,6 +3,7 @@ import * as React from "react";
 import { useState, useEffect } from "react";
 import { StyleSheet, View } from "react-native";
 import { Button, TextInput, Text, HelperText } from "react-native-paper";
+import { theme } from "../constants";
 
 const EmailInput = ({handleTextChange}) => {
     const [userId, setUserId] = useState("");
@@ -20,7 +21,7 @@ const EmailInput = ({handleTextChange}) => {
     const onTextChange = (text) => {
       console.log("onTextChange: " + text);
       let msg = validateEmail(text);
-      handleTextChange({email: text, emailError: msg})
+      handleTextChange({content: {userId: text}, error: {userId: msg} })
 
       setUserId(text);
       setError(msg);
@@ -29,6 +30,7 @@ const EmailInput = ({handleTextChange}) => {
     useEffect(() => {
       const unsubscrible = navigation.addListener("focus", () => {
         setUserId("");
+        setError("");
       });
 
       return unsubscrible;
@@ -36,7 +38,7 @@ const EmailInput = ({handleTextChange}) => {
 
     return(
       <View style={styles.email}>
-        <TextInput style={styles.input}
+        <TextInput style={theme.STYLE.textInput}
           mode="outlined"
           label="Email"
           placeholder="User ID"
@@ -45,6 +47,7 @@ const EmailInput = ({handleTextChange}) => {
           value={userId}
           keyboardType="email-address"
           maxLength={20}
+          left={<TextInput.Icon icon="email" />}
           right={<TextInput.Affix text="@uregina.ca" />}
         />
         <HelperText type="error" visible={error != ""}>
@@ -58,17 +61,6 @@ const styles = StyleSheet.create({
   email: {
     flex: 1,
   },
-  input: {
-    //flex: 1,
-  },
-  errorText: {
-    color: "#dd0000",
-    /*
-      flexDirection: "row",
-      width: "100%",
-      justifyContent: "flex-start",
-    */
-  }
 });
 
 export default EmailInput;

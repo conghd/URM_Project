@@ -18,16 +18,25 @@ const login = async (userData) => {
   return response.data
 }
 
+const resendCode = async (userData) => {
+  console.log("AuthService::resendCode- " + API_URL + 'activate');
+  console.log("AuthService::resendCode- " + JSON.stringify(userData));
+  const response = await axios.post(API_URL + 'resend_code', userData);
+
+  if (response.data) {
+    console.log("AuthService::resendCode- " + JSON.stringify(response.data));
+  }
+
+  return response.data
+}
+
 const activate = async (userData) => {
   console.log("AuthService::activate- " + API_URL + 'activate');
-  const response = await axios.post(API_URL + 'activate', userData).catch((error) => {
-    console.log(error);
-  });
+  console.log("AuthService::active - " + JSON.stringify(userData));
+  const response = await axios.post(API_URL + 'activate', userData);
 
   if (response.data) {
     console.log("AuthService::activate - " + JSON.stringify(response.data));
-    //localStorage.setItem('user', JSON.stringify(response.data))
-    //await AsyncStorage.setItem('user', JSON.stringify(response.data));
   }
 
   return response.data
@@ -52,6 +61,7 @@ const authService = {
   login,
   load,
   activate,
+  resendCode,
 }
 
 export default authService

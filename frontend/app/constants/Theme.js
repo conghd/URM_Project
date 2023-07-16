@@ -28,15 +28,17 @@ export default {
 		container: {
       backgroundColor: "#ffffff",
       flex: 1,
-      justifyContent: "center",
-      alignItems: "center",
+      //justifyContent: "center",
+      //alignItems: "center",
       flexDirection: "column",
       paddingLeft: 20,
       paddingRight: 20,
 		},
     header: {
-        marginTop: 100,
-        flex: 1,
+        marginTop: 60,
+        marginBottom: 20,
+        alignItems: "center",
+        //flex: 1,
         flexDirection: "column",
     },
     headerText: {
@@ -46,8 +48,9 @@ export default {
       fontWeight: "bold"
     },
     sub: {
-      marginTop: 10,
+      marginTop: 20,
       flexDirection: "row",
+      alignItems: "center",
     },
     leftHalf: {
         alignItems: "center",
@@ -65,10 +68,23 @@ export default {
       marginRight: 10
     },
     textInput: {
-      marginTop: 20,
+      //marginTop: 20,
+      //flex: 1,
+      //borderRadius: 10,
+      backgroundColor: "#FFFFFF",
+    },
+    errorText: {
+      //backgroundColor: "#FFFF00",
       flex: 1,
-      borderRadius: 10,
-    }
-
+      flexDirection: "row",
+      alignItems: "center",
+      //justifyContent: "center",
+      height: 40,
+    },
+    button: {
+      justifyContent: "center",
+      flex: 1,
+      borderRadius: 5,
+    },
 	}
 }

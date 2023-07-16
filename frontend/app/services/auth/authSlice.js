@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import authService from './authService'
+import { setStatusBarNetworkActivityIndicatorVisible } from 'expo-status-bar';
 
 //const user = JSON.parse(localStorage.getItem('user'))
 const initialSubState = {
@@ -14,6 +15,7 @@ const initialState = {
    loadState: initialSubState,
    loginState: initialSubState,
    activateState: initialSubState,
+   resendCodeState: initialSubState,
    logoutState: initialSubState,
 };
 
@@ -22,6 +24,20 @@ export const login = createAsyncThunk('auth/login', async (user, thunkAPI) => {
   try {
     console.log("AuthSlice::login - " + JSON.stringify(user) );
     return await authService.login(user)
+  } catch (error) {
+    const message =
+      (error.response && error.response.data && error.response.data.message) ||
+      error.message ||
+      error.toString()
+    return thunkAPI.rejectWithValue(message)
+  }
+})
+
+// Activate account
+export const resendCode = createAsyncThunk('auth/resend_code', async (userData, thunkAPI) => {
+  try {
+    console.log("AuthSlice::resendCode - " + JSON.stringify(userData) );
+    return await authService.resendCode(userData)
   } catch (error) {
     const message =
       (error.response && error.response.data && error.response.data.message) ||
@@ -71,9 +87,13 @@ export const authSlice = createSlice({
       state.loadState = initialSubState
       state.loginState = initialSubState
       state.activateState = initialSubState
+      state.resendCodeState = initialSubState
       state.logoutState = initialSubState
       state.user = null
     },
+    resetLogin: (state) => {
+      state.loginState = initialSubState
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -83,12 +103,26 @@ export const authSlice = createSlice({
       .addCase(activate.fulfilled, (state, action) => {
         state.activateState.isLoading = false
         state.activateState.isSuccess = true
-        state.user = action.payload
+        state.user.activated = true
       })
       .addCase(activate.rejected, (state, action) => {
         state.activateState.isLoading = false
         state.activateState.isError = true
         state.activateState.message = action.payload
+        //state.user = null
+      })
+      .addCase(resendCode.pending, (state) => {
+        state.resendCodeState.isLoading = true
+      })
+      .addCase(resendCode.fulfilled, (state, action) => {
+        state.resendCodeState.isLoading = false
+        state.resendCodeState.isSuccess = true
+        //state.user.activated = true
+      })
+      .addCase(resendCode.rejected, (state, action) => {
+        state.resendCodeState.isLoading = false
+        state.resendCodeState.isError = true
+        state.resendCodeState.message = action.payload
         //state.user = null
       })
       .addCase(login.pending, (state) => {
@@ -133,5 +167,5 @@ export const authSlice = createSlice({
   },
 })
 
-export const { reset } = authSlice.actions
+export const { reset, resetLogin } = authSlice.actions
 export default authSlice.reducer

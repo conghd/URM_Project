@@ -14,11 +14,11 @@ import {
   Alert
 } from 'react-native';
 import { HelperText, TextInput, ActivityIndicator, Button } from 'react-native-paper';
-import { theme } from '../constants';
-import { register, reset } from '../services/auth/registerSlice';
-import EmailInput from '../components/EmailInput';
-import PasswordInput from '../components/PasswordInput';
-import AuthFooter from '../components/AuthFooter';
+import { theme } from '../../constants';
+import { register, reset } from '../../services/auth/registerSlice';
+import EmailInput from '../../components/EmailInput';
+import PasswordInput from '../../components/PasswordInput';
+import AuthFooter from '../../components/AuthFooter';
 
 const SignUpScreen = ({navigation, route}) => {
   const dispatch = useDispatch();
@@ -120,6 +120,7 @@ const SignUpScreen = ({navigation, route}) => {
             <View style={theme.STYLE.sub}>
                 <Button 
                     //icon="camera"
+                    loading={isLoading}
                     mode="contained"
                     onPress={() => handleSubmit() }
                     >
