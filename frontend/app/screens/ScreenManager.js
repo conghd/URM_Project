@@ -23,6 +23,8 @@ import SearchScreen from './SearchScreen';
 import ProductCreationScreen from './ProductCreationScreen';
 import ProductDetailsScreen from './ProductDetailsScreen';
 import ActivationComplete from './auth/ActivationComplete';
+import IntroScreen from './IntroScreen';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const theme = {
   ...DefaultTheme,
@@ -40,8 +42,28 @@ const Tab = createMaterialBottomTabNavigator();
 
 export default function ScreenManager() {
   const [userToken, setUserToken] = useState(null);
+  const [settings, setSettings] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+
   const dispatch = useDispatch();
-  const {user, isSuccess, isLoading, isError, message, loadState} = useSelector((state) => state.auth);
+  const {user, isSuccess, isError, message, loadState} = useSelector((state) => state.auth);
+
+  const getSettings = async() => {
+    try {
+      const nextSettings = await AsyncStorage.getItem("settings");
+      setSettings(nextSettings);
+    } catch (e) {
+    }
+
+    setIsLoading(false);
+  }
+
+  const storeSettings = async (settings) => {
+    try {
+      await AsyncStorage.setItem("settings", JSON.stringify(settings));
+    } catch (e) {
+    }
+  };
 
   useEffect(() => {
     console.log("ScreenManager::useEffect()");
@@ -49,7 +71,7 @@ export default function ScreenManager() {
     dispatch(load());
   }, []);
 
-  if (loadState.isLoading) {
+  if (loadState.isLoading || isLoading) {
     return <SplashScreen />
   }
 
@@ -62,6 +84,12 @@ export default function ScreenManager() {
             >
             { (user == null || user.activated == false) ? (
               <Stack.Group>
+                <Stack.Screen name="Intro" component={IntroScreen} 
+                  options={{
+                    headerShown:false,
+                    ...TransitionPresets.DefaultTransition
+                  }} 
+                  />
                 <Stack.Screen name="SignIn" component={SignInScreen} 
                   options={{
                     headerShown:false,

@@ -46,8 +46,9 @@ const activate = async (userData) => {
 const load = async () => {
   console.log("authService::load");
   const user = await AsyncStorage.getItem("user");
+  const settings = await AsyncStorage.getItem("settings");
   console.log("authService::load - " + user);
-  return JSON.parse(user);
+  return {user: JSON.parse(user) || {}, settings: JSON.parse(settings) || {} };
 }
 
 // Logout user

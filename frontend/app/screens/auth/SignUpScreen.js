@@ -89,6 +89,7 @@ const SignUpScreen = ({navigation, route}) => {
           <Text variant="titleLarge">Account Creation</Text>
         </View>
         <View style={theme.STYLE.sub}>
+          <View style={theme.STYLE.email}>
           <TextInput
             mode='outlined'
             label="Name (Required)"
@@ -97,36 +98,38 @@ const SignUpScreen = ({navigation, route}) => {
             onChangeText={text => { handleTextChange({name: text} )}}
             value={name}
             keyboardType="name-phone-pad"
+
+          />
+          </View>
+        </View>
+        <View style={theme.STYLE.sub}>
+          <EmailInput 
+              handleTextChange={handleTextChange}
+              />
+        
+        </View>
+        <View style={theme.STYLE.sub}>
+          <PasswordInput
+            handleTextChange={handleTextChange}
           />
         </View>
           <View style={theme.STYLE.sub}>
-              <EmailInput 
-                  handleTextChange={handleTextChange}
-                  />
-          
+            <HelperText type="error" visible={message != ""}>
+              {message}
+            </HelperText>
           </View>
-          <View style={theme.STYLE.sub}>
-            <PasswordInput
-              handleTextChange={handleTextChange}
-            />
-          </View>
-            <View style={theme.STYLE.sub}>
-              <HelperText type="error" visible={message != ""}>
-                {message}
-              </HelperText>
-            </View>
 
-            <ActivityIndicator animating={isLoading} />
-            <View style={theme.STYLE.sub}>
-                <Button 
-                    //icon="camera"
-                    loading={isLoading}
-                    mode="contained"
-                    onPress={() => handleSubmit() }
-                    >
-                    Sign Up
-                </Button>
-            </View>
+          <ActivityIndicator animating={isLoading} />
+          <View style={theme.STYLE.sub}>
+              <Button 
+                  //icon="camera"
+                  loading={isLoading}
+                  mode="contained"
+                  onPress={() => handleSubmit() }
+                  >
+                  Sign Up
+              </Button>
+          </View>
 
          <View style={theme.STYLE.sub}>
                 <View style={theme.STYLE.leftHalf} >

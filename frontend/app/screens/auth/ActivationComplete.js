@@ -20,6 +20,8 @@ const ActivationComplete = ({ navigation, route }) => {
   }, []);
 
   React.useEffect(() => {
+    console.log("Activation::useEffect(isLoading)");
+
 
   }, [isLoading]);
 

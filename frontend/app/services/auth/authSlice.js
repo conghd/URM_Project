@@ -1,6 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import authService from './authService'
-import { setStatusBarNetworkActivityIndicatorVisible } from 'expo-status-bar';
 
 //const user = JSON.parse(localStorage.getItem('user'))
 const initialSubState = {
@@ -153,10 +152,11 @@ export const authSlice = createSlice({
         state.loadState.isLoading = true 
       })
       .addCase(load.fulfilled, (state, action) => {
-        state.user = action.payload;
         state.loadState.isLoading = false;
         state.loadState.isError = false;
         state.loadState.isSuccess = true;
+        state.user = action.payload.user;
+        state.useFirstTime = action.payload.useFirstTime || false;
       })
       .addCase(load.rejected, (state, action) => {
         state.loadState.isLoading = false
