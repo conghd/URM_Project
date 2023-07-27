@@ -16,6 +16,7 @@ const logger = createLogger({
     //winston.format.simple()
   ),
   transports: [
+    new transports.Console({}),
     new transports.File({ filename: "log/error.log", level: "warn" }),
     new transports.File({ filename: "log/info.log" }),
   ],

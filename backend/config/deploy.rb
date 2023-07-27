@@ -35,7 +35,7 @@ append :linked_dirs, "backend/log", "backend/public", "backend/node_modules"
 # set :local_user, -> { `git config user.name`.chomp }
 
 # Default value for keep_releases is 5
-# set :keep_releases, 5
+set :keep_releases, 10 
 
 # Uncomment the following to require manually verifying the host key before first deploy.
 # set :ssh_options, verify_host_key: :secure
@@ -51,7 +51,7 @@ set :pm2_start_params, ''                         # pm2 start params see http://
 namespace :deploy do
     desc 'Restart application'
     task :restart do
-        invoke 'pm2:restart'
+        #invoke 'pm2:restart'
     end
 
     desc 'Install dependencies'

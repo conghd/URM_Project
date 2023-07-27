@@ -52,14 +52,16 @@ app.listen(port, () => {
     //db.on('error', console.error.bind(console, 'MongoDB connection error:'));
     db.on('error', () => {
       logger.error("MongoDB connection error.");
-      console.log("MongoDB connection error.");
+      //console.log("MongoDB connection error.");
     })
 
     db.once("open", function() {
       logger.info("Connected to MongoDB successfully.");
-      console.log("Connected to MongoDB successfully.");
+      //console.log("Connected to MongoDB successfully.");
     });
 
     logger.info(`Server is running on port: ${port}`);
-    console.log(`Server is running on port: ${port}`);
+    //logger.info(`[2] Server is running on port: %s`, port);
+    
+    //console.log(`Server is running on port: ${port}`);
 });

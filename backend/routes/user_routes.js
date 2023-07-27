@@ -8,6 +8,7 @@ const {
   listUser,
   //forgotPassword,
   activateAccount,
+  resendCode,
 } = require('../controllers/user/user_controller')
 
 const { protect } = require('../middleware/auth_middleware')
@@ -17,5 +18,6 @@ router.route('/login').post(loginUser)
 router.route('/list').get(listUser)
 router.route('/logout').get(logoutUser)
 router.route('/activate').post(activateAccount)
+router.route('/resend_code').post(resendCode)
 
 module.exports = router
