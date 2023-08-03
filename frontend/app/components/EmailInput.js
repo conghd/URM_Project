@@ -14,6 +14,7 @@ const EmailInput = React.forwardRef(({handleTextChange, handleSubmitEditing, ind
     const validateEmail = (text) => {
       //let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
       //let reg = /^\w+([\.-]?\w+)*$/;
+      //Your username should be between 8 and 25 characters long. It must not contain any spaces or special characters.
       let reg = /^[A-Za-z]([[\.-]?[A-Za-z0-9]+)*$/;
       let msg = (reg.test(text)) ? "": "User ID must only contain characters, numbers, .(dot)";
       return msg;

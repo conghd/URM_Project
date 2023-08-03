@@ -10,6 +10,7 @@ import { theme } from '../../constants';
 import EmailInput from '../../components/EmailInput';
 import PasswordInput from '../../components/PasswordInput';
 import AuthFooter from '../../components/AuthFooter';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 
 const SignInScreen = ({ navigation, route }) => {
@@ -65,6 +66,10 @@ const SignInScreen = ({ navigation, route }) => {
 
   return (
     <View style={theme.STYLE.container}>
+      <KeyboardAwareScrollView
+        showsVerticalScrollIndicator={false}
+        showsHorizontalScrollIndicator={false}
+      >
       <View style={theme.STYLE.header}>
         <Text style={theme.STYLE.headerText}>URM</Text>
       </View>
@@ -123,8 +128,8 @@ const SignInScreen = ({ navigation, route }) => {
               >Sign Up</Button>
         </View>
       </View>
+      </KeyboardAwareScrollView>
       <AuthFooter />
-
     </View>
   );
 }

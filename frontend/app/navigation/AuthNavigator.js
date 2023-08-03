@@ -22,8 +22,8 @@ const AuthNavigator = () => {
   }, [])
 
   useEffect(() => {
-    console.log("AuthNavigator::useEffect, isNewAccount: " + settings.isNewAccount)
-  }, [settings.isNewAccount])
+    console.log("AuthNavigator::useEffect, isNewAccount: " + settings)
+  }, [settings])
     
   return (
     <Stack.Navigator>

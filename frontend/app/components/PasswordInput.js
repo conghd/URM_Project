@@ -18,6 +18,7 @@ const PasswordInput = React.forwardRef(({handleTextChange, handleSubmitEditing, 
       //let reg = /^\w+([\.-]?\w+)*$/;
       //let reg = /^[A-Za-z]([[\.-]?[A-Za-z0-9]+)*$/;
       let reg = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/
+      //Your password must be at least eight characters long. It must contain at least one number and two letters, one upper case and one lower case, and one special character such as !#$%^&+=*().
 
       let msg = (reg.test(text)) ? "": "Minimum 8 characters, at least one uppercase letter,\
         one lowercase letter, one number & one special character";

@@ -52,7 +52,7 @@ export const save = createAsyncThunk('settings/save', async (data, thunkAPI) => 
 )
 export const settingsSlice = createSlice({
   name: 'settings',
-  initialState,
+  initialState: initialState,
   reducers: {
     reset: (state) => {
       state.meta.isLoading = false

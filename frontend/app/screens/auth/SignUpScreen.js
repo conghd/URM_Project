@@ -10,6 +10,7 @@ import EmailInput from '../../components/EmailInput';
 import PasswordInput from '../../components/PasswordInput';
 import AuthFooter from '../../components/AuthFooter';
 import NameInput from '../../components/NameInput';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 const SignUpScreen = ({navigation, route}) => {
   const dispatch = useDispatch();
@@ -101,6 +102,10 @@ const SignUpScreen = ({navigation, route}) => {
 
     return (
       <View style={theme.STYLE.container} >
+        <KeyboardAwareScrollView extraHeight={0}
+          showsVerticalScrollIndicator={false}
+          showsHorizontalScrollIndicator={false}
+          >
         <View style={theme.STYLE.header}>
           <Text style={theme.STYLE.headerText}>URM</Text>
         </View>
@@ -131,11 +136,15 @@ const SignUpScreen = ({navigation, route}) => {
             ref={refInputs[2]}
           />
         </View>
-        <View style={theme.STYLE.sub}>
-          <HelperText type="error" visible={errors.other != ""}>
-            {errors.other}
-          </HelperText>
-        </View>
+        { errors.other != "" && 
+          <View style={theme.STYLE.sub}>
+            <View style={theme.STYLE.errorText}>
+            <HelperText type="error" visible={errors.other != ""}>
+              {errors.other}
+            </HelperText>
+            </View>
+          </View>
+        }
 
           <View style={theme.STYLE.sub}>
               <Button 
@@ -162,8 +171,9 @@ const SignUpScreen = ({navigation, route}) => {
               onPress={() => { navigation.navigate("SignIn")}}
               >Sign In</Button>
           </View>
-          </View>
-      <AuthFooter />
+        </View>
+        </KeyboardAwareScrollView>
+        <AuthFooter />
       </View>
     );
 };
