@@ -3,11 +3,11 @@ import { useSelector, useDispatch } from 'react-redux';
 import { SafeAreaView, Text, View, StyleSheet, ScrollView, FlatList, ImageBackground, TouchableOpacity, Alert,
 } from 'react-native'
 import { Button, TextInput } from 'react-native-paper';
-import ImagePreviewItem from './ImagePreviewItem';
+import ImagePreviewItem from '../ImagePreviewItem';
 import * as ImagePicker from 'expo-image-picker';
-import { createAdvert, reset } from '../services/advert/advertCreationSlice';
+import { createAdvert, reset } from '../../services/advert/advertCreationSlice';
 
-const ProductCreationScreen = ({ navigation, route }) => {
+const CreationScreen = ({ navigation, route }) => {
   const [selectedId, setSelectedId] = useState(null);
   const dispatch = useDispatch();
   const {user } = useSelector((state) => state.auth);
@@ -251,4 +251,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ProductCreationScreen;
+export default CreationScreen;

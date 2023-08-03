@@ -6,11 +6,13 @@ import { useRef, useState, useEffect } from 'react';
 import { Link } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import { activate, login, reset } from '../../services/auth/authSlice'
+import { update } from '../../services/settings/settingsSlice';
 import { theme } from '../../constants';
 import AuthFooter from '../../components/AuthFooter';
 
 const ActivationComplete = ({ navigation, route }) => {
   const dispatch = useDispatch();
+  //const { update } = useSelector((state) => state.settings)
   const {user } = useSelector((state) => state.auth);
   const {isLoading, isError, isSuccess, message } = useSelector((state) => state.auth.activateState);
 
@@ -27,15 +29,8 @@ const ActivationComplete = ({ navigation, route }) => {
 
   const handleSubmit = (e) => {
     //e.preventDefault();
-    let codeMsg = validateCode();
-    setErrors((prev) => { return {code: codeMsg}; });
-    if (errors.code != "" ) {
-      return;
-    }
-
-    //dispatch(reset());
-    //setAnimating(true);
-    dispatch(activate({code: code}));
+    navigation.replace("SignIn", {})
+    dispatch(update({isNewAccount: false }))
   }
 
   return (
@@ -56,7 +51,7 @@ const ActivationComplete = ({ navigation, route }) => {
           style={theme.STYLE.button}
           //icon="camera"
           mode="contained"
-          onPress={() => { navigation.replace("SignIn")} }
+          onPress={() => { handleSubmit() } }
           >
           Next
         </Button>

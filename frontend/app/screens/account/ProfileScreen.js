@@ -3,11 +3,11 @@ import { View, StyleSheet, TextInput, ImageBackground, FlatList } from 'react-na
 import * as SecureStore from 'expo-secure-store';
 import { useState, useEffect } from 'react';
 import { Text, Button, ActivityIndicator, Avatar } from 'react-native-paper';
-import { logout } from '../services/auth/authSlice';
+import { logout } from '../../services/auth/authSlice';
 import { useSelector, useDispatch } from 'react-redux';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import Product from '../components/Product';
-import { getAdverts, reset } from '../services/advert/advertSlice';
+import Product from '../../components/Product';
+import { getAdverts, reset } from '../../services/advert/advertSlice';
 
 const ProfileScreen = () => {
     const dispatch = useDispatch();
@@ -46,7 +46,7 @@ const ProfileScreen = () => {
         <View style={styles.container}>
             <View style={styles.account}>
                 <View style={styles.avatar}>
-                    <Avatar.Image size={64} source={require('../../assets/user3.jpeg')}/>
+                    <Avatar.Image size={64} source={require('../../../assets/user3.jpeg')}/>
                 </View>
                 <View style={styles.info}>
                     <Text>{user.name}</Text>

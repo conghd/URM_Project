@@ -7,22 +7,40 @@ import { PixelRatio, StyleSheet, Text, View } from 'react-native';
 import { Button }from 'react-native-paper';
 import { MD3LightTheme as DefaultTheme, PaperProvider } from 'react-native-paper';
 import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { update } from '../services/settings/settingsSlice';
 import { Image } from 'react-native';
 
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 const IntroScreen = ({ navigation, route }) => {
+  const dispatch = useDispatch();
   const [sliderState, setSliderState] = useState({ currentPage: 0 });
   const { width, height } = Dimensions.get("window");
-  console.log("width: " + width + ", height: " + height);
+  //console.log("width: " + width + ", height: " + height);
+  const { isFirstTime, message} = useSelector((state) => state.settings)
+
+  const handleSubmit = () => {
+    console.log("IntroScreen::handleSubmit");
+    dispatch(update({"isFirstTime": false}))
+  }
+
+  useEffect(() => {
+    console.log("IntroScreen::useEffect[], isFirstTime: " + isFirstTime)
+  }, []);
+
+  useEffect(() => {
+    console.log("IntroScreen::useEffect[], isFirstTime: " + isFirstTime)
+
+  }, [isFirstTime]);
 
   const setSliderPage = (event) => {
     const { currentPage } = sliderState;
     const { x } = event.nativeEvent.contentOffset;
-    console.log("x = " + x + ", width = " + width);
+    //console.log("x = " + x + ", width = " + width);
     const indexOfNextScreen = Math.floor(x / (width - 1));
 
-    console.log("indexOfNextScreen: " + indexOfNextScreen);
+    //console.log("indexOfNextScreen: " + indexOfNextScreen);
     if (indexOfNextScreen !== currentPage) {
       setSliderState({
         ...sliderState,
@@ -80,8 +98,9 @@ const IntroScreen = ({ navigation, route }) => {
                   style={styles.imageStyle} />
               </View>
               <View style={styles.wrapper}>
-                <Text style={styles.header}>{slide.title}</Text>
+                <Text style={styles.header}>{isFirstTime ? "HELLO" : slide.title }</Text>
                 <Text style={styles.paragraph}>{slide.description}</Text>
+                <Text style={styles.paragraph}>{message}</Text>
               </View>
             </View>
           )
@@ -90,7 +109,7 @@ const IntroScreen = ({ navigation, route }) => {
 
         <View style={ styles.bottom }>
           <View style={ styles.get_started }>
-            <Button mode='outlined' onPress={() => { navigation.replace('SignUp') } }>Get Started</Button>
+            <Button mode='outlined' onPress={() => { handleSubmit() } }>Get Started</Button>
           </View>
           <View style={styles.paginationWrapper}>
             {Array.from(Array(4).keys()).map((key, index) => (

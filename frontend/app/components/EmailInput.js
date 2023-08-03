@@ -5,23 +5,24 @@ import { StyleSheet, View } from "react-native";
 import { Button, TextInput, Text, HelperText } from "react-native-paper";
 import { theme } from "../constants";
 
-const EmailInput = ({handleTextChange}) => {
+const EmailInput = React.forwardRef(({handleTextChange, handleSubmitEditing, index}, ref) => {
     const [userId, setUserId] = useState("");
     const [error, setError] = useState("");
+    const [visible, setVisible] = useState(false)
     const navigation = useNavigation();
 
     const validateEmail = (text) => {
       //let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
       //let reg = /^\w+([\.-]?\w+)*$/;
       let reg = /^[A-Za-z]([[\.-]?[A-Za-z0-9]+)*$/;
-      let msg = (reg.test(text)) ? "": "Email address is invalid";
+      let msg = (reg.test(text)) ? "": "User ID must only contain characters, numbers, .(dot)";
       return msg;
     }
 
     const onTextChange = (text) => {
-      console.log("onTextChange: " + text);
+      //console.log("onTextChange: " + text);
       let msg = validateEmail(text);
-      handleTextChange({content: {userId: text}, error: {userId: msg} })
+      handleTextChange({content: {email: `${text}@uregina.ca`}, error: {email: msg} })
 
       setUserId(text);
       setError(msg);
@@ -31,6 +32,7 @@ const EmailInput = ({handleTextChange}) => {
       const unsubscrible = navigation.addListener("focus", () => {
         setUserId("");
         setError("");
+        setVisible(false);
       });
 
       return unsubscrible;
@@ -39,23 +41,31 @@ const EmailInput = ({handleTextChange}) => {
     return(
       <View style={styles.email}>
         <TextInput style={theme.STYLE.textInput}
+          ref={ref}
           mode="outlined"
           label="Email"
           placeholder="User ID"
-          onBlur={() => {}}
+          onBlur={() => { setVisible(true)}}
           onChangeText={text => { onTextChange(text)}}
+          onSubmitEditing={() => handleSubmitEditing(index) }
           value={userId}
           keyboardType="email-address"
           maxLength={20}
+          blurOnSubmit={false}
+          error={error != ""}
           left={<TextInput.Icon icon="email" />}
           right={<TextInput.Affix text="@uregina.ca" />}
         />
-        <HelperText type="error" visible={error != ""}>
-          {error}
-        </HelperText>
+        { (visible && error != "") ?
+          (
+            <HelperText type="error" visible={visible && error != ""}>
+              {error}
+            </HelperText>
+          ) : (<></>)
+      }
       </View>
     );
-};
+});
 
 const styles = StyleSheet.create({
   email: {

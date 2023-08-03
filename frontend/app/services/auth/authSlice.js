@@ -102,7 +102,9 @@ export const authSlice = createSlice({
       .addCase(activate.fulfilled, (state, action) => {
         state.activateState.isLoading = false
         state.activateState.isSuccess = true
-        state.user.activated = true
+        if (state.user != null) {
+          state.user.activated = true
+        }
       })
       .addCase(activate.rejected, (state, action) => {
         state.activateState.isLoading = false

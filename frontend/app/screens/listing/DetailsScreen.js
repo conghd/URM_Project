@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import * as Config from '../../config';
+import * as Config from '../../../config';
 import { Text, 
   View,
   ScrollView,
@@ -9,7 +9,7 @@ import { Button, IconButton } from 'react-native-paper';
 import Slideshow from 'react-native-image-slider-show';
 //import MapView, { Marker } from 'react-native-maps';
 
-const ProductDetailsScreen = ({ navigation, route }) => {
+const DetailsScreen = ({ navigation, route }) => {
   const { item } = route.params;
   const images = item.images.map((image) => { return {url: Config.BE_RESOURCE_URL + image} });
   if (images.length == 0) {
@@ -29,7 +29,7 @@ const ProductDetailsScreen = ({ navigation, route }) => {
 
 
     useEffect(() => {
-      console.log("ProductDetailsScreen::useEffect()");
+      console.log("DetailsScreen::useEffect()");
 
     }, []);
     return (
@@ -102,7 +102,7 @@ const ProductDetailsScreen = ({ navigation, route }) => {
     );
   };
 
-export default ProductDetailsScreen;
+export default DetailsScreen;
 
 
 const styles = StyleSheet.create({

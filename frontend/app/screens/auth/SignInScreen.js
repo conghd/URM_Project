@@ -16,10 +16,9 @@ const SignInScreen = ({ navigation, route }) => {
   const dispatch = useDispatch();
   const {user} = useSelector((state) => state.auth);
   const {isLoading, isError, isSuccess, message } = useSelector((state) => state.auth.loginState);
-  const [loginData, setLoginData] = useState({userId: "", password: ""});
-  const {userId, password} = loginData;
+  const [loginData, setLoginData] = useState({email: "", password: ""});
 
-  const [errors, setErrors] = useState({userId: "", password: "", other: ""});
+  const [errors, setErrors] = useState({email: "", password: "", other: ""});
 
   const handleTextChange = (value) => {
       console.log(value);
@@ -45,6 +44,7 @@ const SignInScreen = ({ navigation, route }) => {
     }, [loginData, errors]);
 
     useEffect(() => {
+      console.log("SignInScreen::useEffect, user = " + JSON.stringify(user));
       if (user != null && user.token != "") {
         if (user.activated == false) {
           navigation.replace("Activation", {verification: "activation"});
@@ -56,14 +56,11 @@ const SignInScreen = ({ navigation, route }) => {
     const handleSubmit = (e) => {
       //e.preventDefault();
       Keyboard.dismiss();
-      if (userId == "" || password === "" ||
-          errors.userId!= "" || errors.password != "" ) {
+      if (errors.email!= "" || errors.password != "" ) {
         return;
       }
 
-      //dispatch(reset());
-      //setAnimating(true);
-      dispatch(login({email: `${userId}@uregina.ca`, password: password}));
+      dispatch(login(loginData));
     }
 
   return (
@@ -71,7 +68,7 @@ const SignInScreen = ({ navigation, route }) => {
       <View style={theme.STYLE.header}>
         <Text style={theme.STYLE.headerText}>URM</Text>
       </View>
-      <View style={theme.STYLE.sub}>
+      <View style={[theme.STYLE.sub, styles.title]}>
           <Text variant="titleLarge">Sign In</Text>
       </View>
       <View style={theme.STYLE.sub}>
@@ -133,6 +130,9 @@ const SignInScreen = ({ navigation, route }) => {
 }
 
 const styles = StyleSheet.create({
+  title: {
+    justifyContent: "center",
+  }
 });
 
 export default SignInScreen;

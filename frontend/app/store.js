@@ -6,11 +6,13 @@ import authReducer from './services/auth/authSlice';
 import registerReducer from './services/auth/registerSlice';
 import advertReducer from './services/advert/advertSlice';
 import advertCreationReducer from './services/advert/advertCreationSlice'
+import settingsReducer from './services/settings/settingsSlice'
+import thunk from 'redux-thunk'
 
 const persistConfig = {
     key: 'root',
     storage: AsyncStorage,
-    whitelist: ['auth']
+    whitelist: ['settings']
 }
 
 const rootReducer = combineReducers({
@@ -18,6 +20,7 @@ const rootReducer = combineReducers({
     register: registerReducer,
     advert: advertReducer,
     advertCreation: advertCreationReducer,
+    settings: settingsReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)
@@ -37,6 +40,7 @@ export const store = configureStore({
         serializableCheck: {
             ignoreActions: [REGISTER],
         },
-    })
+    }),
+    devTools: process.env.NODE_ENV !== 'production',
 })
 export const persistor = persistStore(store)

@@ -3,10 +3,9 @@ import { useEffect } from 'react';
 
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import HomeScreen from './HomeScreen'
-import HomeStackScreen from './HomeStackScreen';
-import ProfileScreen from './ProfileScreen'
-import MessengerScreen from './MessengerScreen';
+import HomeScreen from '../HomeScreen'
+import ProfileScreen from '../account/ProfileScreen'
+import MessengerScreen from '../messenger/MessengerScreen';
 import BookmarkScreen from './BookmarkScreen';
 import SearchScreen from './SearchScreen';
 

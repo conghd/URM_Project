@@ -1,24 +1,15 @@
-import React, {useState, useEffect, createRef} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
-  StyleSheet,
-  //TextInput,
-  View,
-  Text,
-  ScrollView,
-  Image,
-  Keyboard,
-  TouchableOpacity,
-  KeyboardAvoidingView,
-  //Button,
-  Alert
-} from 'react-native';
-import { HelperText, TextInput, ActivityIndicator, Button } from 'react-native-paper';
+  StyleSheet, View, ScrollView, Image,
+  Keyboard, TouchableOpacity, KeyboardAvoidingView, Alert } from 'react-native';
+import { HelperText, Text, TextInput, ActivityIndicator, Button } from 'react-native-paper';
 import { theme } from '../../constants';
 import { register, reset } from '../../services/auth/registerSlice';
 import EmailInput from '../../components/EmailInput';
 import PasswordInput from '../../components/PasswordInput';
 import AuthFooter from '../../components/AuthFooter';
+import NameInput from '../../components/NameInput';
 
 const SignUpScreen = ({navigation, route}) => {
   const dispatch = useDispatch();
@@ -26,36 +17,65 @@ const SignUpScreen = ({navigation, route}) => {
   const [formData, setFormData] = useState({ name: "", email: "", password: ""});
   const {name, email, password} = formData;
   const [errors, setErrors] = useState({name: "", email: "", password: "", other: ""});
+  const refInputs = [useRef(), useRef(), useRef()];
 
-  const { isSuccess, user, isLoading, isError, message } = useSelector((state) => state.register)
+  const { isSuccess, isLoading, isError, message } = useSelector((state) => state.register)
 
   const handleTextChange = (value) => {
-    setErrors((prev) => {return {...prev, other: ""} })
-    return setFormData((prev) => {
-      return {...prev, ...value}
-    });
+    setErrors((prev) => {return {...prev, ...value.error} })
+    setFormData((prev) => { return {...prev, ...value.content} });
+  }
+
+  const setOtherError = (message) => {
+    setErrors((prev) => {return {...prev, other: message}});
+  }
+
+  const displayOtherError = (message) => {
+    setOtherError(message)
+    setTimeout(() => {
+      setOtherError("")
+    }, 2000)
   }
 
   const handleSubmit = (e) => {
     //e.preventDefault();
     if (errors.name != "" || errors.email != "" || errors.password != "") {
+      displayOtherError("Please correct above issues and try again.");
       return;
     }
     //dispatch(reset());
-    const form = {name: name, email: `${email}@uregina.ca`, password: password};
-    setTimeout(() => {
-      //dispatch(register(formData));
-      dispatch(register(form));
-    }, 1000);
+    console.log(formData);
+    dispatch(register(formData));
   }
+
+  const handleSubmitEditing = (index) => {
+    console.log("handleSubmitEditing: " + index)
+    if (index < 2) {
+      refInputs[index + 1].current.focus();
+    } else {
+      Keyboard.dismiss();
+    }
+  };
 
   useEffect(() => {
     dispatch(reset());
   }, []);
 
   useEffect(() => {
+    if (isSuccess && message !== null) {
+      setTimeout(() => {
+        navigation.replace("Activation", {verification: "ACTIVATION", email: message.email });
+      }, 2000);
+    }
+
+  }, [message]);
+
+  useEffect(() => {
     if (isError) {
       console.log("Message: " + JSON.stringify(message));
+      setTimeout(() => {
+        dispatch(reset());
+      }, 2000);
     }
 
     if (isSuccess) {
@@ -63,67 +83,65 @@ const SignUpScreen = ({navigation, route}) => {
     }
 
     if (isSuccess && message) {
-      console.log("user: " + user);
+      //console.log("user: " + user);
       console.log("Message: " + message);
-      setTimeout(() => {
-        //Alert.alert("Success", "Account registration has been completed. An activation code has been sent to your email. You should activate in the first log in");
-        navigation.navigate('SignIn');
-      }, 1000)
     }
 
     if (isError) {
       setErrors((prev) => {return {...prev, other: message}})
+      setTimeout(() => {
+        setErrors((prev) => { return {...prev, other: ""}})
+      }, 5000);
     }
 
     return () => {
-      dispatch(reset());
+      //dispatch(reset());
     }
-  }, [isSuccess, isError, message]);
+  }, [isSuccess, isError]);
 
     return (
       <View style={theme.STYLE.container} >
         <View style={theme.STYLE.header}>
           <Text style={theme.STYLE.headerText}>URM</Text>
         </View>
-        <View style={theme.STYLE.sub}>
+        <View style={[theme.STYLE.sub, styles.title]}>
           <Text variant="titleLarge">Account Creation</Text>
         </View>
         <View style={theme.STYLE.sub}>
-          <View style={theme.STYLE.email}>
-          <TextInput
-            mode='outlined'
-            label="Name (Required)"
-            style={theme.STYLE.textInput}
-            onBlur={() => handleBlur("name")}
-            onChangeText={text => { handleTextChange({name: text} )}}
-            value={name}
-            keyboardType="name-phone-pad"
-
+          <NameInput
+            handleTextChange={handleTextChange}
+            handleSubmitEditing={handleSubmitEditing}
+            index={0}
+            ref={refInputs[0]}
           />
-          </View>
         </View>
         <View style={theme.STYLE.sub}>
           <EmailInput 
-              handleTextChange={handleTextChange}
-              />
-        
+            handleTextChange={handleTextChange}
+            handleSubmitEditing={handleSubmitEditing}
+            index={1}
+            ref={refInputs[1]}
+          />
         </View>
         <View style={theme.STYLE.sub}>
           <PasswordInput
             handleTextChange={handleTextChange}
+            handleSubmitEditing={handleSubmitEditing}
+            index={2}
+            ref={refInputs[2]}
           />
         </View>
-          <View style={theme.STYLE.sub}>
-            <HelperText type="error" visible={message != ""}>
-              {message}
-            </HelperText>
-          </View>
+        <View style={theme.STYLE.sub}>
+          <HelperText type="error" visible={errors.other != ""}>
+            {errors.other}
+          </HelperText>
+        </View>
 
-          <ActivityIndicator animating={isLoading} />
           <View style={theme.STYLE.sub}>
               <Button 
                   //icon="camera"
                   loading={isLoading}
+                  style={theme.STYLE.button}
                   mode="contained"
                   onPress={() => handleSubmit() }
                   >
@@ -151,6 +169,9 @@ const SignUpScreen = ({navigation, route}) => {
 };
 
 const styles = StyleSheet.create({
+  title: {
+    justifyContent: "center",
+  }
 });
 
 export default SignUpScreen;

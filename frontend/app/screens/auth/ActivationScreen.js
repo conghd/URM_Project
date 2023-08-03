@@ -6,6 +6,7 @@ import { useRef, useState, useEffect } from 'react';
 import { Link } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import { activate, login, reset } from '../../services/auth/authSlice'
+import { update } from '../../services/settings/settingsSlice';
 import { resendCode } from '../../services/auth/authSlice';
 import { theme } from '../../constants';
 import AuthFooter from '../../components/AuthFooter';
@@ -13,9 +14,8 @@ import AuthFooter from '../../components/AuthFooter';
 const CODE_LENGTH = 6;
 const MAX_COUNT_DOWN = 5
 const ActivationScreen = ({ navigation, route }) => {
-  const { verification } = route.params;
+  const {email, verification } = route.params;
   const dispatch = useDispatch();
-  const {user } = useSelector((state) => state.auth);
   const {isLoading, isError, isSuccess, message } = useSelector((state) => state.auth.activateState);
   const refDigitInputs = [useRef(), useRef(), useRef(), useRef(), useRef(), useRef()];
 
@@ -103,6 +103,7 @@ const ActivationScreen = ({ navigation, route }) => {
     //return setCode(value);
   }
 
+  // ?????? WHY {index} instead of index
   const handleSubmitEditting = ({index}) => {
     if (digits[index] != "") {
       if (index < 5) {
@@ -117,10 +118,10 @@ const ActivationScreen = ({ navigation, route }) => {
 
   React.useEffect(() => {
     console.log("Activation::useEffect()");
-    console.log("verification: " + verification);
-    if (verification === "activation") {
+    console.log("Activation::verification: " + verification);
+    if (verification === "ACTIVATION") {
 
-    } else if (verification === "resetpassword") {
+    } else if (verification === "RESET_PASSWORD") {
 
     }
 
@@ -140,7 +141,7 @@ const ActivationScreen = ({ navigation, route }) => {
     //e.preventDefault();
     //dispatch(reset());
     //setAnimating(true);
-    dispatch(activate({email: user.email, code: code}));
+    dispatch(activate({email: email, code: code}));
   }
 
   return (
@@ -152,7 +153,7 @@ const ActivationScreen = ({ navigation, route }) => {
         <Text variant="titleLarge">Account Activation</Text>
       </View>
       <View style={{...theme.STYLE.sub, alignItems: "center"}}>
-        <Text style={styles.description} variant="bodyMedium">Enter the {user.email}</Text>
+        <Text style={styles.description} variant="bodyMedium">Enter the {email}</Text>
       </View>
       <View style={theme.STYLE.sub}>
         { digits.map ((d, i) => {
@@ -168,7 +169,7 @@ const ActivationScreen = ({ navigation, route }) => {
                 onChangeText={digit => { handleTextChange({index: i, digit: digit} )}}
                 value={digits[i]} 
                 maxLength={1}
-                blurOnSubmit={false}
+                blurOnSubmit={false} // Used to allow the keyboard is still on
                 caretHidden={true}
                 keyboardType="number-pad"
             />
@@ -210,7 +211,7 @@ const ActivationScreen = ({ navigation, route }) => {
           <Button
             disabled={countDown > 0}
             mode='text'
-            onPress={() => { dispatch(resendCode({email: user.email }))}}
+            onPress={() => { dispatch(resendCode({email: email }))}}
           >Resend</Button>
       </View>
       {/* This is the links to others  */}
