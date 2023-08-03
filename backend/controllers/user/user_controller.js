@@ -41,10 +41,15 @@ const registerUser = asyncHandler(async (req, res) => {
   const { name, email, password } = req.body;
   logger.info("UserController::registerUser(%s, %s, %s)", name, email, password);
 
+  let message = "";
+  if (!name) message += "Name";
+  if (!email) message += message === "" ? "Email" : ", email";
+  if (!password) message += (message === "") ? "Password": ", password";
+  message += " must be not empty. Please try again."
+
   if (!name|| !email || !password) {
     res.status(400).json({
-      code: 2,
-      message: "Name, email and password must be not empty",
+      message: message,
     });
     return;
   }
@@ -53,11 +58,11 @@ const registerUser = asyncHandler(async (req, res) => {
   const existUser = await UserModel.findOne({ email })
   if (existUser) {
     res.status(400).json({
-      code: 1,
-      message: `User with email ${email} already existed.`,
+      message: `User with email ${email} already existed. Please try another.`,
     });
     return;
   }
+
   const salt = await bcrypt.genSalt(10)
   const hashedPw = await bcrypt.hash(password, salt)
   //const activation_code = await bcrypt.hash(email, salt)
@@ -71,17 +76,14 @@ const registerUser = asyncHandler(async (req, res) => {
     activation_code: activation_code
   }, function(error, result) {
     if (error) {
-      res.status(400).json({
-        code: 2,
-        message: "There was an issue with provided information. Please try again."
+      res.status(500).json({
+        message: "There was a server issue. Please try again."
       });
     } else {
-      res.status(201).json({
-        _id: result._id,
-        name: result.name,
-        email: result.email,
-        activated: result.activated,
-        token: generateToken(result.id)
+      logger.info("UserController::registerUser, CODE: %s", activation_code)
+      res.status(200).json({
+        email: email,
+        message: "Your account has been created successfully."
       })
     }
   })
