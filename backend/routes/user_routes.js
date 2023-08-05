@@ -6,7 +6,8 @@ const {
   loginUser,
   logoutUser,
   listUser,
-  //forgotPassword,
+  forgotPassword,
+  verifyAccount,
   activateAccount,
   resendCode,
 } = require('../controllers/user/user_controller')
@@ -18,6 +19,8 @@ router.route('/login').post(loginUser)
 router.route('/list').get(listUser)
 router.route('/logout').get(logoutUser)
 router.route('/activate').post(activateAccount)
+router.route('/forgot_password').post(forgotPassword)
+router.route('/verify_account').post(verifyAccount)
 router.route('/resend_code').post(resendCode)
 
 module.exports = router

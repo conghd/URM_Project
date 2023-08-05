@@ -21,6 +21,14 @@ const userSchema = mongoose.Schema({
   activation_code: {
     type: String,
     required: true,
+  },
+  verified: {
+    type: Boolean,
+    required: true,
+  },
+  verification_code: {
+    type: String,
+    required: true
   }
 }, {timestamps: true});
 

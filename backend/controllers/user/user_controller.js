@@ -93,7 +93,7 @@ const registerUser = asyncHandler(async (req, res) => {
 // @route   POST /user/login
 // @access  Public
 const loginUser = asyncHandler(async (req, res) => {
-  console.log("UserController::loginUser");
+  logger.info("UserController::loginUser");
   const {email, password} = req.body
   
   const user = await UserModel.findOne({ email })
@@ -127,30 +127,42 @@ const loginUser = asyncHandler(async (req, res) => {
 // @route   POST /user/activate
 // @access  Public
 const resendCode = asyncHandler(async (req, res) => {
-  console.log("UserController::ResendCode");
-  const {email } = req.body
+  const {email, type } = req.body
+  logger.info("UserController::ResendCode(%s, %s)", email, type);
   
   const user = await UserModel.findOne({ email: email })
+  let status_code = 200
+  let message = ''
   
   if (user) {
-    user.activation_code = generateActivationCode();
+    if (type === 'ACTIVATION') {
+      user.activation_code = generateActivationCode();
+      logger.info("UserController::resendCode(%s, %s, %s)", email, type, user.activation_code);
+    } else if (type === 'FORGOT_PASSWORD') {
+      user.verification_code = generateActivationCode();
+      logger.info("UserController::resendCode(%s, %s, %s)", email, type, user.verification_code);
+    } else {
+      // DO NOTHING
+    }
     await user.save();
-    res.json({
-      code: 0,
-      message: `A code has been sent to the email ${email}`,
-    })
+    message = `A verification code has been sent to the email ${email}`
   } else {
-    res.status(400).json({
-      code: 1,
-      message: `The user ${email} does not exist.`,
-    })
+    status_code = 400
+    message = `The user ${email} does not exist.`
   }
+
+  res.status(status_code).json({
+    email: email,
+    type: type,
+    message: message,
+  });
 })
+
 // @desc    Activate account
 // @route   POST /user/activate
 // @access  Public
 const activateAccount = asyncHandler(async (req, res) => {
-  console.log("UserController::activateAccount");
+  logger.info("UserController::activateAccount");
   const {email, code} = req.body
   
   const user = await UserModel.findOne({ email: email })
@@ -173,11 +185,91 @@ const activateAccount = asyncHandler(async (req, res) => {
   }
 })
 
+// @desc    Forgot Password
+// @route   POST /user/forgot_password
+// @access  Public
+const forgotPassword = asyncHandler(async (req, res) => {
+  const {email} = req.body
+  logger.info("UserController::forgotPassword(%s)", email);
+  
+  const user = await UserModel.findOne({ email: email })
+  
+  let status_code = ""
+  let message = ""
+  if (user) {
+    user.verified = false
+    user.verification_code = generateActivationCode();
+    await user.save();
+
+    status_code = 200
+    message = `A code has been sent to the email ${email}.`
+
+    logger.info("UserController::forgotPassword, VERIFICATION_CODE: " + user.verification_code)
+  } else {
+    status_code = 400
+    message = `The user ${email} does not exist.`
+  }
+
+  res.status(status_code).json({
+    email: email,
+    message: message,
+  })
+})
+
+// @desc    Verify account
+// @route   POST /user/verify_account
+// @access  Public
+const verifyAccount = asyncHandler(async (req, res) => {
+  const {email, code, type} = req.body
+  logger.info("UserController::verifyAccount(%s, %s, %s)", email, code, type);
+  
+  const user = await UserModel.findOne({ email: email })
+  
+  let status_code = "", message = ""
+  if (user) {
+    if (type == "FORGOT_PASSWORD") {
+      if (code === user.verification_code) {
+        user.verified = true
+        status_code = 200
+        message = `Account ${email} has been verified successfully.`
+
+        await user.save();
+      } else {
+        status_code = 400
+        message = `Verification code is not correct. Please try again.`
+      }
+    } else if (type === "ACTIVATION") {
+      if (code === user.activation_code) {
+        user.activated = true;
+        status_code = 200
+        message = `Account ${email} has been activated successfully.`
+
+        await user.save();
+      } else {
+        status_code = 400
+        message = `Activation code is not correct. Please try again.`
+      }
+    } else {
+      // NOTHING TO DO
+      status_code = 400
+      message = "Invalid action. Please try again"
+    }
+  } else {
+    status_code = 400
+    message = `The user ${email} does not exist.`
+  }
+
+  res.status(status_code).json({
+    email: email,
+    message: message
+  })
+})
+
 // @desc    List users
 // @route   POST  /user/list
 // @access  Private
 const listUser = asyncHandler(async (req, res) => {
-  console.log("UserController::listUser")
+  logger.info("UserController::listUser")
   const users = await UserModel.find()
                   .select("-password")
                   .select("-activated")
@@ -191,7 +283,7 @@ const listUser = asyncHandler(async (req, res) => {
 // @route   GET /user/logout
 // @access  Private
 const logoutUser = asyncHandler(async (req, res) => {
-  console.log("UserController::loggoutUser");
+  logger.info("UserController::loggoutUser");
   res.sendStatus(200).json({
     code: 0,
     message: "Logged out successfully",
@@ -210,5 +302,7 @@ module.exports = {
   listUser,
   logoutUser,
   activateAccount,
+  forgotPassword,
+  verifyAccount,
   resendCode,
 }
