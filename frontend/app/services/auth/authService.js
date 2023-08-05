@@ -19,7 +19,7 @@ const login = async (userData) => {
 }
 
 const resendCode = async (userData) => {
-  console.log("AuthService::resendCode- " + API_URL + 'activate');
+  console.log("AuthService::resendCode- " + API_URL + 'resend_code');
   console.log("AuthService::resendCode- " + JSON.stringify(userData));
   const response = await axios.post(API_URL + 'resend_code', userData);
 
@@ -30,13 +30,13 @@ const resendCode = async (userData) => {
   return response.data
 }
 
-const activate = async (userData) => {
-  console.log("AuthService::activate- " + API_URL + 'activate');
-  console.log("AuthService::active - " + JSON.stringify(userData));
-  const response = await axios.post(API_URL + 'activate', userData);
+const forgotPassword = async (userData) => {
+  console.log("AuthService::forgotPassword- " + API_URL + 'forgot_password');
+  console.log("AuthService::forgotPassword- " + JSON.stringify(userData));
+  const response = await axios.post(API_URL + 'forgot_password', userData);
 
   if (response.data) {
-    console.log("AuthService::activate - " + JSON.stringify(response.data));
+    console.log("AuthService::forgotPassword- " + JSON.stringify(response.data));
   }
 
   return response.data
@@ -61,7 +61,7 @@ const authService = {
   logout,
   login,
   load,
-  activate,
+  forgotPassword,
   resendCode,
 }
 

@@ -5,7 +5,7 @@ import * as SecureStore from 'expo-secure-store';
 import { useRef, useState, useEffect } from 'react';
 import { Link } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
-import { activate, login, reset } from '../../services/auth/authSlice'
+import { activate, reset as resetActivation } from '../../services/auth/authActivationSlice';
 import { update } from '../../services/settings/settingsSlice';
 import { resendCode } from '../../services/auth/authSlice';
 import { theme } from '../../constants';
@@ -16,7 +16,7 @@ const MAX_COUNT_DOWN = 5
 const ActivationScreen = ({ navigation, route }) => {
   const {email, verification } = route.params;
   const dispatch = useDispatch();
-  const {isLoading, isError, isSuccess, message } = useSelector((state) => state.auth.activateState);
+  const {isLoading, isError, isSuccess, message } = useSelector((state) => state.authActivation);
   const refDigitInputs = [useRef(), useRef(), useRef(), useRef(), useRef(), useRef()];
 
   const [code, setCode] = useState("");
@@ -58,8 +58,8 @@ const ActivationScreen = ({ navigation, route }) => {
     setCode(nextCode);
   }
   const handleKeyPress = (index, e) => {
-    console.log("handleKeyPress: " + index + ", " + e.key);
-    console.log("digit: " + digits[index]);
+    //console.log("handleKeyPress: " + index + ", " + e.key);
+    //console.log("digit: " + digits[index]);
     // Handle backspace key
     if (e.key === "Backspace") {
       if (isDigit(digits[index])) {
@@ -121,27 +121,52 @@ const ActivationScreen = ({ navigation, route }) => {
     console.log("Activation::verification: " + verification);
     if (verification === "ACTIVATION") {
 
-    } else if (verification === "RESET_PASSWORD") {
+    } else if (verification === "FORGOT_PASSWORD") {
 
     }
 
+    console.log(`ActivationScreen::useEffect[] - isLoading: ${isLoading}, isSuccess: ${isSuccess}, isError: ${isError}`)
+    dispatch(resetActivation())
     handleCountDown();
   }, []);
 
-  React.useEffect(() => {
+  useEffect(() => {
+    console.log(`ActivationScreen::useEffect[isLoading], isLoading: ${isLoading}, isSuccess: ${isSuccess}, isError: ${isError}`)
+
+  }, [isLoading])
+
+  useEffect(() => {
+    console.log(`ActivationScreen::useEffect[isSuccess] isLoading: ${isLoading}, isSuccess: ${isSuccess}, isError: ${isError}`)
     if (isSuccess) {
-      navigation.replace("ActivationComplete", {verification: verification})
-    } else if (isError) {
-      setError(message);
-      setTimeout(() => {setError(""); }, 5000);
+      if (verification === "ACTIVATION") {
+        navigation.replace("ActivationComplete", {verification: verification})
+      } else if (verification === 'FORGOT_PASSWORD') {
+        navigation.replace("ResetPassword", {verification: verification})
+      } else {
+        // DO NOTHING
+      }
+
+      dispatch(resetActivation())
     }
-  }, [isLoading]);
+  }, [isSuccess]);
+
+
+  useEffect(() => {
+    console.log(`ActivationScreen::useEffect[isError], isLoading: ${isLoading}, isSuccess: ${isSuccess}, isError: ${isError}`)
+    if (isError) {
+      setError(message.message);
+      console.log(message.message)
+      setTimeout(() => {setError(""); }, 5000);
+    
+      dispatch(resetActivation())
+    }
+  }, [isError])
 
   const handleSubmit = (e) => {
     //e.preventDefault();
-    //dispatch(reset());
-    //setAnimating(true);
-    dispatch(activate({email: email, code: code}));
+      console.log('ActivationScreen::handleSubmit(%s)', verification)
+
+    dispatch(activate({email: email, code: code, type: verification}));
   }
 
   return (
@@ -149,11 +174,11 @@ const ActivationScreen = ({ navigation, route }) => {
       <View style={theme.STYLE.header}>
         <Text style={theme.STYLE.headerText}>URM</Text>
       </View>
-      <View style={theme.STYLE.sub}>
-        <Text variant="titleLarge">Account Activation</Text>
+      <View style={[theme.STYLE.sub, styles.title]}>
+        <Text variant="titleLarge">Account Verification</Text>
       </View>
-      <View style={{...theme.STYLE.sub, alignItems: "center"}}>
-        <Text style={styles.description} variant="bodyMedium">Enter the {email}</Text>
+      <View style={{...theme.STYLE.sub, justifyContent: "center"}}>
+        <Text style={styles.description} variant="bodyMedium">A verification code has been sent to your email {email}. Enter the 6 digits to verify your account</Text>
       </View>
       <View style={theme.STYLE.sub}>
         { digits.map ((d, i) => {
@@ -178,18 +203,18 @@ const ActivationScreen = ({ navigation, route }) => {
         }
       </View>
 
-      <View style={theme.STYLE.sub}>
-        <View style={theme.STYLE.errorText} >
-          <HelperText style={styles.error} type="error" visible={error!= ""}>
-            {error}
-          </HelperText>
-        </View>
+      { error &&
+      <View style={{...theme.STYLE.sub, marginTop: 0}}>
+        <HelperText style={styles.error} type="error" visible={error!= ""}>
+          {error}
+        </HelperText>
       </View>
+      }
 
       {/** Sign In button */}
       <View style={theme.STYLE.sub}>
         <Button 
-          disabled={code.length < CODE_LENGTH}
+          disabled={code.length < CODE_LENGTH || isLoading}
           loading={isLoading}
           style={theme.STYLE.button}
           //icon="camera"
@@ -203,33 +228,23 @@ const ActivationScreen = ({ navigation, route }) => {
         
       {/* These are the links to others  */}
       <View style={theme.STYLE.sub}>
-        <Divider />
-      </View>
-      <View style={theme.STYLE.sub}>
           <Text variant="bodyMedium">Didn't get a code?</Text>
           <Text variant='bodyMedium'>{countDown > 0 ? `(${countDown})` : "" }</Text>
           <Button
             disabled={countDown > 0}
             mode='text'
-            onPress={() => { dispatch(resendCode({email: email }))}}
+            onPress={() => { dispatch(resendCode({email: email, type: verification }))}}
           >Resend</Button>
       </View>
       {/* This is the links to others  */}
 
+      <Divider style={styles.divider} />
       {/* These are the links to others  */}
       <View style={theme.STYLE.sub}>
-        <View style={theme.STYLE.leftHalf} >
-          <Button mode='text'
-            onPress={() => { navigation.navigate("ResetPassword")}}
-            >Reset Password</Button>
-        </View>
-        <View
-          style={theme.STYLE.rightHalf}
-          >
-            <Button mode='text'
-            onPress={() => { navigation.navigate("SignUp")}}
-            >Sign Up</Button>
-        </View>
+        <Button
+          mode='outlined'
+          onPress={() => { navigation.navigate("SignIn")}}
+          >Sign In</Button>
       </View>
       {/** Footer */}
       <AuthFooter />
@@ -238,11 +253,14 @@ const ActivationScreen = ({ navigation, route }) => {
 }
 
 const styles = StyleSheet.create({
+  title: {
+    justifyContent: "center",
+  },
   description: {
-    textAlign: "right",
+    textAlign: "left",
     alignContent: "flex-start",
     alignItems: "flex-start",
-    justifyContent: "flex-start",
+    justifyContent: "center",
   },
   digit: {
     //width: 53,
@@ -252,9 +270,12 @@ const styles = StyleSheet.create({
     marginRight: 3,
     fontSize: 36,
   },
+  divider: {
+    marginTop: 30,
+  },
   error: {
-    backgroundColor: "#FFFF00",
     flex: 1,
+    paddingLeft: 0,
   }
 });
 

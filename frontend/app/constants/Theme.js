@@ -65,7 +65,7 @@ export default {
       flex: 1,
       flexDirection: "row",
       justifyContent: "flex-end",
-      marginRight: 10
+      marginRight: 0
     },
     textInput: {
       //marginTop: 20,
@@ -84,7 +84,11 @@ export default {
     button: {
       justifyContent: "center",
       flex: 1,
-      borderRadius: 5,
+      //borderRadius: 5,
     },
+
+    divider: {
+      marginTop: 30,
+    }
 	}
 }

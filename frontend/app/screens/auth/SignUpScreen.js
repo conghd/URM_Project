@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import {
   StyleSheet, View, ScrollView, Image,
   Keyboard, TouchableOpacity, KeyboardAvoidingView, Alert } from 'react-native';
-import { HelperText, Text, TextInput, ActivityIndicator, Button } from 'react-native-paper';
+import { HelperText, Text, TextInput, ActivityIndicator, Button, Divider } from 'react-native-paper';
 import { theme } from '../../constants';
 import { register, reset } from '../../services/auth/registerSlice';
 import EmailInput from '../../components/EmailInput';
@@ -11,6 +11,7 @@ import PasswordInput from '../../components/PasswordInput';
 import AuthFooter from '../../components/AuthFooter';
 import NameInput from '../../components/NameInput';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { Link } from '@react-navigation/native';
 
 const SignUpScreen = ({navigation, route}) => {
   const dispatch = useDispatch();
@@ -110,7 +111,7 @@ const SignUpScreen = ({navigation, route}) => {
           <Text style={theme.STYLE.headerText}>URM</Text>
         </View>
         <View style={[theme.STYLE.sub, styles.title]}>
-          <Text variant="titleLarge">Account Creation</Text>
+          <Text variant="titleLarge">Registration</Text>
         </View>
         <View style={theme.STYLE.sub}>
           <NameInput
@@ -147,30 +148,35 @@ const SignUpScreen = ({navigation, route}) => {
         }
 
           <View style={theme.STYLE.sub}>
-              <Button 
-                  //icon="camera"
-                  loading={isLoading}
-                  style={theme.STYLE.button}
-                  mode="contained"
-                  onPress={() => handleSubmit() }
-                  >
-                  Sign Up
-              </Button>
+            <Button 
+                icon="send"
+                loading={isLoading}
+                style={[theme.STYLE.button, styles.button] }
+                mode="contained"
+                onPress={() => handleSubmit() }
+                >
+                Register
+            </Button>
           </View>
 
-         <View style={theme.STYLE.sub}>
-                <View style={theme.STYLE.leftHalf} >
-                    <Button mode='text'
-                      onPress={() => { navigation.navigate("ResetPassword")}}
-                      >Reset Password</Button>
-                </View>
-          <View
-            style={theme.STYLE.rightHalf}
-            >
-              <Button mode='text'
+         <View style={[theme.STYLE.sub, styles.extra] }>
+          <Text  variant='bodyMedium'>
+              Already have an account? 
+            {/* 
+            <Link
+              style={styles.link}
+              to={{ screen: 'SignIn', params: { }}}>
+              &nbsp;Log In
+            </Link>
+            */}
+          </Text>
+          {/*
+
+          */}
+            <Button 
+              mode='text'
               onPress={() => { navigation.navigate("SignIn")}}
-              >Sign In</Button>
-          </View>
+            >Log In</Button>
         </View>
         </KeyboardAwareScrollView>
         <AuthFooter />
@@ -181,6 +187,21 @@ const SignUpScreen = ({navigation, route}) => {
 const styles = StyleSheet.create({
   title: {
     justifyContent: "center",
+  },
+  button: {
+    marginTop: 8,
+  },
+  divider: {
+    marginTop: 30,
+  },
+  extra: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 30,
+  },
+  link: {
+    justifyContent: 'center',
+    color: '#004e2e',
   }
 });
 

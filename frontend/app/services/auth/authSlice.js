@@ -13,7 +13,7 @@ const initialState = {
    user: null,
    loadState: initialSubState,
    loginState: initialSubState,
-   activateState: initialSubState,
+   forgotState: initialSubState,
    resendCodeState: initialSubState,
    logoutState: initialSubState,
 };
@@ -32,7 +32,7 @@ export const login = createAsyncThunk('auth/login', async (user, thunkAPI) => {
   }
 })
 
-// Activate account
+// Resend code
 export const resendCode = createAsyncThunk('auth/resend_code', async (userData, thunkAPI) => {
   try {
     console.log("AuthSlice::resendCode - " + JSON.stringify(userData) );
@@ -40,22 +40,7 @@ export const resendCode = createAsyncThunk('auth/resend_code', async (userData, 
   } catch (error) {
     const message =
       (error.response && error.response.data && error.response.data.message) ||
-      error.message ||
-      error.toString()
-    return thunkAPI.rejectWithValue(message)
-  }
-})
-
-// Activate account
-export const activate = createAsyncThunk('auth/activate', async (user, thunkAPI) => {
-  try {
-    console.log("AuthSlice::activate- " + JSON.stringify(user) );
-    return await authService.activate(user)
-  } catch (error) {
-    const message =
-      (error.response && error.response.data && error.response.data.message) ||
-      error.message ||
-      error.toString()
+       error.message || error.toString()
     return thunkAPI.rejectWithValue(message)
   }
 })
@@ -80,38 +65,31 @@ export const load = createAsyncThunk('auth/load', async (thunkAPI) => {
 
 export const authSlice = createSlice({
   name: 'auth',
-  initialState,
+  initialState: initialState,
   reducers: {
     reset: (state) => {
       state.loadState = initialSubState
       state.loginState = initialSubState
       state.activateState = initialSubState
+      state.forgotState = initialSubState
       state.resendCodeState = initialSubState
       state.logoutState = initialSubState
       state.user = null
     },
     resetLogin: (state) => {
       state.loginState = initialSubState
-    }
+    },
+    resetForgotPassword: (state) => {
+      //state.forgotState = initialState
+      state.forgotState.isError = false
+      state.forgotState.isSuccess = false
+      state.forgotState.isLoading = false
+      state.forgotState.message = ''
+    },
   },
   extraReducers: (builder) => {
     builder
-      .addCase(activate.pending, (state) => {
-        state.activateState.isLoading = true
-      })
-      .addCase(activate.fulfilled, (state, action) => {
-        state.activateState.isLoading = false
-        state.activateState.isSuccess = true
-        if (state.user != null) {
-          state.user.activated = true
-        }
-      })
-      .addCase(activate.rejected, (state, action) => {
-        state.activateState.isLoading = false
-        state.activateState.isError = true
-        state.activateState.message = action.payload
-        //state.user = null
-      })
+      // Resend Code
       .addCase(resendCode.pending, (state) => {
         state.resendCodeState.isLoading = true
       })
@@ -141,6 +119,7 @@ export const authSlice = createSlice({
         state.user = null
       })
 
+      // Log out
       .addCase(logout.pending, (state) => {
         state.logoutState.isLoading = true
       })
@@ -169,5 +148,5 @@ export const authSlice = createSlice({
   },
 })
 
-export const { reset, resetLogin } = authSlice.actions
+export const { reset, resetLogin, resetForgotPassword } = authSlice.actions
 export default authSlice.reducer

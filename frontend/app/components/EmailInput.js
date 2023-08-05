@@ -5,8 +5,8 @@ import { StyleSheet, View } from "react-native";
 import { Button, TextInput, Text, HelperText } from "react-native-paper";
 import { theme } from "../constants";
 
-const EmailInput = React.forwardRef(({handleTextChange, handleSubmitEditing, index}, ref) => {
-    const [userId, setUserId] = useState("");
+const EmailInput = React.forwardRef(({email, handleTextChange, handleSubmitEditing, index}, ref) => {
+    const [userId, setUserId] = useState(email? email.split('@')[0] : '');
     const [error, setError] = useState("");
     const [visible, setVisible] = useState(false)
     const navigation = useNavigation();
@@ -31,7 +31,7 @@ const EmailInput = React.forwardRef(({handleTextChange, handleSubmitEditing, ind
 
     useEffect(() => {
       const unsubscrible = navigation.addListener("focus", () => {
-        setUserId("");
+        //setUserId("");
         setError("");
         setVisible(false);
       });

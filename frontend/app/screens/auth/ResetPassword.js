@@ -1,30 +1,26 @@
 import * as React from 'react';
-import { Text, View, StyleSheet, TextInput, Button } from 'react-native';
+import { Text, View, StyleSheet, TextInput } from 'react-native';
+import { Button } from 'react-native-paper';
 import * as SecureStore from 'expo-secure-store';
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
+import { theme } from '../../constants';
 
 
-async function save(key, value) {
-    await SecureStore.setItemAsync(key, value);
-}
+const ResetPassword = ({navigation, route}) => {
 
-async function getValueFor(key) {
-    let result = await SecureStore.getItemAsync(key);
+    useEffect(() => {
+        console.log("ResetPassword::useEffect()[]")
 
-    if (result) {
-        alert("Here's your value \n" + result);
-    } else {
-        alert("No values stored under that key.");
-    }
-}
-
-const ResetPassword = () => {
-    const [key, onChangeKey] = useState("user.token");
-    const [value, onChangeValue] = useState("No values");
+    }, [])
 
     return (
         <View style={styles.container}>
             <Text>Reset Password</Text>
+            <View style={theme.STYLE.sub}>
+                <Button mode='outlined'
+                onPress={() => { navigation.navigate("SignIn")}}
+                >Log In</Button>
+            </View>
         </View>
     );
 }

@@ -2,6 +2,7 @@ import { createStackNavigator, TransitionPresets } from "@react-navigation/stack
 import SignInScreen from "../screens/auth/SignInScreen";
 import SignUpScreen from "../screens/auth/SignUpScreen";
 import ResetPassword from "../screens/auth/ResetPassword";
+import ForgotPassword from "../screens/auth/ForgotPassword";
 import ActivationScreen from "../screens/auth/ActivationScreen";
 import ActivationComplete from "../screens/auth/ActivationComplete";
 import { useEffect } from "react";
@@ -39,6 +40,7 @@ const AuthNavigator = () => {
         </>
       )}
       <Stack.Screen name="ResetPassword" component={ResetPassword} options={options1} />
+      <Stack.Screen name="ForgotPassword" component={ForgotPassword} options={options1} />
       <Stack.Screen name="Activation" component={ActivationScreen} options={options1} />
       <Stack.Screen name="ActivationComplete" component={ActivationComplete} options={options1} />
     </Stack.Navigator>
