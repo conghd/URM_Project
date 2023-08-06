@@ -25,7 +25,7 @@ const ActivationScreen = ({ navigation, route }) => {
   const [countDown, setCountDown] = useState();
 
   const handleCountDown = () => {
-    let count = 5;
+    let count = 14
       setCountDown(count);
       const timer = setInterval(() => {
         if (count === 0) {
@@ -37,6 +37,14 @@ const ActivationScreen = ({ navigation, route }) => {
         }
       }, 1000);
   }
+
+  const handleResend = () => {
+    handleCountDown()
+    if (!isLoading) {
+      dispatch(resendCode({email: email, type: verification }))
+    }
+  }
+
   const isDigit = (str) => {
     if (str.length == 1 && "0123456789".includes(str)) {
       return true;
@@ -211,6 +219,17 @@ const ActivationScreen = ({ navigation, route }) => {
       </View>
       }
 
+      {/* These are the links to others  */}
+      <View style={{...theme.STYLE.sub, marginTop: 0, alignItems: 'center'}}>
+          <Text variant="bodyMedium">Didn't get a code?</Text>
+          <Text variant='bodyMedium'>{countDown > 0 ? `(${countDown})` : "" }</Text>
+          <Button
+            disabled={countDown > 0}
+            mode='text'
+            onPress={handleResend}
+          >Resend</Button>
+      </View>
+
       {/** Sign In button */}
       <View style={theme.STYLE.sub}>
         <Button 
@@ -221,30 +240,24 @@ const ActivationScreen = ({ navigation, route }) => {
           mode="contained"
           onPress={() => handleSubmit() }
           >
-          Activate
+          Verify
         </Button>
       </View>
 
         
-      {/* These are the links to others  */}
-      <View style={theme.STYLE.sub}>
-          <Text variant="bodyMedium">Didn't get a code?</Text>
-          <Text variant='bodyMedium'>{countDown > 0 ? `(${countDown})` : "" }</Text>
-          <Button
-            disabled={countDown > 0}
-            mode='text'
-            onPress={() => { dispatch(resendCode({email: email, type: verification }))}}
-          >Resend</Button>
-      </View>
       {/* This is the links to others  */}
 
-      <Divider style={styles.divider} />
+      <Divider style={theme.STYLE.divider} />
       {/* These are the links to others  */}
-      <View style={theme.STYLE.sub}>
+      <View style={[theme.STYLE.sub, styles.extra]}>
+        <Text  variant='bodyMedium'>Or</Text>
+      </View>
+      <View style={{...theme.STYLE.sub, marginTop: 10}}>
         <Button
+          style={theme.STYLE.button}
           mode='outlined'
           onPress={() => { navigation.navigate("SignIn")}}
-          >Sign In</Button>
+          >Cancel</Button>
       </View>
       {/** Footer */}
       <AuthFooter />
@@ -276,7 +289,12 @@ const styles = StyleSheet.create({
   error: {
     flex: 1,
     paddingLeft: 0,
-  }
+  },
+  extra: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 25,
+  },
 });
 
 export default ActivationScreen;

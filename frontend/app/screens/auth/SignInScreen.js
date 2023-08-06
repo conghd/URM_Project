@@ -133,11 +133,11 @@ const SignInScreen = ({ navigation, route }) => {
       
       { errors.other != "" && 
       <View style={theme.STYLE.sub}>
-        <View style={theme.STYLE.errorText} >
-          <HelperText type="error" visible={errors.other != ""}>
+          <HelperText
+            style={{paddingLeft: 0}}
+            type="error" visible={errors.other != ""}>
             {errors.other}
           </HelperText>
-        </View>
       </View>
       }
 
@@ -155,7 +155,13 @@ const SignInScreen = ({ navigation, route }) => {
       </View>
       {/* These are the links to others  */}
       <Divider style={styles.divider} />
-      <View style={theme.STYLE.sub}>
+      <View style={{...theme.STYLE.sub, justifyContent: 'center'}}>
+          <Text  variant='bodyMedium'>
+              Don't have an account? 
+          </Text>
+
+      </View>
+      <View style={{...theme.STYLE.sub, marginTop: 10}}>
         <Button
         style={theme.STYLE.button}
         mode='outlined'
@@ -179,7 +185,8 @@ const styles = StyleSheet.create({
     marginTop: 5,
     alignItems: 'center',
     justifyContent: "flex-end",
-  }
+  },
+
 });
 
 export default SignInScreen;

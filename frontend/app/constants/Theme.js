@@ -52,6 +52,11 @@ export default {
       flexDirection: "row",
       alignItems: "center",
     },
+    sub30: {
+      marginTop: 30,
+      flexDirection: "row",
+      alignItems: "center",
+    },
     leftHalf: {
         alignItems: "center",
         height: 60,

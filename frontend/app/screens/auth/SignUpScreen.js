@@ -159,24 +159,18 @@ const SignUpScreen = ({navigation, route}) => {
             </Button>
           </View>
 
-         <View style={[theme.STYLE.sub, styles.extra] }>
+        <Divider style={styles.divider} />
+        <View style={[theme.STYLE.sub, styles.extra] }>
           <Text  variant='bodyMedium'>
-              Already have an account? 
-            {/* 
-            <Link
-              style={styles.link}
-              to={{ screen: 'SignIn', params: { }}}>
-              &nbsp;Log In
-            </Link>
-            */}
+            Already have an account? 
           </Text>
-          {/*
-
-          */}
-            <Button 
-              mode='text'
-              onPress={() => { navigation.navigate("SignIn")}}
-            >Log In</Button>
+        </View>
+        <View style={{...theme.STYLE.sub, marginTop: 10 }}>
+          <Button 
+            style={theme.STYLE.button}
+            mode='outlined'
+            onPress={() => { navigation.navigate("SignIn")}}
+          >Log In</Button>
         </View>
         </KeyboardAwareScrollView>
         <AuthFooter />
@@ -197,7 +191,7 @@ const styles = StyleSheet.create({
   extra: {
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 30,
+    marginTop: 25,
   },
   link: {
     justifyContent: 'center',

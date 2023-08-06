@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { View, StyleSheet, Keyboard} from 'react-native';
-import { HelperText, Button, TextInput, Text, ActivityIndicator, Snackbar } from 'react-native-paper';
+import { HelperText, Button, TextInput, Text, ActivityIndicator, Snackbar, Divider } from 'react-native-paper';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { forgotPassword, reset as resetForgotPassword } from '../../services/auth/authForgotPasswordSlice';
@@ -144,7 +144,7 @@ const ForgotPassword = ({ navigation, route }) => {
       <ActivityIndicator animating={isLoading} />
       */}
       {/** Sign In button */}
-      <View style={theme.STYLE.sub}>
+      <View style={{...theme.STYLE.sub, marginTop: 30}}>
         <Button 
           loading={isLoading}
           style={theme.STYLE.button}
@@ -155,10 +155,16 @@ const ForgotPassword = ({ navigation, route }) => {
           Continue
         </Button>
       </View>
+      <Divider style={theme.STYLE.divider} />
       {/* These are the links to others  */}
-      <View style={theme.STYLE.sub}>
-        <Button mode='outlined'
-        onPress={() => { navigation.navigate("SignIn")}}
+      <View style={[theme.STYLE.sub, styles.extra]}>
+        <Text  variant='bodyMedium'>Or</Text>
+      </View>
+      <View style={{...theme.STYLE.sub, marginTop: 10}}>
+        <Button
+          style={theme.STYLE.button}
+          mode='outlined'
+          onPress={() => { navigation.navigate("SignIn")}}
         >Back</Button>
       </View>
       </KeyboardAwareScrollView>
@@ -173,6 +179,11 @@ const styles = StyleSheet.create({
   },
   error: {
     marginTop: 0,
+  },
+  extra: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 25,
   },
   email: {
     marginTop: 5,
