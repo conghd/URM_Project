@@ -139,11 +139,9 @@ const SignUpScreen = ({navigation, route}) => {
         </View>
         { errors.other != "" && 
           <View style={theme.STYLE.sub}>
-            <View style={theme.STYLE.errorText}>
             <HelperText type="error" visible={errors.other != ""}>
               {errors.other}
             </HelperText>
-            </View>
           </View>
         }
 
