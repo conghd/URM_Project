@@ -104,6 +104,7 @@ const SignUpScreen = ({navigation, route}) => {
     return (
       <View style={theme.STYLE.container} >
         <KeyboardAwareScrollView extraHeight={0}
+          extraScrollHeight={0}
           showsVerticalScrollIndicator={false}
           showsHorizontalScrollIndicator={false}
           >
@@ -170,8 +171,8 @@ const SignUpScreen = ({navigation, route}) => {
             onPress={() => { navigation.navigate("SignIn")}}
           >Log In</Button>
         </View>
-        </KeyboardAwareScrollView>
         <AuthFooter />
+        </KeyboardAwareScrollView>
       </View>
     );
 };

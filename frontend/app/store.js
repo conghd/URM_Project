@@ -9,6 +9,7 @@ import advertCreationReducer from './services/advert/advertCreationSlice'
 import settingsReducer from './services/settings/settingsSlice'
 import authForgotPasswordReducer from './services/auth/authForgotPasswordSlice'
 import authActivationReducer from './services/auth/authActivationSlice'
+import authResetPasswordReducer from "./services/auth/authResetPasswordSlice";
 import thunk from 'redux-thunk'
 
 const persistConfig = {
@@ -21,6 +22,7 @@ const rootReducer = combineReducers({
     auth: authReducer,
     authForgotPassword: authForgotPasswordReducer,
     authActivation: authActivationReducer,
+    authResetPassword: authResetPasswordReducer,
     register: registerReducer,
     advert: advertReducer,
     advertCreation: advertCreationReducer,

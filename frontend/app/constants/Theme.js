@@ -86,6 +86,9 @@ export default {
       //justifyContent: "center",
       height: 40,
     },
+    infoText: {
+      color: 'green',
+    },
     button: {
       justifyContent: "center",
       flex: 1,

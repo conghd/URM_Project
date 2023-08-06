@@ -31,7 +31,6 @@ const ActivationScreen = ({ navigation, route }) => {
         if (count === 0) {
           clearInterval(timer);
         } else {
-          console.log("count: " + count);
           count = count - 1;
           setCountDown(count);
         }
@@ -147,9 +146,9 @@ const ActivationScreen = ({ navigation, route }) => {
     console.log(`ActivationScreen::useEffect[isSuccess] isLoading: ${isLoading}, isSuccess: ${isSuccess}, isError: ${isError}`)
     if (isSuccess) {
       if (verification === "ACTIVATION") {
-        navigation.replace("ActivationComplete", {verification: verification})
+        navigation.replace("ActivationComplete", {verification: verification, email: email })
       } else if (verification === 'FORGOT_PASSWORD') {
-        navigation.replace("ResetPassword", {verification: verification})
+        navigation.replace("ResetPassword", {verification: verification, email: email})
       } else {
         // DO NOTHING
       }

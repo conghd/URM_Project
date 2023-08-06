@@ -104,6 +104,7 @@ const ForgotPassword = ({ navigation, route }) => {
   }
 
   const handleSubmitEditing = (index) => {
+    Keyboard.dismiss();
   }
 
   return (
@@ -167,8 +168,8 @@ const ForgotPassword = ({ navigation, route }) => {
           onPress={() => { navigation.navigate("SignIn")}}
         >Back</Button>
       </View>
-      </KeyboardAwareScrollView>
       <AuthFooter />
+      </KeyboardAwareScrollView>
     </View>
   );
 }

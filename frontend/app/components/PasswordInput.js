@@ -5,11 +5,15 @@ import { StyleSheet, View } from "react-native";
 import { Button, TextInput, Text, HelperText } from "react-native-paper";
 import { theme } from "../constants";
 
-const PasswordInput = React.forwardRef(({handleTextChange, handleSubmitEditing, index}, ref) => {
+const PasswordInput = React.forwardRef(({handleTextChange, handleSubmitEditing, index, variant}, ref) => {
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
     const [visible, setVisible] = useState(false)
     const [pwVisible, setPwVisible] = useState(false);
+
+    let label = "Password"
+    if (variant === 'current_password') label = "Current Password"
+    if (variant === "new_password") label = "New Password"
 
     const navigation = useNavigation();
 
@@ -28,7 +32,16 @@ const PasswordInput = React.forwardRef(({handleTextChange, handleSubmitEditing, 
     const onTextChange = (text) => {
       //console.log("onTextChange: " + text);
       let msg = validatePassword(text);
-      handleTextChange({content: {password: text}, error: {password: msg}});
+      let data
+      if (variant === 'current_password') {
+        data = {content: {current_password: text}, error: {current_password: msg}}
+      } else if (variant == 'new_password') {
+        data = {content: {new_password: text}, error: {new_password: msg}}
+      } else {
+        data = {content: {password: text}, error: {password: msg}}
+      }
+
+      handleTextChange(data);
 
       setPassword(text);
       setError(msg);
@@ -54,8 +67,8 @@ const PasswordInput = React.forwardRef(({handleTextChange, handleSubmitEditing, 
           ref={ref}
             style={theme.STYLE.textInput}
             mode="outlined"
-            label="Password"
-            placeholder="Password"
+            label={label}
+            placeholder={label}
             onBlur={() => { setVisible(true)}}
             onChangeText={text => { onTextChange(text)}}
             onSubmitEditing={() => { handleSubmitEditing(index)}}
