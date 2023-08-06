@@ -158,6 +158,7 @@ const resendCode = asyncHandler(async (req, res) => {
   });
 })
 
+// TO BE REMOVED
 // @desc    Activate account
 // @route   POST /user/activate
 // @access  Public
@@ -265,6 +266,95 @@ const verifyAccount = asyncHandler(async (req, res) => {
   })
 })
 
+// @desc    Reset password
+// @route   POST  /user/reset_password
+// @access  Public
+const resetPassword = asyncHandler(async (req, res) => {
+  const { email, password } = req.body;
+  logger.info("UserController::resetPassword(%s, %s)", email, password);
+
+  let message = "";
+  if (!email) message += message === "" ? "Email" : ", email";
+  if (!password) message += (message === "") ? "Password": ", password";
+  message += " must be not empty. Please try again."
+
+  if (!email || !password) {
+    res.status(400).json({
+      message: message,
+    });
+    return;
+  }
+  
+  // Check if user exists
+  const user = await UserModel.findOne({ email })
+  if (!user) {
+    res.status(400).json({
+      message: `User ${email} does not exist. Please try again.`,
+    });
+    return;
+  }
+
+  const salt = await bcrypt.genSalt(10)
+  const hashedPw = await bcrypt.hash(password, salt)
+  user.password = hashedPw
+  await user.save()
+  
+  res.status(200).json({
+    email: email,
+    message: "Your password has been changed successfully."
+  })
+})
+
+// @desc    Change password
+// @route   POST  /user/change_password
+// @access  Public
+const changePassword = asyncHandler(async (req, res) => {
+  const { email, password, new_password } = req.body;
+  logger.info("UserController::resetPassword(%s, %s, %s)", email, password, new_password);
+
+  let message = "";
+  if (!email) message += message === "" ? "Email" : ", email";
+  if (!password) message += (message === "") ? "Password": ", password";
+  if (!new_password) message += (message === "") ? "New password": ", new password";
+  message += " must be not empty. Please try again."
+
+  if (!email || !password) {
+    res.status(400).json({
+      message: message,
+    });
+    return;
+  }
+  
+  // Check if user exists
+  const user = await UserModel.findOne({ email })
+  if (!user) {
+    res.status(400).json({
+      message: `User ${email} does not exist. Please try again.`,
+    });
+    return;
+  }
+
+  /*
+  * PAY ATTENTION HERE (NOT OPERATOR)
+  */
+  if (!await bcrypt.compare(password, user.password)) {
+    res.status(400).json({
+      email: email,
+      message: "Invalid credentials. Please try again.",
+    })
+  }
+
+  const salt = await bcrypt.genSalt(10)
+  const hashedPw = await bcrypt.hash(new_password, salt)
+  user.password = hashedPw
+  await user.save()
+  
+  res.status(200).json({
+    email: email,
+    message: "Your password has been changed successfully."
+  })
+})
+
 // @desc    List users
 // @route   POST  /user/list
 // @access  Private
@@ -305,4 +395,6 @@ module.exports = {
   forgotPassword,
   verifyAccount,
   resendCode,
+  resetPassword,
+  changePassword,
 }
