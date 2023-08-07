@@ -1,13 +1,21 @@
 import React, { useEffect } from 'react';
-import { Text, Image,StyleSheet, View, TouchableOpacity } from 'react-native';
+import {Dimensions, Text, Image,StyleSheet, View, TouchableOpacity } from 'react-native';
 import { Appbar } from 'react-native-paper';
 import * as Config from '../../config'
 /*
           */
-const Product = ({ _id, title, price, images, onPress }) => {
+
+
+const windowDimensions = Dimensions.get('window');
+const screenDimensions = Dimensions.get('screen');
+const Product = ({ _id, title, price, images, onPress, index }) => {
+  const odd_style = {marginLeft: 5}
+  const even_style = {marginRight: 5}
+  const style = (index % 2 == 0) ? even_style : odd_style;
+
   return (
       <TouchableOpacity style={styles.card} onPress={onPress}>
-        <View style={styles.infoContainer}>
+        <View style={{...styles.infoContainer, ...style}}>
           <Image style={styles.thumb} source={
             (images && images.length > 0) ?
                 ({uri: Config.BE_RESOURCE_URL + images[0]}) :
@@ -28,7 +36,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   card: {
-    backgroundColor: 'white',
+    //backgroundColor: 'white',
     //borderRadius: 16,
     shadowOpacity: 0.2,
     shadowRadius: 0,
@@ -46,10 +54,12 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 0,
     borderTopRightRadius: 0,
     //width: '100%',
-    width: 196,
+    width: windowDimensions.width / 2 - 5,
   },
   infoContainer: {
-    padding: 5,
+    backgroundColor: 'white',
+    padding: 0,
+    marginBottom: 10,
   },
   name: {
     fontSize: 15,

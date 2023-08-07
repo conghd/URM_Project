@@ -6,6 +6,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Button } from "react-native";
 import { IconButton } from "react-native-paper";
 import CreationScreen from "./listing/CreationScreen";
+import DetailsScreen from "./listing/DetailsScreen";
 
 //const Stack = createStackNavigator();
 const Stack = createNativeStackNavigator()
@@ -47,8 +48,7 @@ const HomeStack = () => {
           ),
 
         })}
-
-        />
+      />
 
       <Stack.Screen name="Creation" component={CreationScreen}
         options={({ navigation, route }) => (
@@ -57,6 +57,15 @@ const HomeStack = () => {
           }
         )}
       />
+
+      <Stack.Screen name="DetailsScreen" component={DetailsScreen}
+        options={({ navigation, route }) => (
+          {
+            title: "Details"
+          }
+        )}
+      />
+
     </Stack.Navigator>
   )
 }
