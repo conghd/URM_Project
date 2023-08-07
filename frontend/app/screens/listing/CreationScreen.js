@@ -86,7 +86,8 @@ const CreationScreen = ({ navigation, route }) => {
   useEffect(() => {
     if (isSuccess) {
         //Alert.alert("Success", "The new listing has been created successfully");
-        navigation.navigate("Main", {screen: "Home"});
+        //navigation.navigate("Main", {screen: "Home"});
+        navigation.navigate("Home", {});
     }
 
   }, [isSuccess]);
@@ -141,7 +142,7 @@ const CreationScreen = ({ navigation, route }) => {
       quality: 1,
     });
 
-    console.log(result);
+    //console.log(result);
     if (!result.canceled) {
       if (result.selected) {
         let newImages = result.selected.map((item) => {return {id: item.assetId, uri: item.uri}});
@@ -192,7 +193,7 @@ const CreationScreen = ({ navigation, route }) => {
           />
         </View>
         <View style={styles.input}>
-          <TextInput label="Price" value={price}
+          <TextInput label="Price" value={`${price}`}
           onChangeText={text => { handleTextChange({price: text })}}
           keyboardType="number-pad"
           mode="outlined"
