@@ -41,18 +41,8 @@ const HomeScreen = ({ navigation, route }) => {
       console.log("HomeScreen::useEffect - navigation");
       navigation.setOptions({
         headerRight: () => (
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
+          <>
           <IconButton
-            style={{
-              marginRight: 0,
-              paddingRight: 0,
-            }}
               icon="magnify"
               onPress={() => {
                 //navigation.navigate("Creation", {})
@@ -60,17 +50,13 @@ const HomeScreen = ({ navigation, route }) => {
               }}
           />
           <IconButton
-            style={{
-              marginLeft: 0,
-              paddingLeft: 0,
-            }}
               icon="camera"
               onPress={() => {
                 navigation.navigate("Creation", {})
                 //alert("Camera")
               }}
           />
-          </View>
+          </>
         )
       });
     }, [navigation]);
