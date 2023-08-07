@@ -99,7 +99,7 @@ const styles = StyleSheet.create({
     },
     account: {
         flex: 1,
-        backgroundColor: "lightgrey",
+        //backgroundColor: "lightgrey",
         flexDirection: "row",
         paddingTop: 50,
         paddingLeft: 20,

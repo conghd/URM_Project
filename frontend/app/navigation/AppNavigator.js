@@ -1,32 +1,88 @@
-import { TransitionPresets, createStackNavigator } from '@react-navigation/stack';
-import MainScreen from "../screens/listing/MainScreen";
-import DetailsScreen from "../screens/listing/DetailsScreen";
-import SearchScreen from "../screens/listing/SearchScreen";
-import ProductCreationScreen from "../screens/listing/CreationScreen";
+import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
+import { useEffect } from 'react';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import HomeStack from '../screens/HomeStack';
+import BookmarkStack from '../screens/BookmarkStack';
+import MessengerStack from '../screens/MessengerStack';
+import ProfileStack from '../screens/ProfileStack';
 
-const Stack = createStackNavigator();
-const options1 = {
-  headerShown:false,
-  ...TransitionPresets.DefaultTransition
-}
-const AppNavigator = () => (
-  <Stack.Navigator>
-    <Stack.Screen name="Main" component={MainScreen}
-        options={{
-        //title: "UR Marketplace",
-        headerTintColor: 'white',
-        headerStyle: { backgroundColor: '#004e2e' },
-        ...options1,
-        }} 
+const Tab = createMaterialBottomTabNavigator();
+const AppNavigator = () => {
+  useEffect(() => {
+
+  }, [])
+
+  return (
+    <Tab.Navigator
+        initialRouteName="Home" 
+        //activeColor="#004e2e"
+        //inactiveColor="#363636"
+        //barStyle={{ backgroundColor: '#FFFFFF' }}
+    >
+        <Tab.Screen
+            name="HomeStack"
+            component={HomeStack}
+            options={{
+                title: "Home",
+                headerTitle: "Home",
+                headerShown: true,
+                tabBarLabel: "Home",
+                tabBarIcon: ({ color }) => (
+                    <MaterialCommunityIcons name="home" color={color} size={26} />
+                ),
+                headerTitleAlign: "center",
+            }}
         />
-    <Stack.Screen name="Details" component={DetailsScreen} />
-    <Stack.Screen name="Search" component={SearchScreen} />
-    <Stack.Screen name="ProductCreation" component={ProductCreationScreen}
-        options={{
-        headerTitle: "New Listing"
-        }
-        } />
-  </Stack.Navigator>
-);
+        {/**
+        <Tab.Screen
+            name="Search"
+            component={SearchScreen}
+            options={{
+                headerTitle: "Search",
+                tabBarLabel: "Search",
+                tabBarIcon: ({ color }) => (
+                    <MaterialCommunityIcons name="magnify" color={color} size={26} />
+                ),
+            }}
+        />
+         */}
+        <Tab.Screen
+            name="BookmarkStack"
+            component={BookmarkStack}
+            options={{
+                headerTitle: "Bookmark Posts",
+                tabBarLabel: "Bookmark",
+                tabBarIcon: ({ color }) => (
+                    <MaterialCommunityIcons name="bookmark" color={color} size={26} />
+                ),
+            }}
+        />
+        <Tab.Screen
+            name="MessengerStack"
+            component={MessengerStack}
+            options={{
+                headerTitle: "Messenger",
+                tabBarLabel: "Messenger",
+                tabBarIcon: ({ color }) => (
+                    <MaterialCommunityIcons name="chat" color={color} size={26} />
+                ),
+            }}
+        />
+        {/**
+        */ }
+        <Tab.Screen
+            name="ProfileStack"
+            component={ProfileStack}
+            options={{
+                tabBarLabel: "Profile",
+                tabBarIcon: ({ color }) => (
+                    <MaterialCommunityIcons name="account" color={color} size={26} />
+                ),
+            }}
+        />
+    </Tab.Navigator>
+  );
+
+};
 
 export default AppNavigator;

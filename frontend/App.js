@@ -5,6 +5,7 @@ import ScreenManager from './app/screens/ScreenManager';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import SplashScreen from './app/screens/auth/SplashScreen';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 const App = () => {
 
@@ -17,7 +18,9 @@ const App = () => {
   return (
     <Provider store={store}>
       <PersistGate loading={<SplashScreen />} persistor={persistor}>
-        <ScreenManager />
+        { /* <SafeAreaProvider> */ }
+          <ScreenManager />
+        { /* </SafeAreaProvider> */ }
       </PersistGate>
     </Provider>
   );

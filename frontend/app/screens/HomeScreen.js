@@ -6,8 +6,9 @@ import { Appbar, Button } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
 import Product from '../components/Product';
 import { getAdverts, reset } from '../services/advert/advertSlice';
-
-
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { theme } from '../constants';
+import { IconButton } from 'react-native-paper';
 
 const HomeScreen = ({ navigation, route }) => {
     const dispatch = useDispatch();
@@ -38,20 +39,47 @@ const HomeScreen = ({ navigation, route }) => {
 
     useEffect(() => {
       console.log("HomeScreen::useEffect - navigation");
+      navigation.setOptions({
+        headerRight: () => (
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+          <IconButton
+            style={{
+              marginRight: 0,
+              paddingRight: 0,
+            }}
+              icon="magnify"
+              onPress={() => {
+                //navigation.navigate("Creation", {})
+                alert("Launching Search")
+              }}
+          />
+          <IconButton
+            style={{
+              marginLeft: 0,
+              paddingLeft: 0,
+            }}
+              icon="camera"
+              onPress={() => {
+                navigation.navigate("Creation", {})
+                //alert("Camera")
+              }}
+          />
+          </View>
+        )
+      });
     }, [navigation]);
 
   return (
-    <>
-      <Appbar.Header 
-        style={{backgroundColor: '#004e2e'}}
-      >
-        <Appbar.Content title="UR Marketplace" color='white'/>
-        <Appbar.Action icon="plus"
-          onPress={() => { navigation.navigate("ProductCreation")}}
-          color='white' backgroundColor='#004e2e' />
-      </Appbar.Header>
-
-    <View style={styles.container}>
+    <SafeAreaView
+      style={theme.STYLE.container} 
+    >
+      <StatusBar />
         <FlatList
           numColumns={2}
           horizontal={false}
@@ -63,8 +91,10 @@ const HomeScreen = ({ navigation, route }) => {
           onRefresh={() => {dispatch(getAdverts(condition))}}
           refreshing={false}
         />
-    </View>
-    </>
+
+      { /*
+  */}
+    </SafeAreaView>
   );
 };
 

@@ -26,14 +26,16 @@ export default {
   },
 	STYLE: {
 		container: {
-      backgroundColor: "#ffffff",
+      //backgroundColor: "#ffffff",
       flex: 1,
-      //justifyContent: "center",
-      //alignItems: "center",
+      justifyContent: "center",
+      alignItems: "center",
       flexDirection: "column",
-      paddingLeft: 20,
-      paddingRight: 20,
+      paddingTop: 0,
+      paddingLeft: 0,
+      paddingRight: 0,
 		},
+
     header: {
         marginTop: 60,
         marginBottom: 20,

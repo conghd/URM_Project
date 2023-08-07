@@ -14,8 +14,9 @@ const Tab = createMaterialBottomTabNavigator();
 const MainScreen = ({ navigation }) => {
     useEffect(() => {
         console.log("MainScreen::useEffect()");
+        /*
         navigation.setOptions({
-            headerTitle: "MAIN",
+            headerTitle: "Main",
             
             headerSearchBarOptions: {
             },
@@ -25,6 +26,8 @@ const MainScreen = ({ navigation }) => {
                 
             }
         });
+
+        */
     }, []);
 
     return (
@@ -38,7 +41,9 @@ const MainScreen = ({ navigation }) => {
                 name="Home"
                 component={HomeScreen}
                 options={{
-                    headerShown: false,
+                    title: "Home",
+                    headerTitle: "Home",
+                    headerShown: true,
                     tabBarLabel: "Home",
                     tabBarIcon: ({ color }) => (
                         <MaterialCommunityIcons name="home" color={color} size={26} />
@@ -70,7 +75,6 @@ const MainScreen = ({ navigation }) => {
                     ),
                 }}
             />
-            {/**
             <Tab.Screen
                 name="Messenger"
                 component={MessengerScreen}
@@ -82,6 +86,7 @@ const MainScreen = ({ navigation }) => {
                     ),
                 }}
             />
+            {/**
             */ }
             <Tab.Screen
                 name="Profile"

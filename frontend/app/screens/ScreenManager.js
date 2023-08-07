@@ -18,6 +18,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import AuthNavigator from '../navigation/AuthNavigator';
 import IntroNavigator from '../navigation/IntroNavigator';
 import AppNavigator from '../navigation/AppNavigator';
+import HomeStack from './HomeStack';
 
 const theme = {
   ...DefaultTheme,
@@ -44,7 +45,9 @@ export default function ScreenManager() {
   }, []);
 
   return (
-      <PaperProvider theme={theme}>
+      <PaperProvider>
+      {/* <PaperProvider theme={theme}>
+      */}
         <NavigationContainer>
           { (settings && settings.isFirstTime) ?
             (<IntroNavigator />)
@@ -53,7 +56,7 @@ export default function ScreenManager() {
               (user === null || user === {}) ?
               (<AuthNavigator />)
               :
-              (<AppNavigator />)
+              (<AppNavigator/>)
             ) 
           }
         </NavigationContainer>
