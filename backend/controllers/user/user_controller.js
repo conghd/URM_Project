@@ -3,7 +3,33 @@ const bcrypt = require('bcrypt')
 const asyncHandler = require('express-async-handler')
 const logger = require("../../util/logger")
 const UserModel = require('../../models/user_model')
+const mailer = require('nodemailer');
+const smtp = require('nodemailer-smtp-transport');
 
+
+const sendMail = asyncHandler(async (data) => {
+  logger.info("UserController::sendmail -" + JSON.stringify(data));
+  const transport = mailer.createTransport(
+    smtp({
+      host: 'in.mailjet.com',
+      port: 2525,
+      auth: {
+        user: process.env.MAILJET_API_KEY || '1f6dab035aa02a0ed87919d96d0a2313',
+        pass: process.env.MAILJET_API_SECRET || '5c06eb77c2fef62f31b27b37da44d9a4',
+      },
+    })
+  );
+
+  const json = await transport.sendMail({
+    from: data.from, // From address
+    to: data.to, // To address
+    subject: data.subject, // Subject
+    text: data.text, // Content
+  });
+
+  logger.info(json)
+
+}) 
 
 const getRandomInt = ( min, max ) => {
   return Math.floor( Math.random() * ( max - min + 1 ) ) + min;
@@ -139,23 +165,35 @@ const resendCode = asyncHandler(async (req, res) => {
   const user = await UserModel.findOne({ email: email })
   let status_code = 200
   let message = ''
+  let code = ''
   
   if (user) {
     if (type === 'ACTIVATION') {
       user.activation_code = generateActivationCode();
-      logger.info("UserController::resendCode(%s, %s, %s)", email, type, user.activation_code);
+      code = user.activation_code
     } else if (type === 'FORGOT_PASSWORD') {
       user.verification_code = generateActivationCode();
-      logger.info("UserController::resendCode(%s, %s, %s)", email, type, user.verification_code);
+      code = user.verification_code
     } else {
       // DO NOTHING
     }
+
+    logger.info("UserController::resendCode(%s, %s, %s)", email, type, code);
     await user.save();
     message = `A verification code has been sent to the email ${email}`
   } else {
     status_code = 400
     message = `The user ${email} does not exist.`
   }
+
+  const mailData = {
+    from: 'conghd@uregina.ca',
+    to: 'conghd@uregina.ca',
+    subject: '[URM] Verification Code',
+    text: 'Your verification code is ' + user.activation_code
+  }
+
+  sendMail(mailData)
 
   res.status(status_code).json({
     email: email,
