@@ -187,8 +187,8 @@ const resendCode = asyncHandler(async (req, res) => {
   }
 
   const mailData = {
-    from: 'conghd@uregina.ca',
-    to: 'conghd@uregina.ca',
+    from: 'conghd@gmail.com',
+    to: 'dhx496@uregina.ca',
     subject: '[URM] Verification Code',
     text: 'Your verification code is ' + user.activation_code
   }
