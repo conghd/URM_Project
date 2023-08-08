@@ -14,7 +14,6 @@ const ActivationComplete = ({ navigation, route }) => {
   const dispatch = useDispatch();
   //const { update } = useSelector((state) => state.settings)
   const {user } = useSelector((state) => state.auth);
-  const {isLoading, isError, isSuccess, message } = useSelector((state) => state.auth.activateState);
 
   useEffect(() => {
     console.log("Activation::useEffect()");
@@ -25,7 +24,7 @@ const ActivationComplete = ({ navigation, route }) => {
     console.log("Activation::useEffect(isLoading)");
 
 
-  }, [isLoading]);
+  }, []);
 
   const handleSubmit = (e) => {
     //e.preventDefault();

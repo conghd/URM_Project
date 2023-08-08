@@ -7,16 +7,14 @@ import { logout } from '../../services/auth/authSlice';
 import { useSelector, useDispatch } from 'react-redux';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Product from '../../components/Product';
-import { getAdverts, reset } from '../../services/advert/advertSlice';
+import { getMyAdverts, reset } from '../../services/advert/advertMySlice'; 
 
-const ProfileScreen = () => {
+const ProfileScreen = ({ navigation, route }) => {
     const dispatch = useDispatch();
-    const {adverts, isLoading, isError, isSuccess, message } = useSelector((state) => state.advert)
+    const {adverts, isLoading, isError, isSuccess, message } = useSelector((state) => state.advertMy)
     const { isLogoutLoading } = useSelector(state => state.auth.logoutState);
-    const [condition, setCondition] = useState({keyword: "Statistics", category: "Science"})
-    const {keyword, category} = condition;
-
     const { user } = useSelector(state => state.auth);
+    const condition = {params: {userId: user._id }}
 
     function renderProduct({ item }) {
         return (
@@ -31,10 +29,20 @@ const ProfileScreen = () => {
         );
       }
 
+    React.useLayoutEffect(() => {
+        console.log("ProfileScreen::useLayoutEffect()");
+        dispatch(getMyAdverts(condition))
+    }, [navigation])
+
     useEffect(() => {
-        console.log("SplashScreen::useEffect()");
-        dispatch(getAdverts({params: {keyword: keyword, category: category }}));
     }, []);
+
+    useEffect(() => {
+        if (isSuccess) {
+
+        }
+
+    }, [isSuccess])
 
     const handleSignOut= (e) => {
         console.log("ProfileScreen::handleSignOut");
@@ -79,7 +87,7 @@ const ProfileScreen = () => {
               keyExtractor={(product) => product._id}
               data={adverts}
               renderItem={renderProduct}
-              onRefresh={() => {dispatch(getAdverts(condition))}}
+              onRefresh={() => {dispatch(getMyAdverts(condition))}}
               refreshing={false}
             />
             </View>
