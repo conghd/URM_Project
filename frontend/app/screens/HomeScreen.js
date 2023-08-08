@@ -51,8 +51,7 @@ const HomeScreen = ({ navigation, route }) => {
               backgroundColor="lightgrey"
               icon="magnify"
               onPress={() => {
-                //navigation.navigate("Creation", {})
-                alert("Launching Search")
+                navigation.navigate("SearchScreen", {})
               }}
             />
             <IconButton
@@ -60,7 +59,7 @@ const HomeScreen = ({ navigation, route }) => {
               backgroundColor="lightgrey"
               icon="camera"
               onPress={() => {
-                navigation.navigate("Creation", {})
+                navigation.navigate("CreationScreen", {})
                 //alert("Camera")
               }}
             />
@@ -78,6 +77,7 @@ const HomeScreen = ({ navigation, route }) => {
         numColumns={2}
         horizontal={false}
         showsHorizontalScrollIndicator={false}
+        showsVerticalScrollIndicator={false}
         style={styles.productsList}
         contentContainerStyle={styles.productsListContainer}
         keyExtractor={(product) => product._id}
@@ -85,7 +85,7 @@ const HomeScreen = ({ navigation, route }) => {
         renderItem={renderProduct}
         onRefresh={() => {dispatch(getAdverts(condition))}}
         refreshing={false}
-        maxToRenderPerBatch={6}
+        //maxToRenderPerBatch={6}
       />
 
       { /*
@@ -105,7 +105,7 @@ const styles = StyleSheet.create({
     paddingTop: 0,
     paddingBottom: 0,
     marginVertical: 0,
-    backgroundColor: 'green',
+    //backgroundColor: 'green',
   },
   header: {
     marginTop: 10,
@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
   },
   productsList: {
     marginTop: 0,
-    backgroundColor: 'yellow',
+    //backgroundColor: 'yellow',
     flex: 1,
     //alignItems: 'space-between',
     height: 840,

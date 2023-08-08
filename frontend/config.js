@@ -16,3 +16,7 @@ export const BE_RESOURCE_URL = `http://${BE_IP}:${BE_PORT}`;
 //export const BE_RESOURCE_URL = "http://10.0.2.2:5000";
 //export const BE_RESOURCE_URL = "http://localhost:5000";
 //export const BE_RESOURCE_URL = "";
+
+export const OPEN_LIBRARY_API = 'https://openlibrary.org/api/books?jscmd=details&format=json&bibkeys=ISBN:';
+export const GOOGLE_LIBRARY_API = "https://www.googleapis.com/books/v1/volumes?key=AIzaSyBozDXedbTiSOV-qKBnIESf-oCF2icOjLY&q=isbn:"
+

@@ -6,6 +6,7 @@ const {
   //updatePost,
   //deletePost,
   getAdverts,
+  search,
   //getPost,
   //voteUpPost,
   //voteDownPost,
@@ -19,6 +20,7 @@ router.route('/create').post(protect, createAdvert)
 //router.route('/list').get(protect, getAdverts)
 //router.route('/list').get(getAdverts)
 router.route('/list').get(getAdverts)
+router.route('/search').get(search)
 //router.route('/update/:id').post(protect, updatePost)
 //router.route('/delete/:id').post(protect, deletePost)
 //router.route('/get/:id').get(protect, getPost)

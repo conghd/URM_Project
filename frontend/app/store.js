@@ -10,12 +10,14 @@ import settingsReducer from './services/settings/settingsSlice'
 import authForgotPasswordReducer from './services/auth/authForgotPasswordSlice'
 import authActivationReducer from './services/auth/authActivationSlice'
 import authResetPasswordReducer from "./services/auth/authResetPasswordSlice";
-import thunk from 'redux-thunk'
+import advertISBNReducer from "./services/advert/advertISBNSlice";
+import advertSearchReducer from "./services/advert/advertSearchSlice";
+//import thunk from 'redux-thunk'
 
 const persistConfig = {
     key: 'root',
     storage: AsyncStorage,
-    whitelist: ['settings']
+    whitelist: ['settings', 'auth']
 }
 
 const rootReducer = combineReducers({
@@ -26,7 +28,9 @@ const rootReducer = combineReducers({
     register: registerReducer,
     advert: advertReducer,
     advertCreation: advertCreationReducer,
+    advertISBN: advertISBNReducer,
     settings: settingsReducer,
+    advertSearch: advertSearchReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)

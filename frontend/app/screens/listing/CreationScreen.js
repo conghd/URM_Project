@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { SafeAreaView, Text, View, StyleSheet, ScrollView, FlatList, ImageBackground, TouchableOpacity, Alert,
 } from 'react-native'
-import { Button, TextInput } from 'react-native-paper';
+import { Button, IconButton, Modal, Portal, TextInput } from 'react-native-paper';
 import ImagePreviewItem from '../ImagePreviewItem';
 import * as ImagePicker from 'expo-image-picker';
 import { createAdvert, reset } from '../../services/advert/advertCreationSlice';
@@ -10,6 +10,8 @@ import { createAdvert, reset } from '../../services/advert/advertCreationSlice';
 const CreationScreen = ({ navigation, route }) => {
   const [selectedId, setSelectedId] = useState(null);
   const dispatch = useDispatch();
+  const {book } = route.params;
+
   const {user } = useSelector((state) => state.auth);
   const [firstTime, setFirstTime] = useState(true);
   /*
@@ -98,6 +100,13 @@ const CreationScreen = ({ navigation, route }) => {
     }
   }, [isError]);
   
+  useEffect(() => {
+    if (route.params?.book) {
+      console.log("CreationScreen::useEffect(): " + JSON.stringify(route.params.book));
+      setFormData((prev) => { return {...prev, title: book.title}})
+    }
+
+  }, [route.params?.book])
   /*
   useEffect(() => {
     if (firstTime) {
@@ -164,6 +173,12 @@ const CreationScreen = ({ navigation, route }) => {
       />
     );
   }
+
+  const [visible, setVisible] = useState(false);
+
+  const showModal = () => setVisible(true);
+  const hideModal = () => setVisible(false);
+  const containerStyle = {backgroundColor: 'white', padding: 20};
     return (
         <ScrollView style={styles.container}>
         <View style={styles.imageSection}>
@@ -180,6 +195,19 @@ const CreationScreen = ({ navigation, route }) => {
 
         </View>
         <View style={styles.inputSection} >
+        <View style={styles.input}>
+          <IconButton 
+            size={50}
+            icon="barcode-scan" onPress={() => { navigation.navigate("ScannerScreen")}}/>
+          {/* 
+          <Button 
+            icon="barcode-scan"
+            mode="contained" onPress={() => { navigation.navigate("ScannerScreen")}} >Scan ISBN</Button>
+
+          */}
+        </View>
+        <View style={styles.input}>
+        </View>
         <View style={styles.input}>
           <TextInput label="Title" value={title}
           onChangeText={text => {handleTextChange({title: text})}}

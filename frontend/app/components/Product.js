@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
-import {Dimensions, Text, Image,StyleSheet, View, TouchableOpacity } from 'react-native';
+import {Dimensions, Image,StyleSheet, View, TouchableOpacity } from 'react-native';
+import { Text } from 'react-native-paper';
 import { Appbar } from 'react-native-paper';
 import * as Config from '../../config'
 /*
@@ -9,8 +10,8 @@ import * as Config from '../../config'
 const windowDimensions = Dimensions.get('window');
 const screenDimensions = Dimensions.get('screen');
 const Product = ({ _id, title, price, images, onPress, index }) => {
-  const odd_style = {marginLeft: 5}
-  const even_style = {marginRight: 5}
+  const odd_style = {marginLeft: 2}
+  const even_style = {marginRight: 2}
   const style = (index % 2 == 0) ? even_style : odd_style;
 
   return (
@@ -20,9 +21,15 @@ const Product = ({ _id, title, price, images, onPress, index }) => {
             (images && images.length > 0) ?
                 ({uri: Config.BE_RESOURCE_URL + images[0]}) :
                 ({uri: Config.BE_RESOURCE_URL + "/images/no-image-available.jpeg"})
-          } />
-          <Text style={styles.name}>{title}</Text>
-          <Text style={styles.price}>{(price === '0' || price === 0 || price === '') ? "FREE": `$${price}` }</Text>
+            } 
+            resizeMode='cover'
+          />
+          <View style={styles.bottomText}>
+            <Text 
+              variant='labelSmall'
+              style={styles.price}>
+              {(price === '0' || price === 0 || price === '') ? "FREE": `$${price}` }- {title}</Text>
+          </View>
         </View>
       </TouchableOpacity>
   );
@@ -50,16 +57,25 @@ const styles = StyleSheet.create({
     marginHorizontal: 0,
   },
   thumb: {
-    height: 128,
+    height: 164,
+    //height: windowDimensions.width / 2 -2,
     borderTopLeftRadius: 0,
     borderTopRightRadius: 0,
     //width: '100%',
-    width: windowDimensions.width / 2 - 5,
+    width: windowDimensions.width / 2 - 2,
+    //borderWidth: 1,
+    borderColor: "gray",
   },
   infoContainer: {
     backgroundColor: 'white',
     padding: 0,
-    marginBottom: 10,
+    marginBottom: 5,
+    borderRadius: 5,
+  },
+  bottomText: {
+    justifyContent: "center",
+    paddingLeft: 10,
+    paddingTop: 5,
   },
   name: {
     fontSize: 15,

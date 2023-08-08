@@ -130,6 +130,30 @@ const getAdverts = asyncHandler(async (req, res) => {
   res.send(adverts)
 })
 
+const search = asyncHandler(async (req, res) => {
+  console.log("AdvertController::search")
+  const category = req.query['category']; 
+  const keyword = req.query['keyword']; 
+  console.log("Category: " + category);
+  console.log("Keyword: " + keyword);
+  let condition = {};
+  if (category) {
+    //condition.category = category;
+  }
+
+  if (keyword) {
+    condition.title = /${keyword}/i
+    //condition.$or = [{ title: `${/keyword/}`}, { description: `${/keyword/}` }];
+  }
+  console.log("Condition: " + JSON.stringify(condition));
+  const adverts = await AdvertModel.find({title: {$regex: `.*${keyword}.*`} })
+    .populate(['user', 'comments'])
+    .sort({createdAt: -1})
+    .exec();
+
+  res.send(adverts)
+})
+
 const getAdvert = asyncHandler(async (req, res) => {
     const advertId = req.params.id;
     const userId = req.user._id;
@@ -250,6 +274,7 @@ module.exports = {
   //deletePost,
   //getPost,
   getAdverts,
+  search,
   ///voteUpPost,
   //voteDownPost,
   //commentPost,

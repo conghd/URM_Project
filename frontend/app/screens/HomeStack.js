@@ -7,6 +7,8 @@ import { Button } from "react-native";
 import { IconButton } from "react-native-paper";
 import CreationScreen from "./listing/CreationScreen";
 import DetailsScreen from "./listing/DetailsScreen";
+import ScannerScreen from "./listing/ScannerScreen";
+import SearchScreen from "./listing/SearchScreen";
 
 //const Stack = createStackNavigator();
 const Stack = createNativeStackNavigator()
@@ -50,7 +52,7 @@ const HomeStack = () => {
         })}
       />
 
-      <Stack.Screen name="Creation" component={CreationScreen}
+      <Stack.Screen name="CreationScreen" component={CreationScreen}
         options={({ navigation, route }) => (
           {
             title: "New Listing",
@@ -65,6 +67,24 @@ const HomeStack = () => {
           }
         )}
       />
+      <Stack.Screen name="ScannerScreen" component={ScannerScreen}
+        options={({ navigation, route }) => (
+          {
+            presentation: 'modal',
+            title: "ISBN Scanner",
+            headerShown: true,
+          }
+        )}
+      />
+
+      <Stack.Screen name="SearchScreen" component={SearchScreen}
+          options={({ navigation, route }) => (
+            {
+              title: "Search",
+              //headerShown: false,
+            }
+          )}
+        />
 
     </Stack.Navigator>
   )
