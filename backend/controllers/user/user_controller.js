@@ -73,11 +73,17 @@ const registerUser = asyncHandler(async (req, res) => {
     email,
     password: hashedPw,
     activated: false,
-    activation_code: activation_code
+    activation_code: activation_code,
+    verification_code: activation_code,
+    verified: false
+
   }, function(error, result) {
     if (error) {
+      logger.error(error)
       res.status(500).json({
-        message: "There was a server issue. Please try again."
+        email: email,
+        message: "There was a server issue. Please try again.",
+        error: error,
       });
     } else {
       logger.info("UserController::registerUser, CODE: %s", activation_code)

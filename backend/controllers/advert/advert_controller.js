@@ -5,6 +5,7 @@ const multer = require('multer')
 const AdvertModel = require('../../models/advert_model')
 const CommentModel = require('../../models/comment_model')
 const path = require('path')
+const logger = require("../../util/logger")
 
 const debugName = "AdvertController:";
 const storage = multer.diskStorage({
@@ -154,6 +155,18 @@ const search = asyncHandler(async (req, res) => {
   res.send(adverts)
 })
 
+const getMyAdverts = asyncHandler(async (req, res) => {
+  const userId = req.query['userId']; 
+  logger.info("AdvertController::getMyAdverts - " + userId)
+
+  const adverts = await AdvertModel.find({user: userId })
+    .populate(['user'])
+    .sort({createdAt: -1})
+    .exec();
+
+  res.send(adverts)
+})
+
 const getAdvert = asyncHandler(async (req, res) => {
     const advertId = req.params.id;
     const userId = req.user._id;
@@ -275,6 +288,7 @@ module.exports = {
   //getPost,
   getAdverts,
   search,
+  getMyAdverts,
   ///voteUpPost,
   //voteDownPost,
   //commentPost,
