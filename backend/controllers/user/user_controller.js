@@ -27,7 +27,7 @@ const sendMail = asyncHandler(async (data) => {
     text: data.text, // Content
   });
 
-  logger.info(json)
+  logger.info(JSON.stringify(json))
 
 }) 
 
