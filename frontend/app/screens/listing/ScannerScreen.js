@@ -153,7 +153,7 @@ const ScannerScreen = ({navigation, route}) => {
             <Button mode='outlined' onPress={() => { navigation.goBack() }}>Cancel</Button>
           </View>
           <View style={{flex: 1, padding: 10}} >
-            <Button mode='contained' onPress={() => { navigation.navigate("CreationScreen", {book: scannedBook}, true)}}>That's Okay</Button>
+            <Button mode='contained' onPress={() => { navigation.navigate("CreationScreen", {book: scannedBook}, true)}}>OK</Button>
           </View>
         </View>
         </>

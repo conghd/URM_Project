@@ -57,6 +57,7 @@ const AppNavigator = () => {
                 ),
             }}
         />
+        {/* 
         <Tab.Screen
             name="MessengerStack"
             component={MessengerStack}
@@ -68,6 +69,7 @@ const AppNavigator = () => {
                 ),
             }}
         />
+          */} 
         {/**
         */ }
         <Tab.Screen

@@ -15,9 +15,9 @@ export default function ImagePreviewItem({item, handlePress, handleDeleteImage }
             <ImageBackground
                 style={styles.img}
                 source={item.id=='0' ?
+                    require('../../assets/icons8-add-64.png') :
                     //require('../../assets/icons8-add-64.png') :
-                    //require('../../assets/icons8-add-64.png') :
-                    require('../../assets/image-add-64.png') :
+                    //require('../../assets/image-add-64.png') :
                     //require('../../assets/tree-1578.png')
                     {uri: item.uri}
                 }>

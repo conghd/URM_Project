@@ -57,7 +57,7 @@ const HomeScreen = ({ navigation, route }) => {
             <IconButton
               size={20}
               backgroundColor="lightgrey"
-              icon="camera"
+              icon="plus"
               onPress={() => {
                 navigation.navigate("CreationScreen", {})
                 //alert("Camera")

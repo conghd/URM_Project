@@ -8,6 +8,7 @@ import { theme } from '../../constants';
 import EmailInput from '../../components/EmailInput';
 import AuthFooter from '../../components/AuthFooter';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { StatusBar } from 'expo-status-bar';
 
 
 const ForgotPassword = ({ navigation, route }) => {
@@ -109,6 +110,7 @@ const ForgotPassword = ({ navigation, route }) => {
 
   return (
     <View style={theme.STYLE.container}>
+      <StatusBar />
       <KeyboardAwareScrollView
         showsVerticalScrollIndicator={false}
         showsHorizontalScrollIndicator={false}

@@ -11,6 +11,7 @@ import EmailInput from '../../components/EmailInput';
 import PasswordInput from '../../components/PasswordInput';
 import AuthFooter from '../../components/AuthFooter';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { StatusBar } from 'expo-status-bar';
 
 
 const SignInScreen = ({ navigation, route }) => {
@@ -92,6 +93,7 @@ const SignInScreen = ({ navigation, route }) => {
 
   return (
     <View style={theme.STYLE.container}>
+      <StatusBar />
       <KeyboardAwareScrollView
         showsVerticalScrollIndicator={false}
         showsHorizontalScrollIndicator={false}
@@ -151,7 +153,7 @@ const SignInScreen = ({ navigation, route }) => {
           mode="contained"
           onPress={() => handleSubmit() }
           >
-          Sign In
+          Log In
         </Button>
       </View>
       {/* These are the links to others  */}

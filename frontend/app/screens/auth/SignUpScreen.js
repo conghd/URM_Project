@@ -12,6 +12,7 @@ import AuthFooter from '../../components/AuthFooter';
 import NameInput from '../../components/NameInput';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { Link } from '@react-navigation/native';
+import { StatusBar } from 'expo-status-bar';
 
 const SignUpScreen = ({navigation, route}) => {
   const dispatch = useDispatch();
@@ -103,6 +104,7 @@ const SignUpScreen = ({navigation, route}) => {
 
     return (
       <View style={theme.STYLE.container} >
+        <StatusBar />
         <KeyboardAwareScrollView extraHeight={0}
           extraScrollHeight={0}
           showsVerticalScrollIndicator={false}

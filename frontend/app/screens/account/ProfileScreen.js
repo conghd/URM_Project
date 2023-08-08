@@ -99,7 +99,7 @@ const ProfileScreen = ({ navigation, route }) => {
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: "#ffffff",
+        //backgroundColor: "#ffffff",
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
@@ -122,13 +122,14 @@ const styles = StyleSheet.create({
 
     },
     info2: {
+        flexDirection: "row",
         paddingTop: 50,
         paddingLeft: 50,
         flex: 1,
     },
     mylisting: {
         flex:3,
-        backgroundColor: "#00FF00",
+        //backgroundColor: "#00FF00",
     },
     loading: {
         marginTop: 10,

@@ -11,6 +11,7 @@ import EmailInput from '../../components/EmailInput';
 import PasswordInput from '../../components/PasswordInput';
 import AuthFooter from '../../components/AuthFooter';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { StatusBar } from 'expo-status-bar';
 
 
 const ResetPassword = ({ navigation, route }) => {
@@ -96,11 +97,8 @@ const ResetPassword = ({ navigation, route }) => {
     }
 
   return (
-    <View style={theme.STYLE.container}>
-      <KeyboardAwareScrollView
-        showsVerticalScrollIndicator={false}
-        showsHorizontalScrollIndicator={false}
-      >
+    <View style={[theme.STYLE.container, styles.container]}>
+      <StatusBar />
       <View style={theme.STYLE.header}>
         <Text style={theme.STYLE.headerText}>URM</Text>
       </View>
@@ -164,13 +162,16 @@ const ResetPassword = ({ navigation, route }) => {
         >Log In
         </Button>
       </View>
-      </KeyboardAwareScrollView>
       <AuthFooter />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    marginLeft: 20,
+    marginRight: 20,
+  },
   title: {
     justifyContent: "center",
   },

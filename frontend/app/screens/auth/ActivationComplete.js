@@ -9,6 +9,7 @@ import { activate, login, reset } from '../../services/auth/authSlice'
 import { update } from '../../services/settings/settingsSlice';
 import { theme } from '../../constants';
 import AuthFooter from '../../components/AuthFooter';
+import { StatusBar } from 'expo-status-bar';
 
 const ActivationComplete = ({ navigation, route }) => {
   const dispatch = useDispatch();
@@ -34,6 +35,7 @@ const ActivationComplete = ({ navigation, route }) => {
 
   return (
     <View style={theme.STYLE.container}>
+      <StatusBar />
       <View style={theme.STYLE.header}>
         <Text style={theme.STYLE.headerText}>URM</Text>
       </View>

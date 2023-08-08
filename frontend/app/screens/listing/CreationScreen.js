@@ -196,15 +196,15 @@ const CreationScreen = ({ navigation, route }) => {
         </View>
         <View style={styles.inputSection} >
         <View style={styles.input}>
+          {/* 
           <IconButton 
             size={50}
             icon="barcode-scan" onPress={() => { navigation.navigate("ScannerScreen")}}/>
-          {/* 
+          */}
           <Button 
             icon="barcode-scan"
-            mode="contained" onPress={() => { navigation.navigate("ScannerScreen")}} >Scan ISBN</Button>
+            mode="outlined" onPress={() => { navigation.navigate("ScannerScreen")}} >Scan ISBN</Button>
 
-          */}
         </View>
         <View style={styles.input}>
         </View>

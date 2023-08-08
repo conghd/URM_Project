@@ -10,6 +10,7 @@ import { update } from '../../services/settings/settingsSlice';
 import { resendCode } from '../../services/auth/authSlice';
 import { theme } from '../../constants';
 import AuthFooter from '../../components/AuthFooter';
+import { StatusBar } from 'expo-status-bar';
 
 const CODE_LENGTH = 6;
 const MAX_COUNT_DOWN = 5
@@ -178,6 +179,7 @@ const ActivationScreen = ({ navigation, route }) => {
 
   return (
     <View style={theme.STYLE.container}>
+      <StatusBar />
       <View style={theme.STYLE.header}>
         <Text style={theme.STYLE.headerText}>URM</Text>
       </View>
