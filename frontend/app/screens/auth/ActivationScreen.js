@@ -1,23 +1,23 @@
-import * as React from 'react';
-import { View, StyleSheet, TouchableOpacity, Keyboard } from 'react-native';
-import { HelperText, Button, TextInput, Text, ActivityIndicator, Divider } from 'react-native-paper';
-import * as SecureStore from 'expo-secure-store';
-import { useRef, useState, useEffect } from 'react';
-import { Link } from '@react-navigation/native';
-import { useDispatch, useSelector } from 'react-redux';
-import { activate, reset as resetActivation } from '../../services/auth/authActivationSlice';
-import { update } from '../../services/settings/settingsSlice';
-import { resendCode } from '../../services/auth/authSlice';
-import { theme } from '../../constants';
-import AuthFooter from '../../components/AuthFooter';
-import { StatusBar } from 'expo-status-bar';
+import * as React from "react";
+import {View, StyleSheet, TouchableOpacity, Keyboard} from "react-native";
+import {HelperText, Button, TextInput, Text, ActivityIndicator, Divider} from "react-native-paper";
+import * as SecureStore from "expo-secure-store";
+import {useRef, useState, useEffect} from "react";
+import {Link} from "@react-navigation/native";
+import {useDispatch, useSelector} from "react-redux";
+import {activate, reset as resetActivation} from "../../services/auth/authActivationSlice";
+import {update} from "../../services/settings/settingsSlice";
+import {resendCode} from "../../services/auth/authSlice";
+import {theme} from "../../constants";
+import AuthFooter from "../../components/AuthFooter";
+import {StatusBar} from "expo-status-bar";
 
 const CODE_LENGTH = 6;
-const MAX_COUNT_DOWN = 5
-const ActivationScreen = ({ navigation, route }) => {
-  const {email, verification } = route.params;
+const ActivationScreen = ({navigation, route}) => {
+  const {email, verification} = route.params;
   const dispatch = useDispatch();
-  const {isLoading, isError, isSuccess, message } = useSelector((state) => state.authActivation);
+  const {isLoading, isError, isSuccess, message} =
+    useSelector((state) => state.authActivation);
   const refDigitInputs = [useRef(), useRef(), useRef(), useRef(), useRef(), useRef()];
 
   const [code, setCode] = useState("");
@@ -26,24 +26,24 @@ const ActivationScreen = ({ navigation, route }) => {
   const [countDown, setCountDown] = useState();
 
   const handleCountDown = () => {
-    let count = 14
-      setCountDown(count);
-      const timer = setInterval(() => {
-        if (count === 0) {
-          clearInterval(timer);
-        } else {
-          count = count - 1;
-          setCountDown(count);
-        }
-      }, 1000);
-  }
+    let count = 14;
+    setCountDown(count);
+    const timer = setInterval(() => {
+      if (count === 0) {
+        clearInterval(timer);
+      } else {
+        count = count - 1;
+        setCountDown(count);
+      }
+    }, 1000);
+  };
 
   const handleResend = () => {
-    handleCountDown()
+    handleCountDown();
     if (!isLoading) {
-      dispatch(resendCode({email: email, type: verification }))
+      dispatch(resendCode({email: email, type: verification}));
     }
-  }
+  };
 
   const isDigit = (str) => {
     if (str.length == 1 && "0123456789".includes(str)) {
@@ -51,7 +51,7 @@ const ActivationScreen = ({ navigation, route }) => {
     }
 
     return false;
-  }
+  };
 
   const updateDigits = (index, digit) => {
     const nextDigits = digits.map((d, i) => {
@@ -62,19 +62,19 @@ const ActivationScreen = ({ navigation, route }) => {
       }
     });
     setDigits(nextDigits);
-    const nextCode = nextDigits.join('');
+    const nextCode = nextDigits.join("");
     setCode(nextCode);
-  }
+  };
   const handleKeyPress = (index, e) => {
-    //console.log("handleKeyPress: " + index + ", " + e.key);
-    //console.log("digit: " + digits[index]);
+    // console.log("handleKeyPress: " + index + ", " + e.key);
+    // console.log("digit: " + digits[index]);
     // Handle backspace key
     if (e.key === "Backspace") {
       if (isDigit(digits[index])) {
         updateDigits(index, "");
       }
 
-      if(digits[index] == "" && index > 0) {
+      if (digits[index] == "" && index > 0) {
         updateDigits(index - 1, "");
         refDigitInputs[index - 1].focus();
       }
@@ -89,12 +89,12 @@ const ActivationScreen = ({ navigation, route }) => {
         Keyboard.dismiss();
       }
     }
-  }
+  };
   const handleFocus = (index, e) => {
     console.log("handleFocus: " + index + ", " + digits[index]);
-    //e.selectionStart = digits[index].length;
-    //e.selectionEnd = digits[index].length;
-  }
+    // e.selectionStart = digits[index].length;
+    // e.selectionEnd = digits[index].length;
+  };
   const handleTextChange = ({index, digit}) => {
     console.log("Activation::handTextChange: " + index + ", " + digit);
 
@@ -102,14 +102,14 @@ const ActivationScreen = ({ navigation, route }) => {
       updateDigits(index, digit);
       if (index < 5) {
         refDigitInputs[index+1].focus();
-        //refDigitInputs[index + 1].selectionStart = digits[index + 1].length;
-        //refDigitInputs[index + 1].selectionEnd = digits[index + 1].length;
+        // refDigitInputs[index + 1].selectionStart = digits[index + 1].length;
+        // refDigitInputs[index + 1].selectionEnd = digits[index + 1].length;
       } else {
         Keyboard.dismiss();
       }
     }
-    //return setCode(value);
-  }
+    // return setCode(value);
+  };
 
   // ?????? WHY {index} instead of index
   const handleSubmitEditting = ({index}) => {
@@ -133,49 +133,50 @@ const ActivationScreen = ({ navigation, route }) => {
 
     }
 
-    console.log(`ActivationScreen::useEffect[] - isLoading: ${isLoading}, isSuccess: ${isSuccess}, isError: ${isError}`)
-    dispatch(resetActivation())
+    console.log(`ActivationScreen::useEffect[] - isLoading: ${isLoading}, isSuccess: ${isSuccess}, isError: ${isError}`);
+    dispatch(resetActivation());
     handleCountDown();
   }, []);
 
   useEffect(() => {
-    console.log(`ActivationScreen::useEffect[isLoading], isLoading: ${isLoading}, isSuccess: ${isSuccess}, isError: ${isError}`)
-
-  }, [isLoading])
+    console.log(`ActivationScreen::useEffect[isLoading], isLoading: ${isLoading}, isSuccess: ${isSuccess}, isError: ${isError}`);
+  }, [isLoading]);
 
   useEffect(() => {
-    console.log(`ActivationScreen::useEffect[isSuccess] isLoading: ${isLoading}, isSuccess: ${isSuccess}, isError: ${isError}`)
+    console.log(`ActivationScreen::useEffect[isSuccess] isLoading: ${isLoading}, isSuccess: ${isSuccess}, isError: ${isError}`);
     if (isSuccess) {
       if (verification === "ACTIVATION") {
-        navigation.replace("ActivationComplete", {verification: verification, email: email })
-      } else if (verification === 'FORGOT_PASSWORD') {
-        navigation.replace("ResetPassword", {verification: verification, email: email})
+        navigation.replace("ActivationComplete", {verification: verification, email: email});
+      } else if (verification === "FORGOT_PASSWORD") {
+        navigation.replace("ResetPassword", {verification: verification, email: email});
       } else {
         // DO NOTHING
       }
 
-      dispatch(resetActivation())
+      dispatch(resetActivation());
     }
   }, [isSuccess]);
 
 
   useEffect(() => {
-    console.log(`ActivationScreen::useEffect[isError], isLoading: ${isLoading}, isSuccess: ${isSuccess}, isError: ${isError}`)
+    console.log(`ActivationScreen::useEffect[isError], isLoading: ${isLoading}, isSuccess: ${isSuccess}, isError: ${isError}`);
     if (isError) {
       setError(message.message);
-      console.log(message.message)
-      setTimeout(() => {setError(""); }, 5000);
-    
-      dispatch(resetActivation())
+      console.log(message.message);
+      setTimeout(() => {
+        setError("");
+      }, 5000);
+
+      dispatch(resetActivation());
     }
-  }, [isError])
+  }, [isError]);
 
   const handleSubmit = (e) => {
-    //e.preventDefault();
-      console.log('ActivationScreen::handleSubmit(%s)', verification)
+    // e.preventDefault();
+    console.log("ActivationScreen::handleSubmit(%s)", verification);
 
     dispatch(activate({email: email, code: code, type: verification}));
-  }
+  };
 
   return (
     <View style={theme.STYLE.container}>
@@ -190,25 +191,35 @@ const ActivationScreen = ({ navigation, route }) => {
         <Text style={styles.description} variant="bodyMedium">A verification code has been sent to your email {email}. Enter the 6 digits to verify your account</Text>
       </View>
       <View style={theme.STYLE.sub}>
-        { digits.map ((d, i) => {
+        { digits.map((d, i) => {
           return (
             <TextInput style={styles.digit}
               key={i}
-              ref={(input) => { refDigitInputs[i] = input; }}
-                mode="outlined"
-                onBlur={() => {}}
-                onKeyPress={({nativeEvent }) => { handleKeyPress(i, nativeEvent); }}
-                onFocus={(e) => { handleFocus(i, e); }}
-                onSubmitEditing={() => { handleSubmitEditting(i); }}
-                onChangeText={digit => { handleTextChange({index: i, digit: digit} )}}
-                value={digits[i]} 
-                maxLength={1}
-                blurOnSubmit={false} // Used to allow the keyboard is still on
-                caretHidden={true}
-                keyboardType="number-pad"
+              ref={(input) => {
+                refDigitInputs[i] = input;
+              }}
+              mode="outlined"
+              onBlur={() => {}}
+              onKeyPress={({nativeEvent}) => {
+                handleKeyPress(i, nativeEvent);
+              }}
+              onFocus={(e) => {
+                handleFocus(i, e);
+              }}
+              onSubmitEditing={() => {
+                handleSubmitEditting(i);
+              }}
+              onChangeText={(digit) => {
+                handleTextChange({index: i, digit: digit} );
+              }}
+              value={digits[i]}
+              maxLength={1}
+              blurOnSubmit={false} // Used to allow the keyboard is still on
+              caretHidden={true}
+              keyboardType="number-pad"
             />
-          )
-          })
+          );
+        })
         }
       </View>
 
@@ -221,50 +232,52 @@ const ActivationScreen = ({ navigation, route }) => {
       }
 
       {/* These are the links to others  */}
-      <View style={{...theme.STYLE.sub, marginTop: 0, alignItems: 'center'}}>
-          <Text variant="bodyMedium">Didn't get a code?</Text>
-          <Text variant='bodyMedium'>{countDown > 0 ? `(${countDown})` : "" }</Text>
-          <Button
-            disabled={countDown > 0}
-            mode='text'
-            onPress={handleResend}
-          >Resend</Button>
+      <View style={{...theme.STYLE.sub, marginTop: 0, alignItems: "center"}}>
+        <Text variant="bodyMedium">Didn't get a code?</Text>
+        <Text variant='bodyMedium'>{countDown > 0 ? `(${countDown})` : "" }</Text>
+        <Button
+          disabled={countDown > 0}
+          mode='text'
+          onPress={handleResend}
+        >Resend</Button>
       </View>
 
       {/** Sign In button */}
       <View style={theme.STYLE.sub}>
-        <Button 
+        <Button
           disabled={code.length < CODE_LENGTH || isLoading}
           loading={isLoading}
           style={theme.STYLE.button}
-          //icon="camera"
+          // icon="camera"
           mode="contained"
           onPress={() => handleSubmit() }
-          >
+        >
           Verify
         </Button>
       </View>
 
-        
+
       {/* This is the links to others  */}
 
       <Divider style={theme.STYLE.divider} />
       {/* These are the links to others  */}
       <View style={[theme.STYLE.sub, styles.extra]}>
-        <Text  variant='bodyMedium'>Or</Text>
+        <Text variant='bodyMedium'>Or</Text>
       </View>
       <View style={{...theme.STYLE.sub, marginTop: 10}}>
         <Button
           style={theme.STYLE.button}
           mode='outlined'
-          onPress={() => { navigation.navigate("SignIn")}}
-          >Cancel</Button>
+          onPress={() => {
+            navigation.navigate("SignIn");
+          }}
+        >Cancel</Button>
       </View>
       {/** Footer */}
       <AuthFooter />
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   title: {
@@ -277,9 +290,9 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   digit: {
-    //width: 53,
+    // width: 53,
     flex: 1,
-    //height: 60,
+    // height: 60,
     marginLeft: 3,
     marginRight: 3,
     fontSize: 36,
@@ -292,8 +305,8 @@ const styles = StyleSheet.create({
     paddingLeft: 0,
   },
   extra: {
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     marginTop: 25,
   },
 });

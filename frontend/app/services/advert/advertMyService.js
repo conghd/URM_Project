@@ -1,7 +1,7 @@
-import axios from 'axios'
-import * as MyConfig from '../../../config'
+import axios from "axios";
+import * as MyConfig from "../../../config";
 
-const API_URL = `${MyConfig.BE_BASE_URL}/advert/`
+const API_URL = `${MyConfig.BE_BASE_URL}/advert/`;
 const configure = (token) => {
   /*
   * Hardcoded
@@ -10,20 +10,20 @@ const configure = (token) => {
   return {
     headers: {
       "Authorization": `Bearer ${token}`,
-      "Content-Type": 'multipart/form-data',
+      "Content-Type": "multipart/form-data",
     },
-  }
-}
+  };
+};
 
 const getMyAdverts = async (condition, token) => {
   console.log("AdvertMyService::getMyAdverts: " + JSON.stringify(condition));
-  const response = await axios.get(API_URL + "get_my_adverts", condition, configure(token))
+  const response = await axios.get(API_URL + "get_my_adverts", condition, configure(token));
 
-  return response.data
-}
+  return response.data;
+};
 
 const advertMyService = {
   getMyAdverts,
-}
+};
 
-export default advertMyService
+export default advertMyService;

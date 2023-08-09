@@ -1,18 +1,19 @@
-import { useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { SafeAreaView, Text, View, StyleSheet, ScrollView, FlatList, ImageBackground, TouchableOpacity, Alert,
-} from 'react-native'
-import { Button, IconButton, Modal, Portal, TextInput } from 'react-native-paper';
-import ImagePreviewItem from '../ImagePreviewItem';
-import * as ImagePicker from 'expo-image-picker';
-import { createAdvert, reset } from '../../services/advert/advertCreationSlice';
+import React, {useEffect, useState} from "react";
+import {useSelector, useDispatch} from "react-redux";
+import {View, StyleSheet, ScrollView, FlatList,
+  ImageBackground, TouchableOpacity, Alert,
+} from "react-native";
+import {Button, IconButton, Modal, Portal, TextInput} from "react-native-paper";
+import ImagePreviewItem from "../ImagePreviewItem";
+import * as ImagePicker from "expo-image-picker";
+import {createAdvert, reset} from "../../services/advert/advertCreationSlice";
 
-const CreationScreen = ({ navigation, route }) => {
+const CreationScreen = ({navigation, route}) => {
   const [selectedId, setSelectedId] = useState(null);
   const dispatch = useDispatch();
-  const {book } = route.params;
+  const {book} = route.params;
 
-  const {user } = useSelector((state) => state.auth);
+  const {user} = useSelector((state) => state.auth);
   const [firstTime, setFirstTime] = useState(true);
   /*
   const [formData, setFormData] = useState({
@@ -36,16 +37,18 @@ const CreationScreen = ({ navigation, route }) => {
     condition: "",
   });
   const [images, setImages] = useState([
-    {id: 0, uri: "" },
+    {id: 0, uri: ""},
   ]);
 
-  const {title, price, description, phoneNumber, location, category, condition} = formData;
+  const {title, price, description, phoneNumber, location, category,
+    condition} = formData;
 
-  const {isLoading, isError, isSuccess, message } = useSelector((state) => state.advertCreation)
+  const {isLoading, isError, isSuccess, message} =
+    useSelector((state) => state.advertCreation);
 
   const handleTextChange = (value) => {
     return setFormData((prev) => {
-      return {...prev, ...value}
+      return {...prev, ...value};
     });
   };
 
@@ -56,7 +59,7 @@ const CreationScreen = ({ navigation, route }) => {
     console.log("description: " + description);
     console.log("category: " + category);
     console.log("condition: " + condition);
-    let form = new FormData();
+    const form = new FormData();
     form.append("title", title);
     form.append("price", price);
     form.append("description", description);
@@ -67,52 +70,53 @@ const CreationScreen = ({ navigation, route }) => {
 
     Object.values(images).forEach((image) => {
       if (image.id != 0) {
-        let uriParts = image.uri.split(".");
-        let fileType = uriParts[uriParts.length - 1];
+        const uriParts = image.uri.split(".");
+        const fileType = uriParts[uriParts.length - 1];
         form.append("images", {
           uri: image.uri,
           name: `image.${fileType}`,
           type: `image/${fileType}`,
         });
       }
-    })
+    });
     dispatch(createAdvert(form));
-  }
+  };
 
   useEffect(() => {
     console.log("ProductCreationScreen::useEffect[]");
     dispatch(reset());
-
   }, []);
 
   useEffect(() => {
     if (isSuccess) {
-        //Alert.alert("Success", "The new listing has been created successfully");
-        //navigation.navigate("Main", {screen: "Home"});
-        navigation.navigate("Home", {});
+      // Alert.alert("Success", "The new listing has been created successfully");
+      // navigation.navigate("Main", {screen: "Home"});
+      navigation.navigate("Home", {});
     }
-
   }, [isSuccess]);
 
   useEffect(() => {
     if (isError) {
-        Alert.alert("Failure", "The new listing has been NOT created. Please try again");
+      Alert.alert("Failure",
+          "The new listing has been NOT created. Please try again");
     }
   }, [isError]);
-  
+
   useEffect(() => {
     if (route.params?.book) {
-      console.log("CreationScreen::useEffect(): " + JSON.stringify(route.params.book));
-      setFormData((prev) => { return {...prev, title: book.title}})
+      console.log("CreationScreen::useEffect(): " +
+        JSON.stringify(route.params.book));
+      setFormData((prev) => {
+        return {...prev, title: book.title};
+      });
     }
-
-  }, [route.params?.book])
+  }, [route.params?.book]);
   /*
   useEffect(() => {
     if (firstTime) {
       dispatch(reset());
       setTimeout(() => {
-      
+
       }, 1000);
 
       setFirstTime(false);
@@ -133,7 +137,7 @@ const CreationScreen = ({ navigation, route }) => {
   const handleDeleteImage = (id) => {
     console.log("handleDeleteImage: " + id);
     setImages((current) => current.filter((e) => e.id != id));
-  }
+  };
 
   const handleImgPress = async (id) => {
     console.log("handleImgPress");
@@ -143,7 +147,7 @@ const CreationScreen = ({ navigation, route }) => {
 
     })
     */
-    let result = await ImagePicker.launchImageLibraryAsync({
+    const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: false,
       allowsMultipleSelection: true,
@@ -151,16 +155,21 @@ const CreationScreen = ({ navigation, route }) => {
       quality: 1,
     });
 
-    //console.log(result);
+    // console.log(result);
     if (!result.canceled) {
       if (result.selected) {
-        let newImages = result.selected.map((item) => {return {id: item.assetId, uri: item.uri}});
-        setImages((current) => { return [...current, ...newImages]})
+        const newImages = result.selected.map((item) => {
+          return {id: item.assetId, uri: item.uri};
+        });
+        setImages((current) => {
+          return [...current, ...newImages];
+        });
       } else {
-        setImages((current) => { return [...current, {id: result.assetId, uri: result.uri}]});
+        setImages((current) => {
+          return [...current, {id: result.assetId, uri: result.uri}];
+        });
       };
     }
-
   };
 
   const renderImagePreview = ({item}) => {
@@ -172,105 +181,109 @@ const CreationScreen = ({ navigation, route }) => {
         handleDeleteImage={handleDeleteImage}
       />
     );
-  }
+  };
 
-  const [visible, setVisible] = useState(false);
+  return (
+    <ScrollView style={styles.container}>
+      <View style={styles.imageSection}>
+        <FlatList
+          style={styles.imgList}
+          horizontal={true}
+          data={ images }
+          renderItem={ renderImagePreview }
+          keyExtractor={(item) => item.id}
+          extraData={selectedId}
+          showsVerticalScrollIndicator ={false}
+          showsHorizontalScrollIndicator={false}
+        />
 
-  const showModal = () => setVisible(true);
-  const hideModal = () => setVisible(false);
-  const containerStyle = {backgroundColor: 'white', padding: 20};
-    return (
-        <ScrollView style={styles.container}>
-        <View style={styles.imageSection}>
-          <FlatList
-                  style={styles.imgList}
-                  horizontal={true}
-                  data={ images }
-                  renderItem={ renderImagePreview }
-                  keyExtractor={(item) => item.id}
-                  extraData={selectedId}
-                  showsVerticalScrollIndicator ={false}
-                  showsHorizontalScrollIndicator={false}
-              />
-
-        </View>
-        <View style={styles.inputSection} >
+      </View>
+      <View style={styles.inputSection} >
         <View style={styles.input}>
-          {/* 
-          <IconButton 
-            size={50}
-            icon="barcode-scan" onPress={() => { navigation.navigate("ScannerScreen")}}/>
-          */}
-          <Button 
+          <Button
             icon="barcode-scan"
-            mode="outlined" onPress={() => { navigation.navigate("ScannerScreen")}} >Scan ISBN</Button>
+            mode="outlined" onPress={() => {
+              navigation.navigate("ScannerScreen");
+            }} >Scan ISBN</Button>
 
         </View>
         <View style={styles.input}>
         </View>
         <View style={styles.input}>
           <TextInput label="Title" value={title}
-          onChangeText={text => {handleTextChange({title: text})}}
-          mode="outlined" 
+            onChangeText={(text) => {
+              handleTextChange({title: text});
+            }}
+            mode="outlined"
           />
         </View>
         <View style={styles.input}>
           <TextInput label="Description" value={description}
-          onChangeText={text => { handleTextChange({description: text})}}
-          mode="outlined" multiline={true} 
+            onChangeText={(text) => {
+              handleTextChange({description: text});
+            }}
+            mode="outlined" multiline={true}
           />
         </View>
         <View style={styles.input}>
           <TextInput label="Price" value={`${price}`}
-          onChangeText={text => { handleTextChange({price: text })}}
-          keyboardType="number-pad"
-          mode="outlined"
+            onChangeText={(text) => {
+              handleTextChange({price: text});
+            }}
+            keyboardType="number-pad"
+            mode="outlined"
           />
         </View>
         <View style={styles.input}>
           <TextInput label="Location" value={location}
-          onChangeText={text => { handleTextChange({location: text })}}
-          mode="outlined"
+            onChangeText={(text) => {
+              handleTextChange({location: text});
+            }}
+            mode="outlined"
           />
         </View>
-        {/** 
+        {/**
         <View style={styles.input}>
-          <TextInput label="Category" value={category} onChangeText={text => { handleTextChange({category: text})}}
+          <TextInput label="Category" value={category}
+          onChangeText={text => { handleTextChange({category: text})}}
           mode="outlined"
           />
         </View>
         */}
         <View style={styles.input}>
-          <TextInput label="Condition" value={condition} onChangeText={text => { handleTextChange({condition: text })}}
-          mode="outlined"
+          <TextInput
+            label="Condition" value={condition} onChangeText={(text) => {
+              handleTextChange({condition: text});
+            }}
+            mode="outlined"
           />
         </View>
-        </View>
-        <View style={{flex: 1, margin: 10 }}>
-          <Button mode="contained" onPress={() => handleSubmit()} >Submit</Button>
-        </View>
-        </ScrollView>
-      );
-  };
+      </View>
+      <View style={{flex: 1, margin: 10}}>
+        <Button mode="contained" onPress={() => handleSubmit()} >Submit</Button>
+      </View>
+    </ScrollView>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
-    display: 'flex',
-    flexDirection: 'column',
+    display: "flex",
+    flexDirection: "column",
     flex: 1,
   },
   imageSection: {
-    flexDirection: 'column',
+    flexDirection: "column",
     flex: 1,
-    //backgroundColor: "#ababab",
+    // backgroundColor: "#ababab",
   },
   imgList: {
-    //backgroundColor: "#aaaaff",
+    // backgroundColor: "#aaaaff",
 
   },
   inputSection: {
     flex: 3,
-    //backgroundColor: "#dedede",
+    // backgroundColor: "#dedede",
   },
 
   input: {

@@ -1,53 +1,53 @@
-import React, { useEffect } from 'react';
-import {Dimensions, Image,StyleSheet, View, TouchableOpacity } from 'react-native';
-import { Text } from 'react-native-paper';
-import { Appbar } from 'react-native-paper';
-import * as Config from '../../config'
+import React, {useEffect} from "react";
+import {Dimensions, Image, StyleSheet, View,
+  TouchableOpacity} from "react-native";
+import {Text} from "react-native-paper";
+import {Appbar} from "react-native-paper";
+import * as Config from "../../config";
 /*
           */
 
 
-const windowDimensions = Dimensions.get('window');
-const screenDimensions = Dimensions.get('screen');
-const Product = ({ _id, title, price, images, onPress, index }) => {
-  const odd_style = {marginLeft: 2}
-  const even_style = {marginRight: 2}
-  const style = (index % 2 == 0) ? even_style : odd_style;
+const windowDimensions = Dimensions.get("window");
+const screenDimensions = Dimensions.get("screen");
+const Product = ({_id, title, price, images, onPress, index}) => {
+  const style = (index % 2 == 0) ? {marginRight: 2}: {marginLeft: 2};
 
   return (
-      <TouchableOpacity style={styles.card} onPress={onPress}>
-        <View style={{...styles.infoContainer, ...style}}>
-          <Image style={styles.thumb} source={
+    <TouchableOpacity style={styles.card} onPress={onPress}>
+      <View style={{...styles.infoContainer, ...style}}>
+        <Image style={styles.thumb} source={
             (images && images.length > 0) ?
                 ({uri: Config.BE_RESOURCE_URL + images[0]}) :
                 ({uri: Config.BE_RESOURCE_URL + "/images/no-image-available.jpeg"})
-            } 
-            resizeMode='cover'
-          />
-          <View style={styles.bottomText}>
-            <Text 
-              variant='labelSmall'
-              style={styles.price}>
-              {(price === '0' || price === 0 || price === '') ? "FREE": `$${price}` }- {title}</Text>
-          </View>
+        }
+        resizeMode='cover'
+        />
+        <View style={styles.bottomText}>
+          <Text
+            variant='labelSmall'
+            style={styles.price}>
+            {(price === "0" || price === 0 || price === "") ?
+              "FREE": `$${price}` }- {title}</Text>
         </View>
-      </TouchableOpacity>
+      </View>
+    </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'column',
+    flexDirection: "column",
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   card: {
-    //backgroundColor: 'white',
-    //borderRadius: 16,
+    // backgroundColor: 'white',
+    // borderRadius: 16,
     shadowOpacity: 0.2,
     shadowRadius: 0,
-    shadowColor: 'black',
+    shadowColor: "black",
     shadowOffset: {
       height: 0,
       width: 0,
@@ -58,16 +58,16 @@ const styles = StyleSheet.create({
   },
   thumb: {
     height: 164,
-    //height: windowDimensions.width / 2 -2,
+    // height: windowDimensions.width / 2 -2,
     borderTopLeftRadius: 0,
     borderTopRightRadius: 0,
-    //width: '100%',
+    // width: '100%',
     width: windowDimensions.width / 2 - 2,
-    //borderWidth: 1,
+    // borderWidth: 1,
     borderColor: "gray",
   },
   infoContainer: {
-    backgroundColor: 'white',
+    backgroundColor: "white",
     padding: 0,
     marginBottom: 5,
     borderRadius: 5,
@@ -79,12 +79,12 @@ const styles = StyleSheet.create({
   },
   name: {
     fontSize: 15,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     color: "#272727",
   },
   price: {
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: "600",
     marginBottom: 8,
     color: "#272727",
   },

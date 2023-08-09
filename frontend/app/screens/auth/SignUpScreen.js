@@ -1,58 +1,63 @@
-import React, {useState, useEffect, useRef} from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import React, {useState, useEffect, useRef} from "react";
+import {useSelector, useDispatch} from "react-redux";
 import {
   StyleSheet, View, ScrollView, Image,
-  Keyboard, TouchableOpacity, KeyboardAvoidingView, Alert } from 'react-native';
-import { HelperText, Text, TextInput, ActivityIndicator, Button, Divider } from 'react-native-paper';
-import { theme } from '../../constants';
-import { register, reset } from '../../services/auth/registerSlice';
-import EmailInput from '../../components/EmailInput';
-import PasswordInput from '../../components/PasswordInput';
-import AuthFooter from '../../components/AuthFooter';
-import NameInput from '../../components/NameInput';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { Link } from '@react-navigation/native';
-import { StatusBar } from 'expo-status-bar';
+  Keyboard, TouchableOpacity, KeyboardAvoidingView, Alert} from "react-native";
+import {HelperText, Text, TextInput, Button, Divider} from "react-native-paper";
+import {theme} from "../../constants";
+import {register, reset} from "../../services/auth/registerSlice";
+import EmailInput from "../../components/EmailInput";
+import PasswordInput from "../../components/PasswordInput";
+import AuthFooter from "../../components/AuthFooter";
+import NameInput from "../../components/NameInput";
+import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
+import {Link} from "@react-navigation/native";
+import {StatusBar} from "expo-status-bar";
 
 const SignUpScreen = ({navigation, route}) => {
   const dispatch = useDispatch();
-  //const [formData, setFormData] = useState({ name: "Hoang Duc Cong", email: "conghd@gmail.com", password: "abc13579"});
-  const [formData, setFormData] = useState({ name: "", email: "", password: ""});
+  const [formData, setFormData] = useState({name: "", email: "", password: ""});
   const {name, email, password} = formData;
   const [errors, setErrors] = useState({name: "", email: "", password: "", other: ""});
   const refInputs = [useRef(), useRef(), useRef()];
 
-  const { isSuccess, isLoading, isError, message } = useSelector((state) => state.register)
+  const {isSuccess, isLoading, isError, message} = useSelector((state) => state.register);
 
   const handleTextChange = (value) => {
-    setErrors((prev) => {return {...prev, ...value.error} })
-    setFormData((prev) => { return {...prev, ...value.content} });
-  }
+    setErrors((prev) => {
+      return {...prev, ...value.error};
+    });
+    setFormData((prev) => {
+      return {...prev, ...value.content};
+    });
+  };
 
   const setOtherError = (message) => {
-    setErrors((prev) => {return {...prev, other: message}});
-  }
+    setErrors((prev) => {
+      return {...prev, other: message};
+    });
+  };
 
   const displayOtherError = (message) => {
-    setOtherError(message)
+    setOtherError(message);
     setTimeout(() => {
-      setOtherError("")
-    }, 2000)
-  }
+      setOtherError("");
+    }, 2000);
+  };
 
   const handleSubmit = (e) => {
-    //e.preventDefault();
+    // e.preventDefault();
     if (errors.name != "" || errors.email != "" || errors.password != "") {
       displayOtherError("Please correct above issues and try again.");
       return;
     }
-    //dispatch(reset());
+    // dispatch(reset());
     console.log(formData);
     dispatch(register(formData));
-  }
+  };
 
   const handleSubmitEditing = (index) => {
-    console.log("handleSubmitEditing: " + index)
+    console.log("handleSubmitEditing: " + index);
     if (index < 2) {
       refInputs[index + 1].current.focus();
     } else {
@@ -67,10 +72,10 @@ const SignUpScreen = ({navigation, route}) => {
   useEffect(() => {
     if (isSuccess && message !== null) {
       setTimeout(() => {
-        navigation.replace("Activation", {verification: "ACTIVATION", email: message.email });
+        navigation.replace("Activation",
+            {verification: "ACTIVATION", email: message.email});
       }, 2000);
     }
-
   }, [message]);
 
   useEffect(() => {
@@ -86,30 +91,34 @@ const SignUpScreen = ({navigation, route}) => {
     }
 
     if (isSuccess && message) {
-      //console.log("user: " + user);
+      // console.log("user: " + user);
       console.log("Message: " + message);
     }
 
     if (isError) {
-      setErrors((prev) => {return {...prev, other: message}})
+      setErrors((prev) => {
+        return {...prev, other: message};
+      });
       setTimeout(() => {
-        setErrors((prev) => { return {...prev, other: ""}})
+        setErrors((prev) => {
+          return {...prev, other: ""};
+        });
       }, 5000);
     }
 
     return () => {
-      //dispatch(reset());
-    }
+      // dispatch(reset());
+    };
   }, [isSuccess, isError]);
 
-    return (
-      <View style={theme.STYLE.container} >
-        <StatusBar />
-        <KeyboardAwareScrollView extraHeight={0}
-          extraScrollHeight={0}
-          showsVerticalScrollIndicator={false}
-          showsHorizontalScrollIndicator={false}
-          >
+  return (
+    <View style={theme.STYLE.container} >
+      <StatusBar />
+      <KeyboardAwareScrollView extraHeight={0}
+        extraScrollHeight={0}
+        showsVerticalScrollIndicator={false}
+        showsHorizontalScrollIndicator={false}
+      >
         <View style={theme.STYLE.header}>
           <Text style={theme.STYLE.headerText}>URM</Text>
         </View>
@@ -125,7 +134,7 @@ const SignUpScreen = ({navigation, route}) => {
           />
         </View>
         <View style={theme.STYLE.sub}>
-          <EmailInput 
+          <EmailInput
             handleTextChange={handleTextChange}
             handleSubmitEditing={handleSubmitEditing}
             index={1}
@@ -140,7 +149,7 @@ const SignUpScreen = ({navigation, route}) => {
             ref={refInputs[2]}
           />
         </View>
-        { errors.other != "" && 
+        { errors.other != "" &&
           <View style={theme.STYLE.sub}>
             <HelperText type="error" visible={errors.other != ""}>
               {errors.other}
@@ -148,35 +157,37 @@ const SignUpScreen = ({navigation, route}) => {
           </View>
         }
 
-          <View style={theme.STYLE.sub}>
-            <Button 
-                icon="send"
-                loading={isLoading}
-                style={[theme.STYLE.button, styles.button] }
-                mode="contained"
-                onPress={() => handleSubmit() }
-                >
+        <View style={theme.STYLE.sub}>
+          <Button
+            icon="send"
+            loading={isLoading}
+            style={[theme.STYLE.button, styles.button] }
+            mode="contained"
+            onPress={() => handleSubmit() }
+          >
                 Register
-            </Button>
-          </View>
+          </Button>
+        </View>
 
         <Divider style={styles.divider} />
         <View style={[theme.STYLE.sub, styles.extra] }>
-          <Text  variant='bodyMedium'>
-            Already have an account? 
+          <Text variant='bodyMedium'>
+            Already have an account?
           </Text>
         </View>
-        <View style={{...theme.STYLE.sub, marginTop: 10 }}>
-          <Button 
+        <View style={{...theme.STYLE.sub, marginTop: 10}}>
+          <Button
             style={theme.STYLE.button}
             mode='outlined'
-            onPress={() => { navigation.navigate("SignIn")}}
+            onPress={() => {
+              navigation.navigate("SignIn");
+            }}
           >Log In</Button>
         </View>
         <AuthFooter />
-        </KeyboardAwareScrollView>
-      </View>
-    );
+      </KeyboardAwareScrollView>
+    </View>
+  );
 };
 
 const styles = StyleSheet.create({
@@ -190,14 +201,14 @@ const styles = StyleSheet.create({
     marginTop: 30,
   },
   extra: {
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     marginTop: 25,
   },
   link: {
-    justifyContent: 'center',
-    color: '#004e2e',
-  }
+    justifyContent: "center",
+    color: "#004e2e",
+  },
 });
 
 export default SignUpScreen;

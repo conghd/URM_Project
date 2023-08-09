@@ -1,75 +1,78 @@
-import { useEffect, useState } from 'react';
-import * as Config from '../../../config';
-import { Text, 
+import React, {useEffect, useState} from "react";
+import * as Config from "../../../config";
+import {Text,
   View,
   ScrollView,
-  StyleSheet
-} from 'react-native'
-import { Button, IconButton } from 'react-native-paper';
-import Slideshow from 'react-native-image-slider-show';
-//import MapView, { Marker } from 'react-native-maps';
+  StyleSheet,
+} from "react-native";
+import {Button, IconButton} from "react-native-paper";
+import Slideshow from "react-native-image-slider-show";
+// import MapView, { Marker } from 'react-native-maps';
 
-const DetailsScreen = ({ navigation, route }) => {
-  const { item } = route.params;
-  const images = item.images.map((image) => { return {url: Config.BE_RESOURCE_URL + image} });
+const DetailsScreen = ({navigation, route}) => {
+  const {item} = route.params;
+  const images = item.images.map((image) => {
+    return {url: Config.BE_RESOURCE_URL + image};
+  });
   if (images.length == 0) {
-    images.push({url: Config.BE_RESOURCE_URL + "/images/no-image-available.jpeg" });
+    images.push({url: Config.BE_RESOURCE_URL +
+      "/images/no-image-available.jpeg"});
   }
   const [bookmark, setBookmark] = useState(false);
   const coordinate = {
     latitude: +50.445210,
-    longitude: -104.618896
-  };
-
-  const initialRegion = {
-      ...coordinate,
-      latitudeDelta: 0.01922,
-      longitudeDelta: 0.01421,
+    longitude: -104.618896,
   };
 
 
-    useEffect(() => {
-      console.log("DetailsScreen::useEffect()");
-
-    }, []);
-    return (
-      <View style={styles.container} >
-        <ScrollView showsVerticalScrollIndicator={false}>
+  useEffect(() => {
+    console.log("DetailsScreen::useEffect()");
+  }, []);
+  return (
+    <View style={styles.container} >
+      <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.sliderBox}>
-            <Slideshow 
-              dataSource={ images }/>
+          <Slideshow
+            dataSource={ images }/>
         </View>
         <View style={styles.header}>
-            <View style={{flex: 5}}>
-              <Text style={styles.title }>{item.title}</Text>
-              <Text style={styles.price}>
-              { (item.price === 0 || item.price === "0" || item.price === "") ? ("FREE") : ("$" + item.price)}
-              </Text>
-            </View>
-            <View style={{flex: 1}}>
-              <IconButton icon={bookmark ? "bookmark" : "bookmark-outline"}
-                size={50}
-                onPress={() => { setBookmark(!bookmark)}}
-                iconColor='gray'
-                
-                />
-            </View>
+          <View style={{flex: 5}}>
+            <Text style={styles.title }>{item.title}</Text>
+            <Text style={styles.price}>
+              { (item.price === 0 || item.price === "0" || item.price === "") ?
+              ("FREE") : ("$" + item.price)}
+            </Text>
+          </View>
+          <View style={{flex: 1}}>
+            <IconButton icon={bookmark ? "bookmark" : "bookmark-outline"}
+              size={50}
+              onPress={() => {
+                setBookmark(!bookmark);
+              }}
+              iconColor='gray'
+
+            />
+          </View>
 
         </View>
         {/**
         <View style={[styles.header, {marginTop: 0}] }>
             <Text style={styles.price}>
-              { (item.price === 0 || item.price === "") ? ("FREE") : ("$" + item.price)}
+              { (item.price === 0 || item.price === "") ?
+                ("FREE") : ("$" + item.price)}
               </Text>
         </View>
         */}
         <View style={styles.sellerHeader}>
-            <Text style={[styles.detailsHeader, {fontWeight: "bold"}]}>Seller</Text>
-            </View>
+          <Text style={[styles.detailsHeader, {fontWeight: "bold"}]}>
+            Seller</Text>
+        </View>
         <View style={[styles.sellerHeader, {marginTop: 0}] }>
-            <Text style={styles.seller}>{item.user != null ? item.user.name : "Unknown"}</Text>
-            {/** 
-            <Button mode="outlined" icon="send" style={styles.seller}>Message</Button >
+          <Text style={styles.seller}>
+            {item.user != null ? item.user.name : "Unknown"}</Text>
+          {/**
+            <Button mode="outlined" icon="send"
+            style={styles.seller}>Message</Button >
             */}
         </View>
 
@@ -80,12 +83,14 @@ const DetailsScreen = ({ navigation, route }) => {
                       <Text style={styles.mapTitle}>Location</Text>
                   </View>
                   <View style={styles.mapContainer} >
-                      <MapView  style={styles.mapView} initialRegion={initialRegion}
+                      <MapView  style={styles.mapView}
+                        initialRegion={initialRegion}
                           loadingEnabled={true}
                           loadingIndicatorColor="#666666"
                           loadingBackgroundColor="#eeeeee"
                           provider="google" >
-                          <Marker coordinate={initialRegion} title={item.user.name} />
+                          <Marker coordinate={initialRegion}
+                          title={item.user.name} />
                       </MapView>
                   </View>
           </View>
@@ -97,10 +102,10 @@ const DetailsScreen = ({ navigation, route }) => {
           <Text style={styles.description}>{item.description}</Text>
         </View>
       </ScrollView>
-      </View>
+    </View>
 
-    );
-  };
+  );
+};
 
 export default DetailsScreen;
 
@@ -108,9 +113,9 @@ export default DetailsScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexDirection: 'column',
+    alignItems: "center",
+    justifyContent: "center",
+    flexDirection: "column",
     backgroundColor: "#FFFFFF",
   },
   sliderBox: {
@@ -134,7 +139,7 @@ const styles = StyleSheet.create({
 
   },
   price: {
-    flex:1,
+    flex: 1,
     flexDirection: "row",
     fontSize: 18,
   },
@@ -164,14 +169,14 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     alignItems: "center",
     paddingTop: 10,
-},
-mapHeader: {
+  },
+  mapHeader: {
     flex: 1,
     justifyContent: "center",
     flexDirection: "row",
-    alignItems: "flex-start"
-},
-mapTitle: {
+    alignItems: "flex-start",
+  },
+  mapTitle: {
     flex: 1,
     marginLeft: 10,
     alignSelf: "flex-start",
@@ -179,15 +184,15 @@ mapTitle: {
     fontSize: 18,
     fontWeight: "bold",
     color: "#272727",
-},
-mapContainer: {
+  },
+  mapContainer: {
     paddingTop: 5,
     flex: 12,
     flexDirection: "row",
-},
-mapView: {
+  },
+  mapView: {
     flex: 1,
-},
+  },
   logo: {
     resizeMode: "cover",
   },
@@ -202,7 +207,7 @@ mapView: {
 
   },
   description: {
-    marginTop: 15
+    marginTop: 15,
   },
   detailsHeader: {
     fontSize: 18,
@@ -224,7 +229,7 @@ mapView: {
     marginBottom: 50,
   },
   btn: {
-    backgroundColor: '#0063E5',
+    backgroundColor: "#0063E5",
     padding: 10,
     margin: 10,
     width: 360,
@@ -232,22 +237,22 @@ mapView: {
   },
   btn_text: {
     fontSize: 23,
-    color: '#fff',
+    color: "#fff",
   },
   loginContainer: {
-    width: '80%',
-    alignItems: 'center',
-    backgroundColor: 'white',
+    width: "80%",
+    alignItems: "center",
+    backgroundColor: "white",
     padding: 10,
     elevation: 10,
-    backgroundColor: '#e6e6e6'
+    backgroundColor: "#e6e6e6",
   },
   textInput: {
     marginTop: 20,
     height: 40,
     width: 360,
     margin: 10,
-    backgroundColor: 'white',
+    backgroundColor: "white",
     borderRadius: 10,
   },
   text: {
@@ -263,6 +268,6 @@ mapView: {
     flex: 1,
     paddingLeft: 40,
     fontSize: 12,
-    color: 'red',
+    color: "red",
   },
 });

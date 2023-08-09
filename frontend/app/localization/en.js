@@ -1,15 +1,15 @@
 export const en = {
-    common: {
-        loading: 'Loading',
-        connectionError: 'Connection error',
-    },
-    signin: {
+  common: {
+    loading: "Loading",
+    connectionError: "Connection error",
+  },
+  signin: {
 
-    },
-    signup: {
+  },
+  signup: {
 
-    },
-    profile: {
+  },
+  profile: {
 
-    }
+  },
 };
