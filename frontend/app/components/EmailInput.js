@@ -1,10 +1,10 @@
 import {useNavigation} from "@react-navigation/native";
 import React, {useState, useEffect} from "react";
 import {StyleSheet, View} from "react-native";
-import {Button, TextInput, Text, HelperText} from "react-native-paper";
+import {TextInput, HelperText} from "react-native-paper";
 import {theme} from "../constants";
 
-const EmailInput = forwardRef(({email, handleTextChange,
+const EmailInput = React.forwardRef(({email, handleTextChange,
   handleSubmitEditing, index}, ref) => {
   const [userId, setUserId] = useState(email? email.split("@")[0] : "");
   const [error, setError] = useState("");

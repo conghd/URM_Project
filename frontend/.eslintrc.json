@@ -15,6 +15,7 @@
         "react"
     ],
     "rules": {
+        "react/display-name": "off",
         "no-console": "off",
         "react/prop-types": "off",
         "quotes": [

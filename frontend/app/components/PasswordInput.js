@@ -4,7 +4,7 @@ import {StyleSheet, View} from "react-native";
 import {Button, TextInput, Text, HelperText} from "react-native-paper";
 import {theme} from "../constants";
 
-const PasswordInput = forwardRef(({handleTextChange, handleSubmitEditing,
+const PasswordInput = React.forwardRef(({handleTextChange, handleSubmitEditing,
   index, variant}, ref) => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -21,10 +21,14 @@ const PasswordInput = forwardRef(({handleTextChange, handleSubmitEditing,
     // let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
     // let reg = /^\w+([\.-]?\w+)*$/;
     // let reg = /^[A-Za-z]([[\.-]?[A-Za-z0-9]+)*$/;
-    const reg = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
-    // Your password must be at least eight characters long. It must contain at least one number and two letters, one upper case and one lower case, and one special character such as !#$%^&+=*().
+    const reg =
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
+    // Your password must be at least eight characters long.
+    // It must contain at least one number and two letters,
+    // one upper case and one lower case, and one special character such as !#$%^&+=*().
 
-    const msg = (reg.test(text)) ? "": "Minimum 8 characters, at least one uppercase letter,\
+    const msg = (reg.test(text)) ? "":
+    "Minimum 8 characters, at least one uppercase letter,\
         one lowercase letter, one number & one special character";
     return msg;
   };

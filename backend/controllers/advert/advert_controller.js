@@ -24,7 +24,7 @@ const upload = multer({storage: storage}).array("images", 16);
 // @route   POST  /api/advert/create
 // @access  Public
 const createAdvert = asyncHandler(async (req, res) => {
-  console.log("AdvertController::createAdvert")
+  logger.info("AdvertController::createAdvert ")
   await upload(req, res, (err) => {
     if (err) {
       res.status(400)
@@ -108,11 +108,11 @@ const getAdverts = asyncHandler(async (req, res) => {
 })
 */
 const getAdverts = asyncHandler(async (req, res) => {
-  console.log("AdvertController::listAdverts")
-  const category = req.query['category']; 
-  const keyword = req.query['keyword']; 
-  console.log("Category: " + category);
-  console.log("Keyword: " + keyword);
+  const { category, keyword, offset, limit } = req.query;
+  //const category = req.query['category']; 
+  //const keyword = req.query['keyword']; 
+  logger.info("AdvertController::listAdverts - (%s, %s, %s, %s)",
+    category, keyword, offset, limit)
   let condition = {};
   if (category) {
     //condition.category = category;
@@ -124,19 +124,20 @@ const getAdverts = asyncHandler(async (req, res) => {
   }
   console.log("Condition: " + JSON.stringify(condition));
   const adverts = await AdvertModel.find(condition)
-    .populate(['user', 'comments'])
+    // .populate(['user', 'comments'])
+    .populate({path: 'user', select: "_id name email"})
     .sort({createdAt: -1})
+    .skip(offset)
+    .limit(limit)
     .exec();
 
   res.send(adverts)
 })
 
 const search = asyncHandler(async (req, res) => {
-  console.log("AdvertController::search")
   const category = req.query['category']; 
   const keyword = req.query['keyword']; 
-  console.log("Category: " + category);
-  console.log("Keyword: " + keyword);
+  logger.info("AdvertController::search - (%s, %s)", category, keyword);
   let condition = {};
   if (category) {
     //condition.category = category;
@@ -148,7 +149,8 @@ const search = asyncHandler(async (req, res) => {
   }
   console.log("Condition: " + JSON.stringify(condition));
   const adverts = await AdvertModel.find({title: {$regex: `.*${keyword}.*`} })
-    .populate(['user', 'comments'])
+    //.populate(['user', 'comments'])
+    .populate({path: 'user', select: "_id name email"})
     .sort({createdAt: -1})
     .exec();
 
@@ -160,7 +162,7 @@ const getMyAdverts = asyncHandler(async (req, res) => {
   logger.info("AdvertController::getMyAdverts - " + userId)
 
   const adverts = await AdvertModel.find({user: userId })
-    .populate(['user'])
+    .populate({path: 'user', select: "_id name email"})
     .sort({createdAt: -1})
     .exec();
 

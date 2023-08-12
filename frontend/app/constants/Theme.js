@@ -26,14 +26,21 @@ export default {
   },
   STYLE: {
     container: {
-      // backgroundColor: "#ffffff",
       flex: 1,
-      justifyContent: "center",
+      justifyContent: "flex-start",
       alignItems: "center",
       flexDirection: "column",
-      paddingTop: 0,
-      paddingLeft: 0,
-      paddingRight: 0,
+      padding: 0,
+      margin: 0,
+    },
+    row: {
+      flexDirection: "row",
+      alignItems: "center",
+    },
+    sub: {
+      marginTop: 20,
+      flexDirection: "row",
+      alignItems: "center",
     },
 
     header: {
@@ -48,11 +55,6 @@ export default {
       color: "#0055d2",
       fontSize: 40,
       fontWeight: "bold",
-    },
-    sub: {
-      marginTop: 20,
-      flexDirection: "row",
-      alignItems: "center",
     },
     sub30: {
       marginTop: 30,

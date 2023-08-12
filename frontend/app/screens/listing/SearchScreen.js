@@ -3,8 +3,9 @@ import {View, StyleSheet, TextInput, FlatList} from "react-native";
 import {Text, Button, Searchbar} from "react-native-paper";
 import {useDispatch, useSelector} from "react-redux";
 import {search, reset} from "../../services/advert/advertSearchSlice";
-import Product from "../../components/Product";
+import Product from "../../components/ListingItem";
 import {theme} from "../../constants";
+import {StatusBar} from "expo-status-bar";
 
 const SearchScreen = ({navigation, route}) => {
   const dispatch = useDispatch();
@@ -53,51 +54,46 @@ const SearchScreen = ({navigation, route}) => {
   };
 
   return (
-    <View style={styles.container}>
-      <Searchbar
-        style={styles.searchBar}
-        placeholder='Search'
-        onChangeText={onChangeSearch}
-        value={searchQuery}
-        onSubmitEditing={handleSubmitEditing}
-      />
+    <View style={theme.STYLE.container}>
+      <View style={theme.STYLE.row}>
+        <Searchbar
+          style={styles.searchBar}
+          placeholder='Search'
+          onChangeText={onChangeSearch}
+          value={searchQuery}
+          onSubmitEditing={handleSubmitEditing}
+        />
+      </View>
       { adverts.length > 0 ? (
-
-            <FlatList
-              numColumns={2}
-              horizontal={false}
-              showsHorizontalScrollIndicator={false}
-              showsVerticalScrollIndicator={false}
-              style={styles.productsList}
-              contentContainerStyle={styles.productsListContainer}
-              keyExtractor={(product) => product._id}
-              data={adverts}
-              renderItem={renderProduct}
-              onRefresh={() => {
-                dispatch(search({params: {keyword: searchQuery}}));
-              }}
-              refreshing={false}
-              // maxToRenderPerBatch={6}
-            />
-            ) : (
-              <View style={{...theme.STYLE.sub, alignItems: "center"}} >
-                <Text variant='bodyLarge'>No listings</Text>
-              </View>
-            ) }
+        <FlatList
+          numColumns={2}
+          horizontal={false}
+          showsHorizontalScrollIndicator={false}
+          showsVerticalScrollIndicator={false}
+          style={styles.productsList}
+          contentContainerStyle={styles.productsListContainer}
+          keyExtractor={(product) => product._id}
+          data={adverts}
+          renderItem={renderProduct}
+          onRefresh={() => {
+            dispatch(search({params: {keyword: searchQuery}}));
+          }}
+          refreshing={false}
+          // maxToRenderPerBatch={6}
+        />
+        ) : (
+          <View style={{...theme.STYLE.sub, alignItems: "center"}} >
+            <Text variant='bodyLarge'>No listings</Text>
+          </View>
+        ) }
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    // backgroundColor: "#ffffff",
-    flex: 1,
-    // justifyContent: "center",
-    alignItems: "center",
-    flexDirection: "column",
-  },
-
   searchBar: {
+    backgroundColor: "#ffffff",
+    flex: 1,
     marginTop: 10,
     marginLeft: 10,
     marginRight: 10,

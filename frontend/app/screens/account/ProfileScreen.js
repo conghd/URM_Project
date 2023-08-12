@@ -1,33 +1,32 @@
-import * as React from "react";
-import {View, StyleSheet, TextInput, ImageBackground, FlatList} from "react-native";
-import * as SecureStore from "expo-secure-store";
-import {useState, useEffect} from "react";
+import React, {useEffect} from "react";
+import {View, StyleSheet, FlatList}
+  from "react-native";
 import {Text, Button, ActivityIndicator, Avatar} from "react-native-paper";
 import {logout} from "../../services/auth/authSlice";
 import {useSelector, useDispatch} from "react-redux";
-import {SafeAreaView} from "react-native-safe-area-context";
-import Product from "../../components/Product";
+import ListingItem from "../../components/ListingItem";
 import {getMyAdverts, reset} from "../../services/advert/advertMySlice";
+
 
 const ProfileScreen = ({navigation, route}) => {
   const dispatch = useDispatch();
-  const {adverts, isLoading, isError, isSuccess, message} = useSelector((state) => state.advertMy);
-  const {isLogoutLoading} = useSelector((state) => state.auth.logoutState);
+  const {adverts, isLoading, isError, isSuccess, message} =
+   useSelector((state) => state.advertMy);
   const {user} = useSelector((state) => state.auth);
   const condition = {params: {userId: user._id}};
 
-  function renderProduct({item}) {
+  const renderListingItem = ({item}) => {
     return (
-      <Product key={item._id} {...item}
+      <ListingItem key={item._id} {...item}
         onPress={() => {
-          // navigation.navigate('ProductDetails', {
+          // navigation.navigate('ListingItemDetails', {
           //  item: item,
           // productId: product.id,
           // });
         }}
       />
     );
-  }
+  };
 
   React.useLayoutEffect(() => {
     console.log("ProfileScreen::useLayoutEffect()");
@@ -53,7 +52,8 @@ const ProfileScreen = ({navigation, route}) => {
     <View style={styles.container}>
       <View style={styles.account}>
         <View style={styles.avatar}>
-          <Avatar.Image size={64} source={require("../../../assets/user3.jpeg")}/>
+          <Avatar.Image size={64}
+            source={require("../../../assets/user3.jpeg")}/>
         </View>
         <View style={styles.info}>
           <Text>{user.name}</Text>
@@ -85,7 +85,7 @@ const ProfileScreen = ({navigation, route}) => {
           contentContainerStyle={styles.productsListContainer}
           keyExtractor={(product) => product._id}
           data={adverts}
-          renderItem={renderProduct}
+          renderItem={renderListingItem}
           onRefresh={() => {
             dispatch(getMyAdverts(condition));
           }}

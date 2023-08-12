@@ -2,33 +2,36 @@ import React, {useEffect} from "react";
 import {Dimensions, Image, StyleSheet, View,
   TouchableOpacity} from "react-native";
 import {Text} from "react-native-paper";
-import {Appbar} from "react-native-paper";
 import * as Config from "../../config";
-/*
-          */
-
 
 const windowDimensions = Dimensions.get("window");
-const screenDimensions = Dimensions.get("screen");
-const Product = ({_id, title, price, images, onPress, index}) => {
+// const screenDimensions = Dimensions.get("screen");
+
+
+const ListingItem = ({_id, title, price, images, onPress, index}) => {
   const style = (index % 2 == 0) ? {marginRight: 2}: {marginLeft: 2};
+  const source = {uri: Config.BE_RESOURCE_URL +
+    ((images && images.length > 0)? images[0] : "/images/no-image.jpeg")};
+  const priceText = (price === "0" || price === 0 || price==="") ?
+    "Free" : `${price}`;
 
   return (
     <TouchableOpacity style={styles.card} onPress={onPress}>
-      <View style={{...styles.infoContainer, ...style}}>
-        <Image style={styles.thumb} source={
-            (images && images.length > 0) ?
-                ({uri: Config.BE_RESOURCE_URL + images[0]}) :
-                ({uri: Config.BE_RESOURCE_URL + "/images/no-image-available.jpeg"})
-        }
-        resizeMode='cover'
+      <View style={[styles.infoContainer, style]}>
+        <Image
+          style={styles.thumb}
+          resizeMode='cover'
+          source={source}
         />
-        <View style={styles.bottomText}>
+        <View
+          style={styles.bottomText}>
           <Text
-            variant='labelSmall'
-            style={styles.price}>
-            {(price === "0" || price === 0 || price === "") ?
-              "FREE": `$${price}` }- {title}</Text>
+            variant='bodySmall'
+            style={styles.price}
+            numberOfLines={1}
+          >
+            {priceText} - {title}
+          </Text>
         </View>
       </View>
     </TouchableOpacity>
@@ -43,7 +46,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   card: {
-    // backgroundColor: 'white',
+    backgroundColor: "#efefef",
     // borderRadius: 16,
     shadowOpacity: 0.2,
     shadowRadius: 0,
@@ -56,26 +59,30 @@ const styles = StyleSheet.create({
     marginVertical: 0,
     marginHorizontal: 0,
   },
-  thumb: {
-    height: 164,
-    // height: windowDimensions.width / 2 -2,
-    borderTopLeftRadius: 0,
-    borderTopRightRadius: 0,
-    // width: '100%',
-    width: windowDimensions.width / 2 - 2,
-    // borderWidth: 1,
-    borderColor: "gray",
-  },
   infoContainer: {
+    width: windowDimensions.width / 2 - 7,
     backgroundColor: "white",
     padding: 0,
-    marginBottom: 5,
+    // marginBottom: 5,
     borderRadius: 5,
+    borderWidth: 1,
+    borderColor: "silver",
+  },
+  thumb: {
+    flex: 1,
+    // height: 164,
+    height: windowDimensions.width / 2 -9,
+    width: windowDimensions.width / 2 - 9,
+    // borderTopLeftRadius: 5,
+    // borderTopRightRadius: 5,
+    borderRadius: 4,
   },
   bottomText: {
     justifyContent: "center",
-    paddingLeft: 10,
+    paddingLeft: 5,
     paddingTop: 5,
+    paddingRight: 5,
+    paddingBottom: 5,
   },
   name: {
     fontSize: 15,
@@ -83,11 +90,11 @@ const styles = StyleSheet.create({
     color: "#272727",
   },
   price: {
+    // overflow: "hidden",
     fontSize: 16,
     fontWeight: "600",
-    marginBottom: 8,
     color: "#272727",
   },
 });
 
-export default Product;
+export default ListingItem;

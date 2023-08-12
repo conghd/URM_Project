@@ -4,7 +4,7 @@ import {StyleSheet, View} from "react-native";
 import {Button, TextInput, Text, HelperText} from "react-native-paper";
 import {theme} from "../constants";
 
-const NameInput = forwardRef(({handleTextChange, handleSubmitEditing,
+const NameInput = React.forwardRef(({handleTextChange, handleSubmitEditing,
   index}, ref) => {
   const [name, setName] = useState("");
   const [error, setError] = useState("");

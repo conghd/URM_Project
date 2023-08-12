@@ -18,10 +18,12 @@ const SignUpScreen = ({navigation, route}) => {
   const dispatch = useDispatch();
   const [formData, setFormData] = useState({name: "", email: "", password: ""});
   const {name, email, password} = formData;
-  const [errors, setErrors] = useState({name: "", email: "", password: "", other: ""});
+  const [errors, setErrors] =
+  useState({name: "", email: "", password: "", other: ""});
   const refInputs = [useRef(), useRef(), useRef()];
 
-  const {isSuccess, isLoading, isError, message} = useSelector((state) => state.register);
+  const {isSuccess, isLoading, isError, message} =
+    useSelector((state) => state.register);
 
   const handleTextChange = (value) => {
     setErrors((prev) => {
@@ -39,7 +41,7 @@ const SignUpScreen = ({navigation, route}) => {
   };
 
   const displayOtherError = (message) => {
-    setOtherError(message);
+    setOtherError(message.message);
     setTimeout(() => {
       setOtherError("");
     }, 2000);
@@ -96,14 +98,7 @@ const SignUpScreen = ({navigation, route}) => {
     }
 
     if (isError) {
-      setErrors((prev) => {
-        return {...prev, other: message};
-      });
-      setTimeout(() => {
-        setErrors((prev) => {
-          return {...prev, other: ""};
-        });
-      }, 5000);
+      displayOtherError(message);
     }
 
     return () => {

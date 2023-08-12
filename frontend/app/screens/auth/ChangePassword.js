@@ -1,13 +1,11 @@
 import * as React from "react";
 import {View, StyleSheet, Keyboard} from "react-native";
-import {HelperText, Button, TextInput, Text, ActivityIndicator, Snackbar, Divider} from "react-native-paper";
-import * as SecureStore from "expo-secure-store";
+import {HelperText, Button, Text, Divider} from "react-native-paper";
 import {useEffect, useState, useRef} from "react";
-import {Link} from "@react-navigation/native";
 import {useDispatch, useSelector} from "react-redux";
-import {resetPassword, reset as resetPasswordState} from "../../services/auth/authResetPasswordSlice";
+import {resetPassword, reset as resetPasswordState}
+  from "../../services/auth/authResetPasswordSlice";
 import {theme} from "../../constants";
-import EmailInput from "../../components/EmailInput";
 import PasswordInput from "../../components/PasswordInput";
 import AuthFooter from "../../components/AuthFooter";
 import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
@@ -17,12 +15,16 @@ const ChangePassword = ({navigation, route}) => {
   const {email} = route.params;
 
   const dispatch = useDispatch();
-  const {isLoading, isError, isSuccess, message} = useSelector((state) => state.authResetPassword);
-  const [loginData, setLoginData] = useState({current_password: "", new_password: ""});
+  const {isLoading, isError, isSuccess, message} =
+    useSelector((state) => state.authResetPassword);
+  const [loginData, setLoginData] =
+    useState({current_password: "", new_password: ""});
   const refInputs = [useRef(), useRef()];
 
-  const [errors, setErrors] = useState({current_password: "", new_password: "", other: "The password is incorrect"});
-  const [info, setInfo] = useState("Your password has been changed successfully");
+  const [errors, setErrors] =
+  useState({current_password: "", new_password: "", other: "The password is incorrect"});
+  const [info, setInfo] =
+  useState("Your password has been changed successfully");
 
   const handleTextChange = (value) => {
     console.log(value);

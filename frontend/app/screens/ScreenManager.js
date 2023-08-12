@@ -22,7 +22,7 @@ const theme = {
 // const Stack = createNativeStackNavigator();
 // const Tab = createMaterialBottomTabNavigator();
 
-export const ScreenManager = () => {
+const ScreenManager = () => {
   const {user} = useSelector((state) => state.auth);
   const {settings} = useSelector((state) => state.settings);
 
@@ -39,7 +39,7 @@ export const ScreenManager = () => {
       <NavigationContainer>
         <SafeAreaProvider>
           { (settings && settings.isFirstTime) ?
-            (<IntroNavigator />) :
+            (<IntroNavigator />):
             (
               (user === null || user === {}) ?
               (<AuthNavigator />) :
@@ -51,3 +51,5 @@ export const ScreenManager = () => {
     </PaperProvider>
   );
 };
+
+export default ScreenManager;
