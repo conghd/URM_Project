@@ -22,6 +22,7 @@ const MainTab = () => {
         component={HomeStack}
         options={{
           headerShown: false,
+          headerBackTitle: "",
           headerTitle: "Home",
           tabBarLabel: "Home",
           tabBarIcon: ({color}) => (

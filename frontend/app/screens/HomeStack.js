@@ -11,6 +11,7 @@ const HomeStack = () => {
       <Stack.Screen name="Home" component={HomeScreen}
         options={({navigation, route}) => (
           {
+            headerBackTitle: "",
             headerRight: () => (
               <>
                 <IconButton

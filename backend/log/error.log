@@ -1,0 +1,5 @@
+{"level":"error","message":"MongoDB connection error.","timestamp":"2023-07-14T23:14:47.581Z"}
+{"level":"error","message":"MongoDB connection error.","timestamp":"2023-07-14T23:16:29.010Z"}
+2023-07-15T07:22:11.229Z [[31merror[39m]: MongoDB connection error.
+2023-08-08T17:07:21.837Z [[31merror[39m]: User validation failed: verification_code: Path `verification_code` is required., verified: Path `verified` is required.
+2023-08-08T17:08:46.107Z [[31merror[39m]: User validation failed: verification_code: Path `verification_code` is required.

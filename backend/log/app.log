@@ -1,0 +1,11 @@
+{"level":"info","message":"Connected to MongoDB successfully.","timestamp":"2023-07-14T23:02:01.116Z"}
+{"level":"info","message":"Server is running on port: 5000","timestamp":"2023-07-14T23:12:36.114Z"}
+{"level":"info","message":"Connected to MongoDB successfully.","timestamp":"2023-07-14T23:12:36.955Z"}
+{"level":"info","message":"Server is running on port: 5000","timestamp":"2023-07-14T23:13:44.750Z"}
+{"level":"info","message":"Connected to MongoDB successfully.","timestamp":"2023-07-14T23:13:45.516Z"}
+{"level":"info","message":"Server is running on port: 5000","timestamp":"2023-07-14T23:14:32.427Z"}
+{"level":"info","message":"Connected to MongoDB successfully.","timestamp":"2023-07-14T23:14:33.258Z"}
+{"level":"info","message":"Server is running on port: 5000","timestamp":"2023-07-14T23:14:46.806Z"}
+{"level":"error","message":"MongoDB connection error.","timestamp":"2023-07-14T23:14:47.581Z"}
+{"level":"info","message":"Server is running on port: 5000","timestamp":"2023-07-14T23:15:58.216Z"}
+{"level":"error","message":"MongoDB connection error.","timestamp":"2023-07-14T23:16:29.010Z"}

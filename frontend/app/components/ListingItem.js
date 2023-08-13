@@ -13,7 +13,7 @@ const ListingItem = ({_id, title, price, images, onPress, index}) => {
   const source = {uri: Config.BE_RESOURCE_URL +
     ((images && images.length > 0)? images[0] : "/images/no-image.jpeg")};
   const priceText = (price === "0" || price === 0 || price==="") ?
-    "Free" : `${price}`;
+    "Free" : `$${price}`;
 
   return (
     <TouchableOpacity style={styles.card} onPress={onPress}>
@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
       height: 0,
       width: 0,
     },
-    elevation: 1,
+    // elevation: 1,
     marginVertical: 0,
     marginHorizontal: 0,
   },
@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
     width: windowDimensions.width / 2 - 7,
     backgroundColor: "white",
     padding: 0,
-    // marginBottom: 5,
+    marginBottom: 0,
     borderRadius: 5,
     borderWidth: 1,
     borderColor: "silver",
@@ -87,13 +87,13 @@ const styles = StyleSheet.create({
   name: {
     fontSize: 15,
     fontWeight: "bold",
-    color: "#272727",
+    color: "#3a3a3a",
   },
   price: {
     // overflow: "hidden",
     fontSize: 16,
     fontWeight: "600",
-    color: "#272727",
+    color: "#3a3a3a",
   },
 });
 

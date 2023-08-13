@@ -135,23 +135,21 @@ const getAdverts = asyncHandler(async (req, res) => {
 })
 
 const search = asyncHandler(async (req, res) => {
-  const category = req.query['category']; 
-  const keyword = req.query['keyword']; 
-  logger.info("AdvertController::search - (%s, %s)", category, keyword);
-  let condition = {};
-  if (category) {
-    //condition.category = category;
-  }
+  const { category, keyword, offset, limit } = req.query;
+  logger.info("AdvertController::search - (%s, %s, %s, %s)",
+    category, keyword, offset, limit)
 
-  if (keyword) {
-    condition.title = /${keyword}/i
-    //condition.$or = [{ title: `${/keyword/}`}, { description: `${/keyword/}` }];
-  }
-  console.log("Condition: " + JSON.stringify(condition));
-  const adverts = await AdvertModel.find({title: {$regex: `.*${keyword}.*`} })
+  const queryRegx = new RegExp(keyword, 'i');
+  const adverts = await AdvertModel.find({$or: [
+      {"title": {$regex: queryRegx}},
+      {"description": {$regex: queryRegx}}
+      ]
+    })
     //.populate(['user', 'comments'])
     .populate({path: 'user', select: "_id name email"})
     .sort({createdAt: -1})
+    .skip(offset)
+    .limit(limit)
     .exec();
 
   res.send(adverts)

@@ -12,6 +12,7 @@ import DetailsScreen from "../screens/listing/DetailsScreen";
 import ScannerScreen from "../screens/listing/ScannerScreen";
 import SearchScreen from "../screens/listing/SearchScreen";
 import MainTab from "../screens/MainTab";
+import SearchStack from "../screens/SearchStack";
 
 const Stack = createNativeStackNavigator();
 const AppNavigator = () => {
