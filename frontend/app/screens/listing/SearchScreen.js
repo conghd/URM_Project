@@ -1,30 +1,30 @@
 import React, {useState, useEffect, useLayoutEffect, useRef} from "react";
 import {SafeAreaView, View, StyleSheet, FlatList} from "react-native";
-import {Text, Button, Searchbar, TextInput, ActivityIndicator} from "react-native-paper";
+import {Text, Searchbar, ActivityIndicator} from "react-native-paper";
 import {useDispatch, useSelector} from "react-redux";
-import {search, reset} from "../../services/advert/advertSearchSlice";
-import ListingItem, {renderListingItem} from "../../components/ListingItem";
+import {search, searchMore, reset}
+  from "../../services/advert/advertSearchSlice";
+import ListingItem from "../../components/ListingItem";
 import {theme} from "../../constants";
 
 
 const SearchScreen = ({navigation, route}) => {
   const dispatch = useDispatch();
-  const [searchQuery, setSearchQuery] = useState("");
   const searchRef = useRef();
 
   const {adverts, isLoading, isError, isSuccess, message} =
     useSelector((state) => state.advertSearch);
 
-  const handleChangeText= (query) => {
-    console.log("handleChangeText: " + query);
-    setSearchQuery(query);
-  };
+  const initCondition =
+  {keyword: "", category: "Science", offset: 0, limit: 8};
+  const [condition, setCondition] = useState(initCondition);
 
   const handleSearch = () => {
-    if (searchQuery === "") {
+    if (condition.keyword === "") {
       return;
     }
-    dispatch(search({params: {keyword: searchQuery}}));
+    dispatch(search({params: {...condition, offset: 0}}));
+    setCondition((prev) => ({...prev, offset: 0}));
   };
 
   useLayoutEffect(() => {
@@ -46,6 +46,18 @@ const SearchScreen = ({navigation, route}) => {
     }
   }, [isSuccess]);
 
+  const loadMore = () => {
+    if (condition.offset + condition.limit > adverts.length) {
+      return;
+    }
+    console.log("SearchScreen::loadMore() - " + condition.offset + ", " +
+     condition.limit);
+    dispatch(searchMore({params: {...condition,
+      offset: condition.offset + condition.limit}}));
+
+    setCondition((prev) => ({...condition, offset: prev.offset + prev.limit}));
+  };
+
   return (
     <SafeAreaView
       style={[theme.STYLE.container, styles.container]}>
@@ -53,9 +65,11 @@ const SearchScreen = ({navigation, route}) => {
       <View style={theme.STYLE.row}>
         <Searchbar
           style={styles.searchBar}
-          placeholder="Search"
-          onChangeText={handleChangeText}
-          value={searchQuery}
+          placeholder="Enter a keyword here"
+          onChangeText={(text) => {
+            setCondition((prev) => ({...prev, keyword: text}));
+          }}
+          value={condition.keyword}
           onBlur={handleSearch}
           ref={searchRef}
 
@@ -81,18 +95,18 @@ const SearchScreen = ({navigation, route}) => {
           renderItem={({item, index}) => (
             <ListingItem key={item._id} {...item} index={index}
               onPress={() => {
-                navigation.navigate("DetailsScreen", {
-                  item: item,
-                  // productId: product.id,
-                });
+                navigation.navigate("DetailsScreen", {item: item});
               }}
             />
           )}
           onRefresh={() => {
-            dispatch(search({params: {keyword: searchQuery}}));
+            dispatch(search({params: {...condition, offset: 0}}));
+            setCondition((prev) => ({...prev, offset: 0}));
           }}
           refreshing={false}
           // maxToRenderPerBatch={6}
+          onEndReachedThreshold={0.1}
+          onEndReached={loadMore}
         />
         ) : (
           <View style={{...theme.STYLE.sub, alignItems: "center"}} >

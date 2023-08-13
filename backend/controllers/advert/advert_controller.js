@@ -152,6 +152,7 @@ const search = asyncHandler(async (req, res) => {
     .limit(limit)
     .exec();
 
+  logger.info("AdvertController::search - num records: " + adverts.length)
   res.send(adverts)
 })
 

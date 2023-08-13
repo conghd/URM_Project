@@ -25,6 +25,21 @@ export const search = createAsyncThunk(
     },
 );
 
+// Get user posts
+export const searchMore = createAsyncThunk(
+    "advert/search_more",
+    async (condition, thunkAPI) => {
+      try {
+        const token = thunkAPI.getState().auth.user.token;
+        return await advertSearchService.search(condition, token);
+      } catch (error) {
+        const message =
+      (error.response && error.response.data) ||
+      error.message || error.toString();
+        return thunkAPI.rejectWithValue(message);
+      }
+    },
+);
 
 export const advertSearchSlice = createSlice({
   name: "advertSearch",
@@ -49,6 +64,19 @@ export const advertSearchSlice = createSlice({
           state.adverts = action.payload;
         })
         .addCase(search.rejected, (state, action) => {
+          state.isLoading = false;
+          state.isError = true;
+          state.message = action.payload;
+        })
+        .addCase(searchMore.pending, (state) => {
+          state.isLoading = true;
+        })
+        .addCase(searchMore.fulfilled, (state, action) => {
+          state.isLoading = false;
+          state.isSuccess = true;
+          state.adverts.push(...action.payload);
+        })
+        .addCase(searchMore.rejected, (state, action) => {
           state.isLoading = false;
           state.isError = true;
           state.message = action.payload;

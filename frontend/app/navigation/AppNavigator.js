@@ -1,18 +1,11 @@
 import React, {useEffect} from "react";
 import {createNativeStackNavigator} from "@react-navigation/native-stack";
-import {IconButton, Button} from "react-native-paper";
-import MaterialCommunityIcons
-  from "react-native-vector-icons/MaterialCommunityIcons";
-import HomeStack from "../screens/HomeStack";
-import BookmarkStack from "../screens/BookmarkStack";
-// import MessengerStack from "../screens/MessengerStack";
-import ProfileStack from "../screens/ProfileStack";
 import CreationScreen from "../screens/listing/CreationScreen";
 import DetailsScreen from "../screens/listing/DetailsScreen";
 import ScannerScreen from "../screens/listing/ScannerScreen";
 import SearchScreen from "../screens/listing/SearchScreen";
 import MainTab from "../screens/MainTab";
-import SearchStack from "../screens/SearchStack";
+// import SearchStack from "../screens/SearchStack";
 
 const Stack = createNativeStackNavigator();
 const AppNavigator = () => {

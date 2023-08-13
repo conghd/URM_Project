@@ -12,7 +12,6 @@ const screenDimensions = Dimensions.get("screen");
 
 const HomeScreen = ({navigation, route}) => {
   const dispatch = useDispatch();
-  const {user} = useSelector((state) => state.auth);
   const {adverts, isLoading, isError, isSuccess, message} =
     useSelector((state) => state.advert);
 
