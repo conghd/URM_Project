@@ -336,11 +336,15 @@ const CreationScreen = ({navigation, route}) => {
         <View style={[theme.STYLE.row, styles.row]}>
           <TextInput
             style={[theme.STYLE.textInput, styles.textInput]}
-            label="Location" value={location}
+            label="Location" value={location} mode="outlined"
             onChangeText={(text) => {
               handleTextChange({location: text});
             }}
-            mode="outlined"
+            editable={false}
+            right={<TextInput.Icon icon="navigation-variant"
+              onPress={() => {
+                navigation.navigate("LocationScreen", {});
+              }}/>}
           />
         </View>
         {/** CONDITION & PRICE */}

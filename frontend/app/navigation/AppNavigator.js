@@ -6,6 +6,7 @@ import ScannerScreen from "../screens/listing/ScannerScreen";
 import SearchScreen from "../screens/listing/SearchScreen";
 import MainTab from "../screens/MainTab";
 import {Button} from "react-native-paper";
+import LocationScreen from "../screens/listing/LocationScreen";
 // import SearchStack from "../screens/SearchStack";
 
 const Stack = createNativeStackNavigator();
@@ -43,6 +44,16 @@ const AppNavigator = () => {
           {
             presentation: "modal",
             title: "ISBN Scanner",
+            headerShown: true,
+          }
+        )}
+      />
+
+      <Stack.Screen name="LocationScreen" component={LocationScreen}
+        options={({navigation, route}) => (
+          {
+            presentation: "modal",
+            title: "Location",
             headerShown: true,
           }
         )}
