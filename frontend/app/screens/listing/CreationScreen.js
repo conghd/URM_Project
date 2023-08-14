@@ -47,9 +47,7 @@ const CreationScreen = ({navigation, route}) => {
     location: "Regina, SK",
     condition: "Like New",
   });
-  const [images, setImages] = useState([
-    {id: 0, uri: ""},
-  ]);
+  const [images, setImages] = useState([{id: 0, uri: ""}]);
 
   const {title, authors, publisher, publishedDate, pageCount, ISBN,
     price, description, phoneNumber, location, category,
@@ -68,11 +66,17 @@ const CreationScreen = ({navigation, route}) => {
     console.log("onSubmit: " + JSON.stringify(formData));
     const form = new FormData();
     form.append("title", title);
+    form.append("authors", authors);
+    form.append("publisher", publisher);
+    form.append("publishedDate", publishedDate);
+    form.append("pageCount", pageCount);
+    form.append("ISBN", ISBN);
+    form.append("category", category);
+
     form.append("price", price);
     form.append("description", description);
     form.append("phoneNumber", phoneNumber);
     form.append("location", location);
-    form.append("category", category);
     form.append("condition", condition);
 
     Object.values(images).forEach((image) => {

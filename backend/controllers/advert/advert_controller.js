@@ -32,7 +32,8 @@ const createAdvert = asyncHandler(async (req, res) => {
     } else {
       console.log(req.body);
       const {
-        title, description, phoneNumber, price, location, category, condition 
+        title, authors, publisher, publishedDate, pageCount, ISBN, category,
+        description, location, phoneNumber, condition, price
       } = req.body
 
       const paths = []
@@ -43,13 +44,20 @@ const createAdvert = asyncHandler(async (req, res) => {
       //console.log(user);
       const advertData = {
           title: title || "",
+          authors: authors || "",
+          publisher: publisher || "",
+          publishedDate: publishedDate || "",
+          pageCount: pageCount || 0,
+          ISBN: ISBN || "",
+          category: category || "",
+
           description: description || "",
+          location: location || "",
+          condition: condition || "",
           phoneNumber: phoneNumber || "",
           price: price || "",
+
           user: user || "",
-          location: location || "",
-          category: category || "",
-          condition: condition || "",
           status: 1,
           images: paths,
           comments: [],
@@ -59,13 +67,12 @@ const createAdvert = asyncHandler(async (req, res) => {
       const advert = AdvertModel.create(
         advertData, 
         function(error, result){
-          console.log(result);
           if (error) {
-            res.status(400)
             console.log(error);
-            res.json({'code': 400, "message": error})
+            res.status(400).json({data: {}, message: "The listing was not created successfully.", error: error})
           } else {
-            res.json({ 'code': 200, 'message': 'createAdvert'})
+            console.log(result);
+            res.status(200).json({data: result, message: 'The listing was created successfully.', error: ""})
           }
       })
     }
