@@ -5,7 +5,6 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import authReducer from "./services/auth/authSlice";
 import registerReducer from "./services/auth/registerSlice";
 import advertReducer from "./services/advert/advertSlice";
-import advertCreationReducer from "./services/advert/advertCreationSlice";
 import settingsReducer from "./services/settings/settingsSlice";
 import authForgotPasswordReducer from "./services/auth/authForgotPasswordSlice";
 import authActivationReducer from "./services/auth/authActivationSlice";
@@ -28,7 +27,6 @@ const rootReducer = combineReducers({
   authResetPassword: authResetPasswordReducer,
   register: registerReducer,
   advert: advertReducer,
-  advertCreation: advertCreationReducer,
   advertISBN: advertISBNReducer,
   settings: settingsReducer,
   advertSearch: advertSearchReducer,

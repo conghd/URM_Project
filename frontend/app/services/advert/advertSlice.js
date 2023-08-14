@@ -11,7 +11,14 @@ const initialState = {
     isError: false,
     isSuccess: false,
     isLoading: false,
-    message: ""},
+    message: "",
+  },
+  createAdvertState: {
+    isError: false,
+    isSuccess: false,
+    isLoading: false,
+    message: "",
+  },
 };
 
 // Get user posts
@@ -41,6 +48,21 @@ export const getMoreAdverts = createAsyncThunk("advert/get_more",
     },
 );
 
+// Create new post
+export const createAdvert = createAsyncThunk("advert/create",
+    async (advertData, thunkAPI) => {
+      try {
+        console.log("advertSlice:createAdvert: " +
+         thunkAPI.getState().auth.user);
+        const token = thunkAPI.getState().auth.user.token;
+        return await advertService.createAdvert(advertData, token);
+      } catch (error) {
+        const message = (error.response && error.response.data) ||
+        error.message || error.toString();
+        return thunkAPI.rejectWithValue(message);
+      }
+    },
+);
 // Delete user post
 export const deleteAdvert = createAsyncThunk(
     "advert/delete",
@@ -72,6 +94,12 @@ export const advertSlice = createSlice({
       state.getMoreState.isError = false;
       state.getMoreState.isSuccess = false;
     },
+    resetCreateAdvertState: (state) => {
+      state.createAdvertState.isLoading = false;
+      state.createAdvertState.isError = false;
+      state.createAdvertState.isSuccess= false;
+      state.createAdvertState.message= "";
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -101,6 +129,19 @@ export const advertSlice = createSlice({
           state.isError = true;
           state.message = action.payload;
         })
+        .addCase(createAdvert.pending, (state) => {
+          state.createAdvertState.isLoading = true;
+        })
+        .addCase(createAdvert.fulfilled, (state, action) => {
+          state.createAdvertState.isLoading = false;
+          state.createAdvertState.isSuccess = true;
+          state.adverts.unshift(action.payload.data);
+        })
+        .addCase(createAdvert.rejected, (state, action) => {
+          state.createAdvertState.isLoading = false;
+          state.createAdvertState.isError = true;
+          state.createAdvertState.message = action.payload;
+        })
         .addCase(deleteAdvert.pending, (state) => {
           state.isLoading = true;
         })
@@ -119,5 +160,5 @@ export const advertSlice = createSlice({
   },
 });
 
-export const {reset} = advertSlice.actions;
+export const {reset, resetCreateAdvertState} = advertSlice.actions;
 export default advertSlice.reducer;

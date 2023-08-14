@@ -23,6 +23,20 @@ const getAdverts = async (condition, token) => {
   return response.data;
 };
 
+// Create new post
+const createAdvert = async (advertData, token) => {
+  console.log("adverService::createAdvert");
+  console.log("API: " + API_URL + "create");
+  console.log("advertService::token - " + token);
+  const response =
+  await axios.post(API_URL + "create", advertData, configure(token))
+      .catch((error) => {
+        console.log(error.toString());
+      });
+
+  return response.data;
+};
+
 // Delete user post
 const deleteAdvert = async (advertId, token) => {
   const response = await axios.delete(API_URL + advertId + "/delete", configure(token));
@@ -31,6 +45,7 @@ const deleteAdvert = async (advertId, token) => {
 
 const advertService = {
   getAdverts,
+  createAdvert,
   deleteAdvert,
 };
 

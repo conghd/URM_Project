@@ -1,17 +1,14 @@
 import React, {useEffect, useLayoutEffect, useState, useRef} from "react";
 import {useSelector, useDispatch} from "react-redux";
-import {View, StyleSheet, ScrollView, FlatList,
-  ImageBackground, TouchableOpacity, Alert,
-  TouchableWithoutFeedback,
-  Pressable,
+import {View, StyleSheet, FlatList, Alert,
 } from "react-native";
-import {Button, Divider, HelperText, IconButton, TextInput} from "react-native-paper";
+import {Button, Divider, HelperText, TextInput} from "react-native-paper";
 import ImagePreviewItem from "../ImagePreviewItem";
 import * as ImagePicker from "expo-image-picker";
-import {createAdvert, reset} from "../../services/advert/advertCreationSlice";
+import {createAdvert, resetCreateAdvertState as reset}
+  from "../../services/advert/advertSlice";
 import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
 import {theme} from "../../constants";
-import {StatusBar} from "expo-status-bar";
 
 const CreationScreen = ({navigation, route}) => {
   const [selectedId, setSelectedId] = useState(null);
@@ -19,18 +16,6 @@ const CreationScreen = ({navigation, route}) => {
   const {book} = route.params;
 
   const listRef = useRef();
-  const {user} = useSelector((state) => state.auth);
-  /*
-  const [formData, setFormData] = useState({
-    title: "Statistics II",
-    price: 10.0,
-    description: "This is the main textbook for Statistics II.",
-    phoneNumber: "(306)666-8899",
-    location: "Regina",
-    category: "Computer Science",
-    condition: "Like new",
-  });
-  */
 
   const [formData, setFormData] = useState({
     title: "",
@@ -54,7 +39,7 @@ const CreationScreen = ({navigation, route}) => {
     condition} = formData;
 
   const {isLoading, isError, isSuccess, message} =
-    useSelector((state) => state.advertCreation);
+    useSelector((state) => state.advert.createAdvertState);
 
   const handleTextChange = (value) => {
     return setFormData((prev) => {
