@@ -1,6 +1,5 @@
 import {createSlice, createAsyncThunk} from "@reduxjs/toolkit";
 import advertService from "./advertService";
-import getStoredState from "redux-persist/es/getStoredState";
 
 const initialState = {
   adverts: [],
@@ -49,45 +48,6 @@ export const deleteAdvert = createAsyncThunk(
       try {
         const token = thunkAPI.getState().auth.user.token;
         return await advertService.deleteAdvert(id, token);
-      } catch (error) {
-        const message =
-        (error.response &&
-          error.response.data &&
-          error.response.data.message) ||
-        error.message ||
-        error.toString();
-        return thunkAPI.rejectWithValue(message);
-      }
-    },
-);
-
-// Do UP vote
-export const upvotePost = createAsyncThunk(
-    "advert/up_vote",
-    async (advertData, thunkAPI) => {
-      try {
-        console.log("------");
-        const token = thunkAPI.getState().auth.user.token;
-        return await advertService.upvotePost(advertData.post_id, advertData, token);
-      } catch (error) {
-        const message =
-        (error.response &&
-          error.response.data &&
-          error.response.data.message) ||
-        error.message ||
-        error.toString();
-        return thunkAPI.rejectWithValue(message);
-      }
-    },
-);
-
-// Do DOWN vote
-export const downvotePost = createAsyncThunk(
-    "advert/down_vote",
-    async (advertData, thunkAPI) => {
-      try {
-        const token = thunkAPI.getState().auth.user.token;
-        return await advertService.downvotePost(advertData.post_id, advertData, token);
       } catch (error) {
         const message =
         (error.response &&

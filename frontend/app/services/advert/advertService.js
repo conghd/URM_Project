@@ -29,24 +29,9 @@ const deleteAdvert = async (advertId, token) => {
   return response.data;
 };
 
-// Upvote
-const upvoteAdvert = async (advertId, advertData, token) => {
-  const response = await axios.post(API_URL + advertId + "/vote_up", advertData, configure(token));
-
-  return response.data;
-};
-
-// Downvote
-const downvoteAdvert = async (advertId, advertData, token) => {
-  const response = await axios.post(API_URL + advertId + "/vote_down", advertData, configure(token));
-  return response.data;
-};
-
 const advertService = {
   getAdverts,
   deleteAdvert,
-  upvoteAdvert,
-  downvoteAdvert,
 };
 
 export default advertService;
