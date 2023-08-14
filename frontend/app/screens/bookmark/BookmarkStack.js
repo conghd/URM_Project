@@ -1,5 +1,6 @@
+import React from "react";
 import {createNativeStackNavigator} from "@react-navigation/native-stack";
-import BookmarkScreen from "./listing/BookmarkScreen";
+import BookmarkScreen from "./BookmarkScreen";
 
 // const Stack = createStackNavigator();
 const Stack = createNativeStackNavigator();

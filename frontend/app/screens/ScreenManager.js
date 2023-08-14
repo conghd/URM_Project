@@ -12,9 +12,11 @@ const theme = {
   ...DefaultTheme,
   colors: {
     ...DefaultTheme.colors,
-    primary: "#004e2e",
-    secondary: "#ffc82e",
-    tertiary: "#eaaa00",
+    // background: "#ffffff",
+    // surfaceVariant: "#ffffff",
+    // primary: "#004e2e",
+    // secondary: "#ffc82e",
+    // tertiary: "#eaaa00",
   },
 };
 
@@ -33,9 +35,7 @@ const ScreenManager = () => {
   }, []);
 
   return (
-    <PaperProvider>
-      {/* <PaperProvider theme={theme}>
-      */}
+    <PaperProvider theme={theme}>
       <NavigationContainer>
         <SafeAreaProvider>
           { (settings && settings.isFirstTime) ?

@@ -13,12 +13,15 @@ const getBookInfo = async (isbn) => {
   const bookData = data.items[0].volumeInfo;
   const book = {
     title: bookData.title,
-    authors: bookData.authors,
-    publisher: bookData.publisher,
-    publishedDate: bookData.publishedDate,
-    pageCount: bookData.pageCount,
-    categories: bookData.categories,
-    imageLinks: bookData.imageLinks,
+    subtitle: bookData.subtitle || "",
+    authors: bookData.authors || [],
+    publisher: bookData.publisher || "",
+    publishedDate: bookData.publishedDate || "",
+    pageCount: bookData.pageCount || "",
+    ISBN: bookData.industryIdentifiers.find((item) =>
+      item.type === "ISBN_13").identifier || "",
+    categories: bookData.categories || [],
+    imageLinks: bookData.imageLinks || [],
   };
 
   return book;

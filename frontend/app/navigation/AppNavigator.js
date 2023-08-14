@@ -5,6 +5,7 @@ import DetailsScreen from "../screens/listing/DetailsScreen";
 import ScannerScreen from "../screens/listing/ScannerScreen";
 import SearchScreen from "../screens/listing/SearchScreen";
 import MainTab from "../screens/MainTab";
+import {Button} from "react-native-paper";
 // import SearchStack from "../screens/SearchStack";
 
 const Stack = createNativeStackNavigator();
@@ -18,7 +19,7 @@ const AppNavigator = () => {
       <Stack.Screen name="MainTab" component={MainTab}
         options={({navigation, route}) => (
           {
-            title: "MainTab",
+            // title: "MainTab",
             headerShown: false,
           })}
       />
@@ -26,7 +27,6 @@ const AppNavigator = () => {
       <Stack.Screen name="CreationScreen" component={CreationScreen}
         options={({navigation, route}) => (
           {
-            title: "New Listing",
           }
         )}
       />

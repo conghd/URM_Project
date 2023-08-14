@@ -5,6 +5,7 @@ import ScreenManager from "./app/screens/ScreenManager";
 import {Provider} from "react-redux";
 import {PersistGate} from "redux-persist/integration/react";
 import SplashScreen from "./app/screens/auth/SplashScreen";
+import {ActionSheetProvider} from "@expo/react-native-action-sheet";
 
 const App = () => {
   useEffect(() => {
@@ -16,7 +17,9 @@ const App = () => {
   return (
     <Provider store={store}>
       <PersistGate loading={<SplashScreen />} persistor={persistor}>
-        <ScreenManager />
+        <ActionSheetProvider>
+          <ScreenManager />
+        </ActionSheetProvider>
       </PersistGate>
     </Provider>
   );

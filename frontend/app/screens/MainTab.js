@@ -4,7 +4,7 @@ import {createMaterialBottomTabNavigator}
 import MaterialCommunityIcons
   from "react-native-vector-icons/MaterialCommunityIcons";
 import ProfileStack from "./ProfileStack";
-import BookmarkStack from "./BookmarkStack";
+import BookmarkStack from "./bookmark/BookmarkStack";
 import HomeStack from "./HomeStack";
 import MessengerStack from "./MessengerStack";
 

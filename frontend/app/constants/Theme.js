@@ -26,16 +26,21 @@ export default {
   },
   STYLE: {
     container: {
+      backgroundColor: "white",
+      display: "flex",
+      flexDirection: "column",
       flex: 1,
       justifyContent: "flex-start",
       alignItems: "center",
-      flexDirection: "column",
       padding: 0,
       margin: 0,
     },
     row: {
       flexDirection: "row",
       alignItems: "center",
+    },
+    scrollView: {
+      width: "100%",
     },
     sub: {
       marginTop: 20,
