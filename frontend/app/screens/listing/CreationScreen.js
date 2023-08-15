@@ -13,7 +13,7 @@ import {theme} from "../../constants";
 const CreationScreen = ({navigation, route}) => {
   const [selectedId, setSelectedId] = useState(null);
   const dispatch = useDispatch();
-  const {book} = route.params;
+  const {loc, book} = route.params;
 
   const listRef = useRef();
 
@@ -61,7 +61,7 @@ const CreationScreen = ({navigation, route}) => {
     form.append("price", price);
     form.append("description", description);
     form.append("phoneNumber", phoneNumber);
-    form.append("location", location);
+    form.append("location", JSON.stringify(location));
     form.append("condition", condition);
 
     Object.values(images).forEach((image) => {
@@ -132,6 +132,14 @@ const CreationScreen = ({navigation, route}) => {
       });
     }
   }, [route.params?.book]);
+
+  useEffect(() => {
+    if (route.params?.loc) {
+      console.log("CreationScreen::useEffect(): " +
+        JSON.stringify(route.params.loc));
+      setFormData((prev) => ({...prev, location: loc}));
+    }
+  }, [route.params?.loc]);
 
   const handleDeleteImage = (id) => {
     console.log("handleDeleteImage: " + id);
@@ -336,9 +344,9 @@ const CreationScreen = ({navigation, route}) => {
         <View style={[theme.STYLE.row, styles.row]}>
           <TextInput
             style={[theme.STYLE.textInput, styles.textInput]}
-            label="Location" value={location} mode="outlined"
+            label="Location" value={location.name || ""} mode="outlined"
             onChangeText={(text) => {
-              handleTextChange({location: text});
+              // handleTextChange({location: text});
             }}
             editable={false}
             right={<TextInput.Icon icon="navigation-variant"
@@ -362,7 +370,7 @@ const CreationScreen = ({navigation, route}) => {
 
           />
           <TextInput
-            style={[theme.STYLE.textInput, styles.textInput]}
+            style={[theme.STYLE.textInput, styles.textInput, {textAlign: "right"}]}
             label="Price" value={`${price}`}
             onChangeText={(text) => {
               handleTextChange({price: text});
