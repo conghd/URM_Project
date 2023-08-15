@@ -149,7 +149,8 @@ const search = asyncHandler(async (req, res) => {
   const queryRegx = new RegExp(keyword, 'i');
   const adverts = await AdvertModel.find({$or: [
       {"title": {$regex: queryRegx}},
-      {"description": {$regex: queryRegx}}
+      {"description": {$regex: queryRegx}},
+      {"authors": {$regex: queryRegx}}
       ]
     })
     //.populate(['user', 'comments'])
