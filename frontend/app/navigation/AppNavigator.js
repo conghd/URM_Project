@@ -7,6 +7,7 @@ import SearchScreen from "../screens/listing/SearchScreen";
 import MainTab from "../screens/MainTab";
 import {Button} from "react-native-paper";
 import LocationScreen from "../screens/listing/LocationScreen";
+import MyListing from "../screens/account/MyListing";
 // import SearchStack from "../screens/SearchStack";
 
 const Stack = createNativeStackNavigator();
@@ -63,6 +64,15 @@ const AppNavigator = () => {
         options={({navigation, route}) => (
           {
             title: "Search",
+            // headerShown: false,
+          }
+        )}
+      />
+
+      <Stack.Screen name="MyListing" component={MyListing}
+        options={({navigation, route}) => (
+          {
+            title: "My Listings",
             // headerShown: false,
           }
         )}

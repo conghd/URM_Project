@@ -4,7 +4,7 @@ import {View, StyleSheet, FlatList, SafeAreaView, TouchableOpacity}
 import {Text, Button, ActivityIndicator, Avatar} from "react-native-paper";
 import {logout} from "../../services/auth/authSlice";
 import {useSelector, useDispatch} from "react-redux";
-import ListingItem from "../../components/ListingItem";
+import MyListingItem from "../../components/MyListingItem";
 import {getMyAdverts, reset} from "../../services/advert/advertMySlice";
 import {theme} from "../../constants";
 import {StatusBar} from "expo-status-bar";
@@ -20,11 +20,12 @@ MDIcon.loadFont();
 MCIcon.loadFont();
 FIcon.loadFont();
 
-const ProfileScreen = ({navigation, route}) => {
+const MyListing = ({navigation, route}) => {
   const dispatch = useDispatch();
   const {adverts, isLoading, isError, isSuccess, message} =
    useSelector((state) => state.advertMy);
   const {user} = useSelector((state) => state.auth);
+  const condition = {params: {userId: user._id}};
 
   const renderListingItem = ({item}) => {
     return (
@@ -41,6 +42,7 @@ const ProfileScreen = ({navigation, route}) => {
 
   React.useLayoutEffect(() => {
     console.log("ProfileScreen::useLayoutEffect()");
+    dispatch(getMyAdverts(condition));
   }, [navigation]);
 
   useEffect(() => {
@@ -52,80 +54,34 @@ const ProfileScreen = ({navigation, route}) => {
     }
   }, [isSuccess]);
 
-  const handleSignOut= (e) => {
-    console.log("ProfileScreen::handleSignOut");
-    dispatch(logout());
-  };
-
   return (
 
     <SafeAreaView style={[theme.STYLE.container, styles.container]}>
       <StatusBar />
-      <View style={[theme.STYLE.row, styles.avatar]}>
-        <Avatar.Image size={128}
-          source={require("../../../assets/user3.jpeg")}/>
-      </View>
-      <View style={[theme.STYLE.row, styles.info]}>
-        <Text style={styles.name}>{user.name}</Text>
-        <Text styles={styles.email}>{user.email}</Text>
-      </View>
-      <View style={[theme.STYLE.row, styles.info]}>
-        <View style={styles.listContainer}>
-          {data.lists.map((list) => (
-            <TouchableOpacity
-              key={list.icon}
-              style={styles.listButton}
-              onPress={() => {
-                if (list.screen) {
-                  navigation.navigate(list.screen, {});
-                }
-              }}
-            >
-              {list.type == "FIcon" ? (
-                <FIcon name={list.icon} style={styles.listIcon} />
-              ) : (
-                <MCIcon name={list.icon} style={styles.listIcon} />
-              )}
-              <Text style={styles.listLabel}>{list.label}</Text>
-              <View style={styles.rightIcon}>
-                <FAIcon name="angle-right"
-                  style={[styles.listIcon, {width: 10}]} />
-              </View>
-            </TouchableOpacity>
-          ))}
-        </View>
-      </View>
-
-      <View style={[theme.STYLE.row, {position: "absolute", bottom: 20}]}>
-        <Button
-          style={styles.button}
-          // icon="camera"
-          mode="outlined"
-          onPress={() => handleSignOut() }
-        >
-          Sign Out
-        </Button>
-      </View>
       <View style={styles.mylisting}>
-        {/**
         <FlatList
-          numColumns={2}
+          numColumns={1}
+          showsVerticalScrollIndicator={false}
           horizontal={false}
           style={styles.productsList}
           contentContainerStyle={styles.productsListContainer}
           keyExtractor={(product) => product._id}
           data={adverts}
-          renderItem={renderListingItem}
+          renderItem={({item}) => (
+            <MyListingItem key={item._id} {...item}
+              onPress={() => {
+              // navigation.navigate('ListingItemDetails', {
+              //  item: item,
+              // productId: product.id,
+              // });
+              }}
+            />)}
           onRefresh={() => {
             dispatch(getMyAdverts(condition));
           }}
           refreshing={false}
         />
-
-       */}
       </View>
-      {/**
-        */}
     </SafeAreaView>
   );
 };
@@ -136,6 +92,15 @@ const styles = StyleSheet.create({
   },
   row: {
 
+    productsList: {
+      marginTop: 0,
+      // backgroundColor: 'yellow',
+    },
+    productsListContainer: {
+      // backgroundColor: "#eeeeee",
+      paddingVertical: 0,
+      marginHorizontal: 0,
+    },
   },
   avatar: {
     marginTop: 20,
@@ -169,35 +134,6 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 10,
   },
-  listContainer: {
-    alignItems: "flex-start",
-    padding: 25,
-    width: "100%",
-  },
-  listTitle: {
-    fontSize: 16,
-    marginBottom: 20,
-    color: "#666",
-  },
-  listButton: {
-    flexDirection: "row",
-    alignItems: "center",
-    paddingVertical: 10,
-    width: "100%",
-  },
-  listIcon: {
-    fontSize: 26,
-    color: "#666",
-    width: 60,
-  },
-  listLabel: {
-    fontSize: 16,
-  },
-  rightIcon: {
-    marginRight: 0,
-    flex: 1,
-    alignItems: "flex-end",
-  },
 });
 
-export default ProfileScreen;
+export default MyListing;
