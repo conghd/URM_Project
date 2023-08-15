@@ -3,6 +3,9 @@ const router = express.Router()
 
 const {
   createListing,
+  sellListing,
+  deleteListing,
+  updateStatus,
 } = require('../controllers/advert/listing_controller')
 
 const uploadMiddleware = require("../middleware/upload_file_middleware");
@@ -15,5 +18,7 @@ router.route('/create').post(protect,
   //uploadMiddleware.getResult
   createListing
 )
-
+router.route('/sell').get(sellListing)
+router.route('/delete').get(deleteListing)
+router.route('/update_status').get(updateStatus)
 module.exports = router

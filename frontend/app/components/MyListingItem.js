@@ -4,12 +4,19 @@ import {Dimensions, Image, StyleSheet, View,
   ImageBackground} from "react-native";
 import {Button, Text} from "react-native-paper";
 import * as Config from "../../config";
+import moment from "moment/moment";
 
 const windowDimensions = Dimensions.get("window");
 // const screenDimensions = Dimensions.get("screen");
 
-
-const MyListingItem = ({_id, title, price, images, onPress, index}) => {
+// 0 - DELETE
+// 1 - AVAILABLE
+// 2 - SOLD
+const STATUS_DELETE = 0;
+const STATUS_AVAILABLE = 1;
+const STATUS_SOLD = 2;
+const MyListingItem = ({item, onPress, onSold, onDelete, onUpdateStatus, index}) => {
+  const {title, price, images} = item;
   const style = (index % 2 == 0) ? {marginRight: 2}: {marginLeft: 2};
   const source = {uri: Config.BE_RESOURCE_URL +
     ((images && images.length > 0)? images[0] : "/images/no-image.jpeg")};
@@ -27,7 +34,9 @@ const MyListingItem = ({_id, title, price, images, onPress, index}) => {
             resizeMode='cover'
             source={source}
           >
+            {item.status == STATUS_SOLD &&
             <Text style={styles.statusText} variant="bodyMedium">Sold</Text>
+            }
           </ImageBackground>
         </View>
 
@@ -35,20 +44,25 @@ const MyListingItem = ({_id, title, price, images, onPress, index}) => {
           <Text variant='bodySmall'
             style={[styles.price, {}]}
             numberOfLines={2}
-          >
-            {priceText} - {title}
+          >{priceText} - {title}
+          </Text>
+          <Text variant='labelSmall'
+            style={styles.time}>
+            {moment.utc(item.createdAt).local().startOf("seconds").fromNow()}
           </Text>
 
           <View style={styles.bottom}>
-            <Button mode="elevated"
-              onPress={() => console.log("SOLD")}
-            >Sold</Button>
-            <Button style={{color: "red"}}
-              onPress={() => console.log("Edit")}
-              mode="outlined">Edit</Button>
+            {item.status == STATUS_AVAILABLE &&
+              <Button mode="elevated" onPress={onSold} >Sold</Button>
+            }
+            {item.status == STATUS_SOLD &&
+              <Button mode="elevated" onPress={() =>
+                onUpdateStatus({status: 1})} >Sell</Button>
+            }
+            <Button onPress={() => {}} mode="outlined">Edit</Button>
             <Button style={{borderColor: "red"}}
-              onPress={() => console.log("Delete")}
-              mode="text">Delete</Button>
+              onPress={() =>
+                onUpdateStatus({status: 0}) } mode="text">Delete</Button>
           </View>
 
         </View>
@@ -131,6 +145,14 @@ const styles = StyleSheet.create({
     padding: 10,
     overflow: "hidden",
     fontSize: 14,
+    fontWeight: "400",
+    color: "#3a3a3a",
+  },
+  time: {
+    width: 2 * windowDimensions.width / 3-9,
+    paddingLeft: 10,
+    overflow: "hidden",
+    fontSize: 12,
     fontWeight: "400",
     color: "#3a3a3a",
   },

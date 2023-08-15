@@ -1,11 +1,14 @@
 import React, {useEffect} from "react";
-import {View, StyleSheet, FlatList, SafeAreaView, TouchableOpacity}
+import {View, StyleSheet, FlatList, SafeAreaView, TouchableOpacity, Alert}
   from "react-native";
 import {Text, Button, ActivityIndicator, Avatar} from "react-native-paper";
 import {logout} from "../../services/auth/authSlice";
 import {useSelector, useDispatch} from "react-redux";
 import MyListingItem from "../../components/MyListingItem";
-import {getMyAdverts, reset} from "../../services/advert/advertMySlice";
+import {getMyAdverts, reset, sellMyAdvert, deleteMyAdvert, resetDeleteState,
+  resetSellState,
+  resetStatusState,
+  updateStatus} from "../../services/advert/advertMySlice";
 import {theme} from "../../constants";
 import {StatusBar} from "expo-status-bar";
 import data from "./static.json";
@@ -22,23 +25,11 @@ FIcon.loadFont();
 
 const MyListing = ({navigation, route}) => {
   const dispatch = useDispatch();
-  const {adverts, isLoading, isError, isSuccess, message} =
+  const {adverts, sellState, isLoading, isError, isSuccess, message} =
    useSelector((state) => state.advertMy);
   const {user} = useSelector((state) => state.auth);
   const condition = {params: {userId: user._id}};
 
-  const renderListingItem = ({item}) => {
-    return (
-      <ListingItem key={item._id} {...item}
-        onPress={() => {
-          // navigation.navigate('ListingItemDetails', {
-          //  item: item,
-          // productId: product.id,
-          // });
-        }}
-      />
-    );
-  };
 
   React.useLayoutEffect(() => {
     console.log("ProfileScreen::useLayoutEffect()");
@@ -54,6 +45,13 @@ const MyListing = ({navigation, route}) => {
     }
   }, [isSuccess]);
 
+  useEffect(() => {
+    if (sellState.isSuccess) {
+      Alert.alert("Success", "The listing has been marked as sold");
+      dispatch(resetSellState());
+    }
+  }, [sellState.isSuccess]);
+
   return (
 
     <SafeAreaView style={[theme.STYLE.container, styles.container]}>
@@ -68,12 +66,24 @@ const MyListing = ({navigation, route}) => {
           keyExtractor={(product) => product._id}
           data={adverts}
           renderItem={({item}) => (
-            <MyListingItem key={item._id} {...item}
+            <MyListingItem key={item._id}
+              item={item}
               onPress={() => {
               // navigation.navigate('ListingItemDetails', {
               //  item: item,
               // productId: product.id,
               // });
+              }}
+              onSold={() => {
+                dispatch(sellMyAdvert({params: {id: item._id}}));
+              }}
+              onDelete={(data) => {
+                dispatch(resetStatusState());
+                dispatch(updateStatus({params: {id: item._id, ...data}}));
+              }}
+              onUpdateStatus={(data) => {
+                dispatch(resetStatusState());
+                dispatch(updateStatus({params: {id: item._id, ...data}}));
               }}
             />)}
           onRefresh={() => {

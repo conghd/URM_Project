@@ -120,7 +120,7 @@ const getAdverts = asyncHandler(async (req, res) => {
   //const keyword = req.query['keyword']; 
   logger.info("AdvertController::listAdverts - (%s, %s, %s, %s)",
     category, keyword, offset, limit)
-  let condition = {};
+  let condition = {status: 1};
   if (category) {
     //condition.category = category;
   }
@@ -151,8 +151,10 @@ const search = asyncHandler(async (req, res) => {
       {"title": {$regex: queryRegx}},
       {"description": {$regex: queryRegx}},
       {"authors": {$regex: queryRegx}}
-      ]
-    })
+      ],
+    status: 1,
+    },
+    )
     //.populate(['user', 'comments'])
     .populate({path: 'user', select: "_id name email"})
     .sort({createdAt: -1})
@@ -168,9 +170,11 @@ const getMyAdverts = asyncHandler(async (req, res) => {
   const userId = req.query['userId']; 
   logger.info("AdvertController::getMyAdverts - " + userId)
 
-  const adverts = await AdvertModel.find({user: userId })
+  const adverts = await AdvertModel.find(
+    {user: userId,
+    status: { $gt: 0} })
     .populate({path: 'user', select: "_id name email"})
-    .sort({createdAt: -1})
+    .sort({status: 1, createdAt: -1})
     .exec();
 
   res.send(adverts)

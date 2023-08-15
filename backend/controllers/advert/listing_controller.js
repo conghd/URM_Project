@@ -66,6 +66,71 @@ const createListing = asyncHandler(async (req, res) => {
   })
 })
 
+const sellListing = asyncHandler(async (req, res) => {
+  const { id } = req.query;
+  logger.info("ListingController::sellListing- (%s)", id)
+
+  const filter = {"_id": id};
+  const update = {"status": 2};
+
+  const advert = await AdvertModel.findById(id).exec();
+  advert.status = 2;
+  await advert.save();
+  logger.info("ListingController::updateStatus- " + advert.status)
+  res.status(200).json({data: advert, message: ""})
+  /*
+  await AdvertModel.findByIdAndUpdate(id, update, (error, advert) => {
+    if (error) {
+      res.status(400).json({data: {}, message: error})
+    } else {
+      logger.info("ListingController::sellListing- " + advert.status)
+      res.status(200).json({data: advert, message: ""})
+    }
+  })
+  */
+})
+
+const updateStatus = asyncHandler(async (req, res) => {
+  const { id, status } = req.query;
+  logger.info("ListingController::updateStatus- (%s, status: %s)", id, status)
+
+  const filter = {"_id": id};
+  const update = {"status": status};
+
+  const advert = await AdvertModel.findById(id).exec();
+  advert.status = status;
+  await advert.save();
+  logger.info("ListingController::updateStatus- " + advert.status)
+  res.status(200).json({data: advert, message: ""})
+/*
+  await AdvertModel.findByIdAndUpdate(id, update, (error, advert) => {
+    if (error) {
+      res.status(400).json({data: {}, message: error})
+    } else {
+      logger.info("ListingController::updateStatus- " + advert.status)
+      res.status(200).json({data: advert, message: ""})
+    }
+  })
+  */
+})
+
+const deleteListing = asyncHandler(async (req, res) => {
+  const { id } = req.query;
+  logger.info("ListingController::deleteListing- (%s)", id)
+
+  const filter = {"_id": id};
+  const update = {"status": 0};
+
+  let advert = await AdvertModel.findByIdAndUpdate(id, update)
+    .exec();
+
+  logger.info("ListingController::deleteListing- " + advert.status)
+  res.send({data: advert, message: "", error: "",})
+})
+
 module.exports = {
   createListing,
+  sellListing,
+  deleteListing,
+  updateStatus,
 }
