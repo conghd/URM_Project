@@ -329,7 +329,6 @@ const CreationScreen = ({navigation, route}) => {
           />
         </View>
 
-        <Divider style={theme.STYLE.divider} />
         <View style={[theme.STYLE.row, styles.row]}>
           <TextInput
             style={[theme.STYLE.textInput, styles.textInput]}
@@ -337,7 +336,7 @@ const CreationScreen = ({navigation, route}) => {
             onChangeText={(text) => {
               handleTextChange({description: text});
             }}
-            mode="outlined" multiline={true}
+            mode="outlined" multiline={true} numberOfLines={2}
           />
         </View>
         {/** LOCATION */}
@@ -379,7 +378,7 @@ const CreationScreen = ({navigation, route}) => {
             mode="outlined"
           />
         </View>
-        <View style={{flex: 1, margin: 10, marginBottom: 40}}>
+        <View style={{flex: 1, margin: 10, marginTop: 20, marginBottom: 40}}>
           <Button mode="contained"
             onPress={() => handleSubmit()} >Submit</Button>
         </View>

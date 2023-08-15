@@ -114,10 +114,10 @@ const ScannerScreen = ({navigation, route}) => {
         </View>
 
         <View style={styles.sub2}>
-          <Button style={styles.flex1} mode='outlined' onPress={() => {
+          <Button style={[styles.flex1, {margin: 15}]} mode='outlined' onPress={() => {
             navigation.goBack();
           }}>Cancel</Button>
-          <Button style={styles.flex1} mode='contained' onPress={() => {
+          <Button style={[styles.flex1, {margin: 15}]} mode='contained' onPress={() => {
             navigation.navigate("CreationScreen",
                 {book: scannedBook}, true);
           }}>OK</Button>
@@ -130,7 +130,7 @@ const ScannerScreen = ({navigation, route}) => {
 
 const styles = StyleSheet.create({
   camera: {
-    backgroundColor: "green",
+    // backgroundColor: "green",
     aspectRatio: 1,
     flex: 1,
     marginTop: 0,
@@ -170,8 +170,6 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 10,
   },
-
-
 });
 
 export default ScannerScreen;
