@@ -29,7 +29,8 @@ const createAdvert = async (advertData, token) => {
   console.log("API: " + API_URL + "create");
   console.log("advertService::token - " + token);
   const response =
-  await axios.post(API_URL + "create", advertData, configure(token))
+  await axios.post(`${MyConfig.BE_BASE_URL}/listing/create`,
+      advertData, configure(token))
       .catch((error) => {
         console.log(error.toString());
       });
