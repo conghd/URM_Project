@@ -1,36 +1,81 @@
 const util = require("util");
 const multer = require("multer");
-const { uuid } = require('uuidv4');
+const sharp = require("sharp");
+const crypto = require("crypto")
 
-/**  */
-const DIR = __dirname + './public/upload/images';
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        console.log("MIDDLEWARE::destination");
-        console.log(__dirname + './public/upload/images');
-        cb(null, DIR);
-    },
-    filename: (req, file, cb) => {
-        console.log("MIDDLEWARE::filename")
-        const fileName = file.originalname.toLowerCase().split(' ').join('-');
-        console.log("MIDDLEWARE::filename: " + fileName)
-        //cb(null, uuidv4() + '-' + fileName)
-        cb(null, uuid() + '-' + fileName)
-    }
+const multerStorage = multer.memoryStorage();
+
+const multerFilter = (req, file, cb) => {
+  if (file.mimetype.startsWith("image")) {
+    cb(null, true);
+  } else {
+    cb("Please upload only images.", false);
+  }
+  };
+
+const upload = multer({
+  storage: multerStorage,
+  fileFilter: multerFilter
 });
-var uploadFile = multer({
-    storage: storage,
-    fileFilter: (req, file, cb) => {
-        console.log("MIDDLEWARE::uploadFIle::fileFilter")
-        if (file.mimetype == "image/png" || file.mimetype == "image/jpg" || file.mimetype == "image/jpeg") {
-            cb(null, true);
-        } else {
-            cb(null, false);
-            return cb(new Error('Only .png, .jpg and .jpeg format allowed!'));
-        }
-    }
-})//.array("images", 16);
 
-//let uploadFileMiddleware = util.promisify(uploadFile);
-//module.exports = uploadFileMiddleware;
-module.exports = uploadFile;
+const uploadFiles = upload.array("images", 10);
+
+const uploadImages = (req, res, next) => {
+  uploadFiles(req, res, err => {
+    if (err instanceof multer.MulterError) {
+      if (err.code === "LIMIT_UNEXPECTED_FILE") {
+        return res.send("Too many files to upload.");
+      }
+    } else if (err) {
+      return res.send(err);
+    }
+
+    next();
+  });
+};
+
+/**
+ * Resize Images
+ */
+
+const resizeImages = async (req, res, next) => {
+  if (!req.files) return next();
+
+  req.body.images = [];
+  await Promise.all(
+    req.files.map(async (file, index) => {
+      //const filename = file.originalname.replace(/\..+$/, "");
+      const filename = crypto.randomBytes(16).toString("base64url");
+      const newFilename = `urm-${filename}-${Date.now()}-${index}.jpeg`;
+
+      await sharp(file.buffer)
+        .resize(640, 320)
+        .toFormat("jpeg")
+        .jpeg({ quality: 90 })
+        .toFile(`public/upload/images/${newFilename}`);
+
+      req.body.images.push(newFilename);
+    })
+  );
+
+  next();
+};
+
+const getResult = async (req, res) => {
+  if (req.body.images.length <= 0) {
+    return res.send(`You must select at least 1 image.`);
+  }
+
+  const images = req.body.images
+    .map(image => "" + image + "")
+    .join("");
+
+  return res.send(`Images were uploaded:${images}`);
+};
+
+
+module.exports = {
+  uploadImages: uploadImages,
+  resizeImages: resizeImages,
+  getResult: getResult
+}

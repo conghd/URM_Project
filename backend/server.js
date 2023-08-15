@@ -27,6 +27,7 @@ app.use(bodyParser.json())
 app.use('/api/user', require('./routes/user_routes'))
 app.use('/api/post', require('./routes/post_routes'))
 app.use('/api/advert', require('./routes/advert_routes'))
+app.use('/api/listing', require('./routes/listing_routes'))
 app.use('/api/comment', require('./routes/comment_routes'))
 app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 

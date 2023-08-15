@@ -25,6 +25,7 @@
     "nodemailer": "^6.9.4",
     "nodemailer-smtp-transport": "^2.7.4",
     "realm": "^10.18.0",
+    "sharp": "^0.32.4",
     "swagger-ui-express": "^4.6.0",
     "uuidv4": "^6.2.13",
     "winston": "^3.10.0"

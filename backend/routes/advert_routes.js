@@ -16,7 +16,7 @@ const {
 const { protect } = require('../middleware/auth_middleware')
 
 router.route('/create').post(protect, createAdvert)
-//router.route('/create').post(createAdvert)
+
 //router.route('/list').get(protect, getAdverts)
 //router.route('/list').get(getAdverts)
 router.route('/list').get(getAdverts)
