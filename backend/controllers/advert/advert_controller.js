@@ -54,7 +54,7 @@ const createAdvert = asyncHandler(async (req, res) => {
           description: description || "",
           location: location || "",
           condition: condition || "",
-          phoneNumber: phoneNumber || "",
+          phoneNumber: phoneNumber || "(306) 888-9999",
           price: price || "",
 
           user: user || "",

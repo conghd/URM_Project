@@ -3,11 +3,11 @@ import * as Config from "../../../config";
 import {Text,
   View,
   ScrollView,
-  StyleSheet,
+  StyleSheet, SafeAreaView,
 } from "react-native";
 import {Button, IconButton} from "react-native-paper";
 import Slideshow from "react-native-image-slider-show";
-// import MapView, { Marker } from 'react-native-maps';
+import MapView, {Marker} from "react-native-maps";
 
 const DetailsScreen = ({navigation, route}) => {
   const {item} = route.params;
@@ -18,7 +18,17 @@ const DetailsScreen = ({navigation, route}) => {
     images.push({url: Config.BE_RESOURCE_URL +
       "/images/no-image-available.jpeg"});
   }
+
+
   const [bookmark, setBookmark] = useState(false);
+  const location = JSON.parse(item.location);
+  const {longitude, latitude, longitudeDelta, latitudeDelta} = location;
+  const initialRegion = {
+    longitude,
+    latitude,
+    longitudeDelta,
+    latitudeDelta,
+  };
   const coordinate = {
     latitude: +50.445210,
     longitude: -104.618896,
@@ -29,10 +39,11 @@ const DetailsScreen = ({navigation, route}) => {
     console.log("DetailsScreen::useEffect()");
   }, []);
   return (
-    <View style={styles.container} >
+    <SafeAreaView style={styles.container} >
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.sliderBox}>
           <Slideshow
+            height={320}
             dataSource={ images }/>
         </View>
         <View style={styles.header}>
@@ -45,15 +56,20 @@ const DetailsScreen = ({navigation, route}) => {
           </View>
           <View style={{flex: 1}}>
             <IconButton icon={bookmark ? "bookmark" : "bookmark-outline"}
-              size={50}
+              size={40}
               onPress={() => {
                 setBookmark(!bookmark);
               }}
               iconColor='gray'
-
             />
           </View>
 
+        </View>
+        <View style={styles.details} >
+          <Text style={styles.condition}>Authors: {item.authors}</Text>
+          <Text style={styles.description}>Publisher: {item.publisher}</Text>
+          <Text style={styles.description}>Number of pages: {item.pageCount}</Text>
+          <Text style={styles.description}>ISBN: {item.ISBN}</Text>
         </View>
         {/**
         <View style={[styles.header, {marginTop: 0}] }>
@@ -69,40 +85,43 @@ const DetailsScreen = ({navigation, route}) => {
         </View>
         <View style={[styles.sellerHeader, {marginTop: 0}] }>
           <Text style={styles.seller}>
-            {item.user != null ? item.user.name : "Unknown"}</Text>
+            {item.user != null ? item.user.name : "Unknown"} - {item.phoneNumber}
+          </Text>
+
           {/**
             <Button mode="outlined" icon="send"
             style={styles.seller}>Message</Button >
             */}
         </View>
 
-        {/**
         <View style={styles.locationHeader}>
           <View style={styles.mapSection}>
-                  <View style={styles.mapHeader} >
-                      <Text style={styles.mapTitle}>Location</Text>
-                  </View>
-                  <View style={styles.mapContainer} >
-                      <MapView  style={styles.mapView}
-                        initialRegion={initialRegion}
-                          loadingEnabled={true}
-                          loadingIndicatorColor="#666666"
-                          loadingBackgroundColor="#eeeeee"
-                          provider="google" >
-                          <Marker coordinate={initialRegion}
-                          title={item.user.name} />
-                      </MapView>
-                  </View>
+            <View style={styles.mapHeader} >
+              <Text style={styles.mapTitle}>Location</Text>
+            </View>
+            <View style={styles.mapContainer} >
+              <MapView style={styles.mapView}
+                initialRegion={initialRegion}
+                loadingEnabled={true}
+                loadingIndicatorColor="#666666"
+                loadingBackgroundColor="#eeeeee"
+                provider="google" >
+                <Marker coordinate={initialRegion}
+                  title={item.user.name} />
+              </MapView>
+            </View>
           </View>
         </View>
-        */}
+        <View style={styles.sellerHeader}>
+
+        </View>
         <View style={styles.details} >
-          <Text style={styles.detailsHeader}>Details</Text>
-          <Text style={styles.condition}>Condition: {item.condition}</Text>
+          <Text style={[styles.detailsHeader, {fontWeight: "bold"}]}>
+          Description</Text>
           <Text style={styles.description}>{item.description}</Text>
         </View>
       </ScrollView>
-    </View>
+    </SafeAreaView>
 
   );
 };
@@ -128,9 +147,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   title: {
+    width: "100%",
     flex: 1,
     flexDirection: "row",
-    fontSize: 24,
+    fontSize: 20,
     color: "#272727",
     alignSelf: "flex-start",
     textAlign: "left",
@@ -154,9 +174,9 @@ const styles = StyleSheet.create({
   },
   seller: {
     marginLeft: 20,
-    fontSize: 18,
+    fontSize: 14,
     textAlign: "left",
-    color: "#176fdb",
+    // color: "#176fdb",
   },
   details: {
     flex: 2,
@@ -207,7 +227,7 @@ const styles = StyleSheet.create({
 
   },
   description: {
-    marginTop: 15,
+    marginTop: 10,
   },
   detailsHeader: {
     fontSize: 18,
