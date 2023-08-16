@@ -7,7 +7,8 @@ import AuthNavigator from "../navigation/AuthNavigator";
 import IntroNavigator from "../navigation/IntroNavigator";
 import AppNavigator from "../navigation/AppNavigator";
 import {SafeAreaProvider} from "react-native-safe-area-context";
-
+import Toast from "react-native-toast-message";
+import {toastConfig} from "./ToastConfig";
 const theme = {
   ...DefaultTheme,
   colors: {
@@ -24,13 +25,12 @@ const theme = {
 // const Stack = createNativeStackNavigator();
 // const Tab = createMaterialBottomTabNavigator();
 
+
 const ScreenManager = () => {
   const {user} = useSelector((state) => state.auth);
   const {settings} = useSelector((state) => state.settings);
 
   useEffect(() => {
-    console.log("ScreenManager::useEffect()");
-    // console.log("ScreenManager::useEffect(), isFirstTime = " + isFirstTime);
     console.log("ScreenManager::useEffect(), user = " + JSON.stringify(user));
   }, []);
 
@@ -48,6 +48,8 @@ const ScreenManager = () => {
           }
         </SafeAreaProvider>
       </NavigationContainer>
+
+      <Toast config={toastConfig}/>
     </PaperProvider>
   );
 };
