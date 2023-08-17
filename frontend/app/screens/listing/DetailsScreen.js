@@ -6,7 +6,8 @@ import {Text,
   StyleSheet, SafeAreaView,
 } from "react-native";
 import {Button, IconButton} from "react-native-paper";
-import Slideshow from "react-native-image-slider-show";
+// import Slideshow from "react-native-image-slider-show";
+import Slideshow from "../../components/Slideshow";
 import MapView, {Marker} from "react-native-maps";
 
 const DetailsScreen = ({navigation, route}) => {
