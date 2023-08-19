@@ -2,23 +2,23 @@ import axios from "axios";
 import * as MyConfig from "../../../config";
 
 const API_URL = `${MyConfig.BE_BASE_URL}/advert/`;
-const configure = (token) => {
-  /*
-  * Hardcoded
-  */
-  const token2 = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzN2E5OGUzMDYzZjg0YzVkOTdmOGNlOSIsImlhdCI6MTY2OTcyNzI4MCwiZXhwIjoxNjcyMzE5MjgwfQ.svNPp7vOhGLi4KH0Yhu24cgML4EoRPnrvRy65kXtgYk";
-  return {
-    headers: {
-      "Authorization": `Bearer ${token}`,
-      "Content-Type": "multipart/form-data",
-    },
-  };
+
+import {configureGet, configurePost, configurePost2} from "../requestConfig";
+
+// GET ADVERTS
+const getAdverts = async (params, token) => {
+  console.log("AdvertService::getAdverts: " + JSON.stringify(params));
+  const response = await axios.get(API_URL + "list",
+      configureGet(token, params));
+
+  return response.data;
 };
 
-// Get user posts
-const getAdverts = async (condition, token) => {
-  console.log("AdvertService::getAdverts: " + JSON.stringify(condition));
-  const response = await axios.get(API_URL + "list", condition, configure(token));
+// GET SINGLE ADVERT
+const getAdvert = async (advertId, token) => {
+  console.log("AdvertService::getAdvert: " + JSON.stringify(advertId));
+  const response = await axios.get(API_URL + "get" + advertId,
+      configureGet(token));
 
   return response.data;
 };
@@ -30,7 +30,7 @@ const createAdvert = async (advertData, token) => {
   console.log("advertService::token - " + token);
   const response =
   await axios.post(`${MyConfig.BE_BASE_URL}/listing/create`,
-      advertData, configure(token))
+      advertData, configurePost2(token))
       .catch((error) => {
         console.log(error.toString());
       });
@@ -40,12 +40,14 @@ const createAdvert = async (advertData, token) => {
 
 // Delete user post
 const deleteAdvert = async (advertId, token) => {
-  const response = await axios.delete(API_URL + advertId + "/delete", configure(token));
+  const response = await axios.delete(API_URL + advertId + "/delete",
+      configure(token));
   return response.data;
 };
 
 const advertService = {
   getAdverts,
+  getAdvert,
   createAdvert,
   deleteAdvert,
 };

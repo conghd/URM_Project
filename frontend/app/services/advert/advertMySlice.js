@@ -3,10 +3,17 @@ import advertMyService from "./advertMyService";
 
 const initialState = {
   adverts: [],
+  bookmarks: [],
   isError: false,
   isSuccess: false,
   isLoading: false,
   message: "",
+  bookmarkState: {
+    isError: false,
+    isSuccess: false,
+    isLoading: false,
+    message: "",
+  },
   sellState: {
     isError: false,
     isSuccess: false,
@@ -64,6 +71,34 @@ export const updateStatus = createAsyncThunk(
     },
 );
 
+export const updateBookmark = createAsyncThunk(
+    "advert/update_bookmark",
+    async (condition, thunkAPI) => {
+      try {
+        const token = thunkAPI.getState().auth.user.token;
+        return await advertMyService.updateBookmark(condition, token);
+      } catch (error) {
+        const message = (error.response && error.response.data) ||
+    error.message || error.toString();
+        return thunkAPI.rejectWithValue(message);
+      }
+    },
+);
+
+export const getBookmarks = createAsyncThunk(
+    "advert/get_bookmarks",
+    async (condition, thunkAPI) => {
+      try {
+        const token = thunkAPI.getState().auth.user.token;
+        return await advertMyService.getBookmarks(condition, token);
+      } catch (error) {
+        const message = (error.response && error.response.data) ||
+  error.message || error.toString();
+        return thunkAPI.rejectWithValue(message);
+      }
+    },
+);
+
 export const advertMySlice = createSlice({
   name: "advertMy",
   initialState: initialState,
@@ -73,6 +108,7 @@ export const advertMySlice = createSlice({
       state.isError = false;
       state.isSuccess = false;
       state.adverts = [];
+      stsate.bookmarks = [];
       state.message = "";
     },
     resetSellState: (state) => {
@@ -86,6 +122,12 @@ export const advertMySlice = createSlice({
       state.statusState.isError = false;
       state.statusState.isSuccess= false;
       state.statusState.message = "";
+    },
+    resetBMState: (state) => {
+      state.bookmarkState.isLoading = false;
+      state.bookmarkState.isError = false;
+      state.bookmarkState.isSuccess= false;
+      state.bookmarkState.message = "";
     },
   },
   extraReducers: (builder) => {
@@ -109,7 +151,6 @@ export const advertMySlice = createSlice({
         .addCase(sellMyAdvert.fulfilled, (state, action) => {
           state.sellState.isLoading = false;
           state.sellState.isSuccess = true;
-          console.log(action.payload);
           const index = state.adverts.findIndex(
               (item) => item._id === action.payload.data._id);
           state.adverts.splice(index, 1);
@@ -122,7 +163,6 @@ export const advertMySlice = createSlice({
           state.sellState.isLoading = false;
           state.sellState.isError = true;
           state.sellState.message = action.payload;
-          console.log(action.payload);
         })
         .addCase(updateStatus.pending, (state) => {
           state.statusState.isLoading = true;
@@ -130,7 +170,6 @@ export const advertMySlice = createSlice({
         .addCase(updateStatus.fulfilled, (state, action) => {
           state.statusState.isLoading = false;
           state.statusState.isSuccess = true;
-          console.log("------" + action.payload.data.status);
           // Process
           const index = state.adverts.findIndex(
               (item) => item._id === action.payload.data._id);
@@ -144,9 +183,49 @@ export const advertMySlice = createSlice({
           state.statusState.isError = true;
           state.statusState.message = action.payload;
         })
+
+        // UPDATE BOOKMARK
+        .addCase(updateBookmark.pending, (state) => {
+          state.bookmarkState.isLoading = true;
+        })
+        .addCase(updateBookmark.fulfilled, (state, action) => {
+          state.bookmarkState.isLoading = false;
+          state.bookmarkState.isSuccess = true;
+          // Process
+          if (action.payload.meta.add == true) {
+            state.bookmarks.push(action.payload.data);
+          } else {
+            const index = state.bookmarks.findIndex(
+                (item) => item._id === action.payload.data._id,
+            );
+            state.bookmarks.splice(index, 1);
+          }
+        })
+        .addCase(updateBookmark.rejected, (state, action) => {
+          state.bookmarkState.isLoading = false;
+          state.bookmarkState.isError = true;
+          state.bookmarkState.message = action.payload;
+        })
+
+        // Get bookmarks
+        .addCase(getBookmarks.pending, (state) => {
+          state.bookmarkState.isLoading = true;
+        })
+        .addCase(getBookmarks.fulfilled, (state, action) => {
+          state.bookmarkState.isLoading = false;
+          state.bookmarkState.isSuccess = true;
+          state.bookmarks = action.payload.data;
+        })
+        .addCase(getBookmarks.rejected, (state, action) => {
+          state.bookmarkState.isLoading = false;
+          state.bookmarkState.isError = true;
+          state.bookmarkState.message = action.payload;
+        })
     ;
   },
 });
 
-export const {reset, resetSellState, resetStatusState} = advertMySlice.actions;
+export const {reset, resetSellState, resetStatusState, resetBMState} =
+ advertMySlice.actions;
+
 export default advertMySlice.reducer;

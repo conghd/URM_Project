@@ -12,10 +12,7 @@ const protect = asyncHandler(async (req, res, next) => {
       token = req.headers.authorization.split(' ')[1]
       
       if (!token) {
-        res.status(401).json({
-          code: 1,
-          message: "Unauthorized user",
-        })
+        res.status(401).json({ code: 1, message: "Unauthorized user",})
       }
 
       const decoded = jwt.verify(token, process.env.JWT_SECRET)
@@ -27,21 +24,17 @@ const protect = asyncHandler(async (req, res, next) => {
         .select("-activation_code");
 
       if (!user) {
-        res.status(401).json({
-          code: 1,
-          message: "Unauthorized user",
-        })
+        res.status(401).json({ code: 1, message: "Unauthorized user", })
       }
       req.user = user;
 
       next()
     } catch (error) {
       console.log(error)
-        res.status(401).json({
-          code: 1,
-          message: "Unauthorized user",
-        })
+        res.status(401).json({code: 1, message: "Unauthorized user", })
     }
+  } else {
+    res.status(401).json({code: 1, message: "Unauthorized user", })
   }
 })
 

@@ -1,168 +1,84 @@
 import React, {useState, useEffect, useRef} from "react";
-import {Text, View, StyleSheet, SafeAreaView,
-  TouchableOpacity,
-  ScrollView} from "react-native";
-import FAIcon from "react-native-vector-icons/FontAwesome";
-import MDIcon from "react-native-vector-icons/MaterialIcons";
-
-import {Button, Divider} from "react-native-paper";
-import {useActionSheet} from "@expo/react-native-action-sheet";
-import RBSheet from "react-native-raw-bottom-sheet";
+import {Text, View, StyleSheet, SafeAreaView, FlatList} from "react-native";
+import {useSelector, useDispatch} from "react-redux";
+import Toast from "react-native-toast-message";
+import BookmarkItem from "./BookmarkItem";
 import {theme} from "../../constants";
-import data from "./static.json";
+import {getBookmarks, resetBMState}
+  from "../../services/advert/advertMySlice";
+import {Button} from "react-native-paper";
 
-FAIcon.loadFont();
-MDIcon.loadFont();
 
-const BookmarkScreen = () => {
-  const {showActionSheetWithOptions} = useActionSheet();
-  const refRBSheet = useRef();
+const BookmarkScreen = ({navigation, route}) => {
+  const dispatch = useDispatch();
+  const {bookmarks, isLoading, isError, isSuccess} =
+    useSelector((state) => state.advertMy);
 
   useEffect(() => {
     console.log("BookmarkScreen::useEffect()");
   }, []);
 
-  const handlePress = () => {
-    const title = "Choose an action";
-    const message = "Alternatively, any component can use the higher order component to access the context and pass the showActionSheetWithOptions as a prop.";
-    const options = ["Delete", "Save", "Cancel"];
-    const destructiveButtonIndex = 0;
-    const cancelButtonIndex = 0;
-
-    showActionSheetWithOptions({
-      title,
-      message,
-      options,
-      cancelButtonIndex,
-      destructiveButtonIndex,
-    }, (selectedIndex) => {
-      switch (selectedIndex) {
-        case 1:
-          // Save
-          break;
-
-        case destructiveButtonIndex:
-          // Delete
-          break;
-
-        case cancelButtonIndex:
-          // Canceled
-      }
+  useEffect(() => {
+    const unsubscribe = navigation.addListener("focus", () => {
     });
-  };
 
-  const handleBottomSheet = () => {
-    refRBSheet.current.open();
-  };
+    dispatch(getBookmarks({}));
+    return unsubscribe;
+  }, [navigation]);
+
+
   return (
-    <SafeAreaView style={theme.STYLE.container}>
-      <View style={[theme.STYLE.row, styles.row]}>
-        <Button style={styles.button}
-          mode="contained" onPress={handlePress}>Open Action Sheet</Button>
-      </View>
-      <View style={[theme.STYLE.row, styles.row]}>
-        <Button style={styles.button}
-          mode="contained" onPress={handleBottomSheet}>Open Raw Bottom Sheet</Button>
-      </View>
-
-      <View style={[theme.STYLE.row, styles.row]}>
-        <RBSheet
-          height={350}
-          ref={refRBSheet}
-          closeOnDragDown={true}
-          closeOnPressMask={false}
-          customStyles={{
-            wrapper: {
-              backgroundColor: "transparent",
-            },
-            draggableIcon: {
-              backgroundColor: "#000",
-            },
+    <SafeAreaView style={[theme.STYLE.container, styles.container]}>
+      <View style={[theme.STYLE.row, styles.mylisting]}>
+        <FlatList
+          numColumns={1}
+          showsVerticalScrollIndicator={false}
+          horizontal={false}
+          style={styles.list}
+          contentContainerStyle={styles.contentContainer}
+          keyExtractor={(item) => item._id}
+          data={bookmarks}
+          renderItem={({item}) => (
+            <BookmarkItem key={item._id}
+              item={item}
+              onPress={() => {
+              // navigation.navigate('ListingItemDetails', {
+              //  item: item,
+              // productId: product.id,
+              // });
+              }}
+              onSold={() => {}}
+              onDelete={() => {}}
+              onUnSave={(data) => {
+                // dispatch(resetStatusState());
+                // dispatch(updateStatus({params: {id: item._id, ...data}}));
+              }}
+            />)}
+          onRefresh={() => {
+            dispatch(getBookmarks({}));
           }}
-        >
-          <View style={styles.listContainer}>
-            <Text style={styles.listTitle}>Create</Text>
-            <Divider />
-            <ScrollView>
-              {data.lists.map((list) => (
-                <TouchableOpacity
-                  key={list.icon}
-                  style={styles.listButton}
-                  onPress={() => {
-                    refRBSheet.current.close();
-                  }}
-                >
-                  <MDIcon name={list.icon} style={styles.listIcon} />
-                  <Text style={styles.listLabel}>{list.label}</Text>
-                </TouchableOpacity>
-              ))}
-            </ScrollView>
-          </View>
-        </RBSheet>
+          refreshing={false}
+        />
       </View>
-
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    // backgroundColor: "#ffffff",
-    backgroundColor: "#F5FCFF",
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    flexDirection: "column",
   },
   row: {
-    marginTop: 5,
   },
-  textTitle: {
-    fontSize: 20,
-    marginTop: 120,
-  },
-  buttonContainer: {
-    alignItems: "center",
-    marginTop: 50,
-  },
-  button: {
-    width: 150,
-    backgroundColor: "#4EB151",
-    paddingVertical: 10,
-    alignItems: "center",
-    borderRadius: 3,
-    margin: 10,
-  },
-  buttonTitle: {
-    color: "#FFFFFF",
-    fontSize: 16,
-    fontWeight: "600",
-  },
-  listContainer: {
+  mylisting: {
+    justifyContent: "center",
+    alignItems: "flex-start",
     flex: 1,
-    padding: 25,
-    paddingTop: 5,
   },
-  listTitle: {
-    textAlign: "center",
-    fontSize: 16,
-    fontWeight: "600",
-    fontStyle: "normal",
-    marginBottom: 20,
-    color: "#1a1a1a",
+  list: {
+    flex: 1,
+    height: "100%",
   },
-  listButton: {
-    flexDirection: "row",
-    alignItems: "center",
-    paddingVertical: 10,
-  },
-  listIcon: {
-    fontSize: 26,
-    color: "#666",
-    width: 60,
-  },
-  listLabel: {
-    fontSize: 16,
+  contentContainer: {
   },
 
 });

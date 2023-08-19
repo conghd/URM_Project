@@ -1,4 +1,5 @@
 const mongoose = require("mongoose")
+const { ObjectId } = require("mongodb");
 
 const userSchema = mongoose.Schema({
   name: {
@@ -29,7 +30,10 @@ const userSchema = mongoose.Schema({
   verification_code: {
     type: String,
     required: true
-  }
+  },
+
+  bookmarks: [{ type: ObjectId, ref: "Advert", required: true}],
+
 }, {timestamps: true});
 
 

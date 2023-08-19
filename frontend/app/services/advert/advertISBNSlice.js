@@ -16,8 +16,7 @@ export const getBookInfo = createAsyncThunk(
       try {
         return await advertISBNService.getBookInfo(isbn);
       } catch (error) {
-        const message =
-        (error.response && error.response.data) ||
+        const message = (error.response && error.response.data) ||
         error.message || error.toString();
         return thunkAPI.rejectWithValue(message);
       }

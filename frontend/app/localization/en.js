@@ -10,6 +10,7 @@ export const en = {
 
   },
   profile: {
-
+    header: "Profile",
+    logout: "Logout",
   },
 };

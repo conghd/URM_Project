@@ -56,11 +56,7 @@ const MyListing = ({navigation, route}) => {
 
     <SafeAreaView style={[theme.STYLE.container, styles.container]}>
       <StatusBar />
-
       <View style={styles.mylisting}>
-        { adverts.length > 0 ? (
-
-
         <FlatList
           numColumns={1}
           showsVerticalScrollIndicator={false}
@@ -95,9 +91,6 @@ const MyListing = ({navigation, route}) => {
           }}
           refreshing={false}
         />
-        ) : (
-          <Text variant="bodyMedium">Your listing is empty.</Text>
-                  )}
       </View>
     </SafeAreaView>
   );
@@ -111,15 +104,15 @@ const styles = StyleSheet.create({
   },
   row: {
 
-    productsList: {
-      marginTop: 0,
-      // backgroundColor: 'yellow',
-    },
-    productsListContainer: {
-      // backgroundColor: "#eeeeee",
-      paddingVertical: 0,
-      marginHorizontal: 0,
-    },
+  },
+  productsList: {
+    marginTop: 0,
+    // backgroundColor: 'yellow',
+  },
+  productsListContainer: {
+    // backgroundColor: "#eeeeee",
+    paddingVertical: 0,
+    marginHorizontal: 0,
   },
   avatar: {
     marginTop: 20,
@@ -148,9 +141,7 @@ const styles = StyleSheet.create({
   mylisting: {
     justifyContent: "center",
     alignItems: "center",
-
     flex: 3,
-    backgroundColor: "#00FF00",
   },
   loading: {
     marginTop: 10,

@@ -6,7 +6,7 @@ import {useDispatch, useSelector} from "react-redux";
 import ListingItem from "../components/ListingItem";
 import {getAdverts, getMoreAdverts} from "../services/advert/advertSlice";
 import {theme} from "../constants";
-
+import Toast from "react-native-toast-message";
 const windowDimensions = Dimensions.get("window");
 const screenDimensions = Dimensions.get("screen");
 
@@ -34,7 +34,7 @@ const HomeScreen = ({navigation, route}) => {
 
   const handleRefresh = () => {
     console.log("HomeScreen::handleRefresh()");
-    dispatch(getAdverts({params: initCondition}));
+    dispatch(getAdverts(initCondition));
     setCondition((prev) => ({...prev, offset: 0}));
   };
 
@@ -52,14 +52,20 @@ const HomeScreen = ({navigation, route}) => {
 
   useEffect(() => {
     console.log("HomeScreen::useEffect()");
-    dispatch(getAdverts({params: initCondition}));
+    dispatch(getAdverts(initCondition));
   }, []);
 
 
   useEffect(() => {
     console.log("HomeScreen::useEffect - navigation");
-
     navigation.setOptions({
+    });
+
+    Toast.show({
+      type: "info2",
+      text1: "Hello",
+      text2: "This is a message",
+      position: "bottom",
     });
   }, [navigation]);
 

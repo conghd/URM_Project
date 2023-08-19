@@ -6,6 +6,7 @@ const AdvertModel = require('../../models/advert_model')
 const CommentModel = require('../../models/comment_model')
 const path = require('path')
 const logger = require("../../util/logger")
+const UserModel = require('../../models/user_model')
 
 const debugName = "AdvertController:";
 const storage = multer.diskStorage({
@@ -116,29 +117,27 @@ const getAdverts = asyncHandler(async (req, res) => {
 */
 const getAdverts = asyncHandler(async (req, res) => {
   const { category, keyword, offset, limit } = req.query;
-  //const category = req.query['category']; 
-  //const keyword = req.query['keyword']; 
   logger.info("AdvertController::listAdverts - (%s, %s, %s, %s)",
     category, keyword, offset, limit)
   let condition = {status: 1};
-  if (category) {
-    //condition.category = category;
-  }
 
-  if (keyword) {
-    //condition.$or = [{ title: `${/keyword/}`}, { description: `${/keyword/}` }];
-    condition.tit
-  }
-  console.log("Condition: " + JSON.stringify(condition));
-  const adverts = await AdvertModel.find(condition)
+  let adverts = await AdvertModel.find(condition)
     // .populate(['user', 'comments'])
     .populate({path: 'user', select: "_id name email"})
     .sort({createdAt: -1})
     .skip(offset)
     .limit(limit)
     .exec();
+  
+  
+  // Check bookmark
+  const adverts2 = adverts.map((advert) => {
+    const isBookmark = req.user.bookmarks.includes(advert._id)
+    advert.set("isBookmark", isBookmark, {strict: false});
+    return advert;
+  })
 
-  res.send(adverts)
+  res.send(adverts2)
 })
 
 const search = asyncHandler(async (req, res) => {
@@ -167,7 +166,7 @@ const search = asyncHandler(async (req, res) => {
 })
 
 const getMyAdverts = asyncHandler(async (req, res) => {
-  const userId = req.query['userId']; 
+  const userId = req.user._id;
   logger.info("AdvertController::getMyAdverts - " + userId)
 
   const adverts = await AdvertModel.find(
@@ -183,127 +182,17 @@ const getMyAdverts = asyncHandler(async (req, res) => {
 const getAdvert = asyncHandler(async (req, res) => {
     const advertId = req.params.id;
     const userId = req.user._id;
-  res.json({ 'message': 'getPost'})
-})
-
-const voteUpPost = asyncHandler(async (req, res) => {
-  const postId = req.params.id;
-  const userId = req.user._id;
-  const voteUpData = {
-    post: postId,
-    user: userId,
-  };
-
-  const { vote_up } = req.body
-  console.info(debugName + `:voteUpPost -- ${ vote_up }, ` + JSON.stringify(voteUpData))
-
-  var error, result;
-  const post = await PostModel.findById(postId).populate("upVotes").exec();
-  if (!post) {
-    res.status(400)
-    throw new Error("Invalid post"); 
-  }
-
-  if (vote_up == true || vote_up == "True" || vote_up == "true" || vote_up == "TRUE") {
-      await UpVoteModel.create(voteUpData, function(err, ret) {
-        error = err; result = ret;
-        if (!error) {
-          post.upVotes.push(ret);
-          post.save();
-        }
-      })
-  } else {
-    const upVote = await UpVoteModel.findOne({post: postId, user: userId })
-    post.upVotes.pull({_id: upVote._id })
-    await post.save();
-    await UpVoteModel.deleteOne({_id: upVote._id });
-  }
-
-  if (error) {
-    console.log(error)
-    res.status(400)
-  } else {
-    res.json({ 'message': 'voteUpPost: done successfully!'})
-  }
-})
-
-const voteDownPost = asyncHandler(async (req, res) => {
-  const postId = req.params.id;
-  const userId = req.user._id;
-  const voteDownData = {
-    post: postId,
-    user: userId
-  };
-
-  const { vote_down } = req.body
-  console.info(debugName + `:voteDownPost -- ${ vote_down }, ` + JSON.stringify(voteDownData))
-
-  var error, result;
-  const post = await PostModel.findById(postId);
-  if (!post) {
-    res.status(400)
-    throw Error("Invalid post")
-  }
-
-  if (vote_down == true || vote_down == "True" || vote_down == "true" || vote_down == "TRUE") {
-    await DownVoteModel.create(voteDownData, function(err, ret) {
-      error = err; result = ret;
-      if (!error) {
-        post.downVotes.push(ret);
-        post.save();
-      } else {
-      }
-    })
-  } else {
-    const downVote = await DownVoteModel.findOne({user: userId, post: postId});
-    post.downVotes.pull({ _id: downVote._id });
-    await post.save();
-    await DownVoteModel.deleteOne({_id: downVote._id })
-  }
-
-  if (error) {
-    res.status(400)
-    throw Error("Can not save down vote")
-  } else {
-    res.json({ 'message': 'voteDownPost:success'})
-  }
-})
-
-const commentPost = asyncHandler(async (req, res) => {
-  const user = req.user;
-  const post_id = req.params.id;
-  const commentData = {
-    content: req.body.content,
-    post: req.params.id,
-    user: req.user._id
-  }
-
-  console.info(debugName + `:commentPost -- ` + JSON.stringify(commentData))
-  const comment = new CommentModel(commentData);
-  await comment.save((error) => {
-  })
-
-  await PostModel.findByIdAndUpdate(post_id,
-    {$push: { comments: comment.id }},
-    { new: true, useFindAndModify: false });
-
-  res.json({ 'message': 'commentPost is OK', 'code': 200 })
-})
-
-const deleteComment = asyncHandler(async (req, res) => {
-  console.info(debugName + `:deleteComment -- ` + JSON.stringify(req))
+    const advert = await AdvertModel.findById(advertId)
+      .populate({path: "user", select: "_id name email bookmarks"})
+      .exec();
+      
+  res.json({ data: advert, message: ''})
 })
 
 module.exports = {
   createAdvert,
-  //updatePost,
-  //deletePost,
-  //getPost,
+  getAdvert,
   getAdverts,
   search,
   getMyAdverts,
-  ///voteUpPost,
-  //voteDownPost,
-  //commentPost,
-  //deleteComment,
 }

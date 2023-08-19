@@ -1,16 +1,20 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useLayoutEffect, useState} from "react";
 import * as Config from "../../../config";
-import {Text,
-  View,
-  ScrollView,
-  StyleSheet, SafeAreaView,
+import {View, ScrollView, StyleSheet, SafeAreaView,
 } from "react-native";
-import {Button, IconButton} from "react-native-paper";
+import {Text, Button, IconButton} from "react-native-paper";
 // import Slideshow from "react-native-image-slider-show";
 import Slideshow from "../../components/Slideshow";
 import MapView, {Marker} from "react-native-maps";
+import {updateBookmark} from "../../services/advert/advertMySlice";
+import {useSelector, useDispatch} from "react-redux";
+import Toast from "react-native-toast-message";
+import {StatusBar} from "expo-status-bar";
 
 const DetailsScreen = ({navigation, route}) => {
+  const dispatch = useDispatch();
+  const {isLoading, isSuccess, isError, message} =
+    useSelector((state) => state.advertMy.bookmarkState);
   const {item} = route.params;
   const images = item.images.map((image) => {
     return {url: Config.BE_RESOURCE_URL + image};
@@ -20,8 +24,25 @@ const DetailsScreen = ({navigation, route}) => {
       "/images/no-image-available.jpeg"});
   }
 
+  useLayoutEffect(() => {
+    navigation.setOptions({
 
-  const [bookmark, setBookmark] = useState(false);
+      headerRight: () => (
+        <View style={{marginBottom: 20}}>
+          <IconButton
+            style={{paddingBottom: 12, marginRight: -10}}
+            size={30}
+            // backgroundColor="lightgrey"
+            icon="dots-horizontal"
+            onPress={() => {
+            // navigation.navigate("SearchScreen", {});
+            }}
+          />
+        </View>
+      ),
+    });
+  }, [navigation]);
+
   const location = JSON.parse(item.location);
   const {longitude, latitude, longitudeDelta, latitudeDelta} = location;
   const initialRegion = {
@@ -30,17 +51,22 @@ const DetailsScreen = ({navigation, route}) => {
     longitudeDelta,
     latitudeDelta,
   };
-  const coordinate = {
-    latitude: +50.445210,
-    longitude: -104.618896,
-  };
 
+  useEffect(() => {
+    if (isSuccess) {
+    }
+  }, [isSuccess]);
+
+  useEffect(() => {
+
+  }, [isError]);
 
   useEffect(() => {
     console.log("DetailsScreen::useEffect()");
   }, []);
   return (
     <SafeAreaView style={styles.container} >
+      <StatusBar />
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.sliderBox}>
           <Slideshow
@@ -55,14 +81,18 @@ const DetailsScreen = ({navigation, route}) => {
               ("FREE") : ("$" + item.price)}
             </Text>
           </View>
-          <View style={{flex: 1}}>
-            <IconButton icon={bookmark ? "bookmark" : "bookmark-outline"}
-              size={40}
+          <View style={{flex: 1, alignItems: "center", marginRight: 10}}>
+            <IconButton icon={item.isBookmark ? "heart" : "heart-outline"}
+              size={30}
               onPress={() => {
-                setBookmark(!bookmark);
+                // setBookmark(!bookmark);
+                dispatch(updateBookmark({id: item._id, add: !item.isBookmark}));
+                item.isBookmark = !item.isBookmark;
               }}
-              iconColor='gray'
+              containerColor={item.isBookmark? "#DBF7F2" : "#D8DADF"}
+              iconColor={item.isBookmark? "#1770F6" : "#050505"}
             />
+            <Text variant="bodyMedium">Save</Text>
           </View>
 
         </View>
