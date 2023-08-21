@@ -28,7 +28,7 @@ const MyListing = ({navigation, route}) => {
   const {adverts, sellState, isLoading, isError, isSuccess, message} =
    useSelector((state) => state.advertMy);
   const {user} = useSelector((state) => state.auth);
-  const condition = {params: {userId: user._id}};
+  const condition = {userId: user._id};
 
 
   React.useLayoutEffect(() => {
@@ -75,15 +75,15 @@ const MyListing = ({navigation, route}) => {
               // });
               }}
               onSold={() => {
-                dispatch(sellMyAdvert({params: {id: item._id}}));
+                dispatch(sellMyAdvert({id: item._id}));
               }}
               onDelete={(data) => {
                 dispatch(resetStatusState());
-                dispatch(updateStatus({params: {id: item._id, ...data}}));
+                dispatch(updateStatus({id: item._id, ...data}));
               }}
               onUpdateStatus={(data) => {
                 dispatch(resetStatusState());
-                dispatch(updateStatus({params: {id: item._id, ...data}}));
+                dispatch(updateStatus({id: item._id, ...data}));
               }}
             />)}
           onRefresh={() => {

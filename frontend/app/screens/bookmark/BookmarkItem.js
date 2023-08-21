@@ -5,6 +5,8 @@ import {Dimensions, Image, StyleSheet, View,
 import {Button, IconButton, Text} from "react-native-paper";
 import * as Config from "./../../../config";
 import moment from "moment/moment";
+import {useSelector, useDispatch} from "react-redux";
+import {updateBookmark} from "../../services/advert/advertMySlice";
 
 const windowDimensions = Dimensions.get("window");
 // const screenDimensions = Dimensions.get("screen");
@@ -16,6 +18,7 @@ const STATUS_DELETE = 0;
 const STATUS_AVAILABLE = 1;
 const STATUS_SOLD = 2;
 const BookmarkItem = ({item, onPress, onSold, onDelete, onUpdateStatus, index}) => {
+  const dispatch = useDispatch();
   const {title, price, images} = item;
   const source = {uri: Config.BE_RESOURCE_URL +
     ((images && images.length > 0)? images[0] : "/images/no-image.jpeg")};
@@ -51,9 +54,19 @@ const BookmarkItem = ({item, onPress, onSold, onDelete, onUpdateStatus, index}) 
           </Text>
 
           <View style={styles.bottom}>
-            <IconButton icon="bookmark-off"
-              onPress={() =>
-                onUpdateStatus({status: 0}) } mode="text"></IconButton>
+            <View style={{alignItems: "center"}}>
+              <IconButton icon={item.isBookmark ? "heart" : "heart-outline"}
+                size={26}
+                onPress={() => {
+                // setBookmark(!bookmark);
+                  dispatch(updateBookmark({id: item._id, add: !item.isBookmark}));
+                  item.isBookmark = !item.isBookmark;
+                }}
+                containerColor={item.isBookmark? "#DBF7F2" : "#D8DADF"}
+                iconColor={item.isBookmark? "#1770F6" : "#050505"}
+              />
+              <Text variant="bodyMedium">Save</Text>
+            </View>
           </View>
 
         </View>
@@ -121,7 +134,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   bottom: {
-    flexDirection: "row",
+    flexDirection: "column",
     flex: 1,
     alignItems: "flex-end",
     justifyContent: "flex-end",

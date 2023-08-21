@@ -23,7 +23,7 @@ const SearchScreen = ({navigation, route}) => {
     if (condition.keyword === "") {
       return;
     }
-    dispatch(search({params: {...condition, offset: 0}}));
+    dispatch(search({...condition, offset: 0}));
     setCondition((prev) => ({...prev, offset: 0}));
   };
 
@@ -52,8 +52,8 @@ const SearchScreen = ({navigation, route}) => {
     }
     console.log("SearchScreen::loadMore() - " + condition.offset + ", " +
      condition.limit);
-    dispatch(searchMore({params: {...condition,
-      offset: condition.offset + condition.limit}}));
+    dispatch(searchMore({...condition,
+      offset: condition.offset + condition.limit}));
 
     setCondition((prev) => ({...condition, offset: prev.offset + prev.limit}));
   };

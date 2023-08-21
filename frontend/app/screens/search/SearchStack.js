@@ -1,6 +1,6 @@
 import React, {useLayoutEffect} from "react";
 import {createNativeStackNavigator} from "@react-navigation/native-stack";
-import SearchScreen from "./listing/SearchScreen";
+import SearchScreen from "./SearchScreen";
 
 // const Stack = createStackNavigator();
 const Stack = createNativeStackNavigator();

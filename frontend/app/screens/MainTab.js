@@ -5,8 +5,10 @@ import MaterialCommunityIcons
   from "react-native-vector-icons/MaterialCommunityIcons";
 import ProfileStack from "./ProfileStack";
 import BookmarkStack from "./bookmark/BookmarkStack";
+import SearchScreen from "./search/SearchScreen";
+import SearchStack from "./search/SearchStack";
 import HomeStack from "./HomeStack";
-import MessengerStack from "./MessengerStack";
+import MessengerStack from "./messenger/MessengerStack";
 
 const Tab = createMaterialBottomTabNavigator();
 const MainTab = () => {
@@ -31,20 +33,19 @@ const MainTab = () => {
           headerTitleAlign: "center",
         }}
       />
+      <Tab.Screen
+        name="Search"
+        component={SearchStack}
+        options={{
+          headerTitle: "Search",
+          tabBarLabel: "Search",
+          tabBarIcon: ({color}) => (
+            <MaterialCommunityIcons name="magnify"
+              color={color} size={26} />
+          ),
+        }}
+      />
       {/**
-        <Tab.Screen
-            name="Search"
-            component={SearchScreen}
-            options={{
-                headerTitle: "Search",
-                tabBarLabel: "Search",
-                tabBarIcon: ({ color }) => (
-                    <MaterialCommunityIcons name="magnify"
-                    color={color} size={26} />
-                ),
-            }}
-        />
-         */}
       <Tab.Screen
         name="BookmarkStack"
         component={BookmarkStack}
@@ -56,6 +57,7 @@ const MainTab = () => {
           ),
         }}
       />
+         */}
       <Tab.Screen
         name="MessengerStack"
         component={MessengerStack}

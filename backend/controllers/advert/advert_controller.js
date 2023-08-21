@@ -160,8 +160,15 @@ const search = asyncHandler(async (req, res) => {
     .limit(limit)
     .exec();
 
-  logger.info("AdvertController::search - num records: " + adverts.length)
-  res.send(adverts)
+    // Check bookmark
+  const adverts2 = adverts.map((advert) => {
+    const isBookmark = req.user.bookmarks.includes(advert._id)
+    advert.set("isBookmark", isBookmark, {strict: false});
+    return advert;
+  })
+
+  logger.info("AdvertController::search - num records: " + adverts2.length)
+  res.send(adverts2)
 })
 
 const getMyAdverts = asyncHandler(async (req, res) => {

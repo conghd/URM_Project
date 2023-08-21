@@ -42,10 +42,10 @@ const BookmarkScreen = ({navigation, route}) => {
             <BookmarkItem key={item._id}
               item={item}
               onPress={() => {
-              // navigation.navigate('ListingItemDetails', {
-              //  item: item,
-              // productId: product.id,
-              // });
+                navigation.navigate("DetailsScreen", {
+                  item: item,
+                  // productId: product.id,
+                });
               }}
               onSold={() => {}}
               onDelete={() => {}}

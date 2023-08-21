@@ -9,7 +9,9 @@
       {
         "icon": "heart",
         "label": "My Favorites",
-        "type": "MCICon"
+        "type": "MCICon",
+        "screen": "BookmarkScreen"
+
       },
       {
         "icon": "account",

@@ -3,12 +3,13 @@ import {createNativeStackNavigator} from "@react-navigation/native-stack";
 import CreationScreen from "../screens/listing/CreationScreen";
 import DetailsScreen from "../screens/listing/DetailsScreen";
 import ScannerScreen from "../screens/listing/ScannerScreen";
-import SearchScreen from "../screens/listing/SearchScreen";
+import SearchScreen from "../screens/search/SearchScreen";
 import MainTab from "../screens/MainTab";
 import {Button} from "react-native-paper";
 import LocationScreen from "../screens/listing/LocationScreen";
 import MyListing from "../screens/account/MyListing";
 import MessagingScreen from "../screens/messenger/MessagingScreen";
+import BookmarkScreen from "../screens/bookmark/BookmarkScreen";
 // import SearchStack from "../screens/SearchStack";
 
 const Stack = createNativeStackNavigator();
@@ -82,6 +83,14 @@ const AppNavigator = () => {
         options={({navigation, route}) => (
           {
             title: "Messages",
+            // headerShown: false,
+          }
+        )}
+      />
+      <Stack.Screen name="BookmarkScreen" component={BookmarkScreen}
+        options={({navigation, route}) => (
+          {
+            title: "My Favorites",
             // headerShown: false,
           }
         )}
