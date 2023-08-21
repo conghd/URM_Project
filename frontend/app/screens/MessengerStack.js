@@ -1,12 +1,11 @@
 import {createNativeStackNavigator} from "@react-navigation/native-stack";
-import MessengerScreen from "./messenger/MessengerScreen";
-
+import ChatScreen from "./messenger/ChatScreen";
 // const Stack = createStackNavigator();
 const Stack = createNativeStackNavigator();
 const MessengerStack = () => {
   return (
     <Stack.Navigator>
-      <Stack.Screen name="Messenger" component={MessengerScreen}
+      <Stack.Screen name="Messenger" component={ChatScreen}
         options={{
           title: "Messenger",
           headerShown: true,

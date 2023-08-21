@@ -8,6 +8,7 @@ import MainTab from "../screens/MainTab";
 import {Button} from "react-native-paper";
 import LocationScreen from "../screens/listing/LocationScreen";
 import MyListing from "../screens/account/MyListing";
+import MessagingScreen from "../screens/messenger/MessagingScreen";
 // import SearchStack from "../screens/SearchStack";
 
 const Stack = createNativeStackNavigator();
@@ -73,6 +74,14 @@ const AppNavigator = () => {
         options={({navigation, route}) => (
           {
             title: "My Listings",
+            // headerShown: false,
+          }
+        )}
+      />
+      <Stack.Screen name="Messaging" component={MessagingScreen}
+        options={({navigation, route}) => (
+          {
+            title: "Messages",
             // headerShown: false,
           }
         )}

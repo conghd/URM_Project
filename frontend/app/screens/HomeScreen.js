@@ -60,13 +60,6 @@ const HomeScreen = ({navigation, route}) => {
     console.log("HomeScreen::useEffect - navigation");
     navigation.setOptions({
     });
-
-    Toast.show({
-      type: "info2",
-      text1: "Hello",
-      text2: "This is a message",
-      position: "bottom",
-    });
   }, [navigation]);
 
   return (
