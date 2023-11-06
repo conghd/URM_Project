@@ -84,6 +84,7 @@ const registerUser = asyncHandler(async (req, res) => {
   const existUser = await UserModel.findOne({ email })
   if (existUser) {
     res.status(400).json({
+      email: email,
       message: `User with email ${email} already existed. Please try another.`,
     });
     return;
@@ -199,6 +200,7 @@ const resendCode = asyncHandler(async (req, res) => {
     email: email,
     type: type,
     message: message,
+    code: code
   });
 })
 
@@ -424,6 +426,24 @@ const logoutUser = asyncHandler(async (req, res) => {
   });
 })
 
+const testUser = asyncHandler(async (req, res) => {
+  logger.info("UserController::testUser")
+  const user = await UserModel.findOne({name: "test0"})
+                  .select("-password")
+                  .select("-activated")
+                  .select("-activation_code")
+                  .select("-__v");
+  
+  res.send({token: generateToken(user._id)});
+})
+
+const deleteUser = asyncHandler(async (req, res) => {
+  logger.info("UserController::deleteUser")
+  const { email } = req.body;
+  await UserModel.deleteOne({email: email});
+
+  res.status(200).json({ email: email, message: "Account was deleted successfully!"});
+});
 
 const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -441,4 +461,6 @@ module.exports = {
   resendCode,
   resetPassword,
   changePassword,
+  testUser,
+  deleteUser,
 }

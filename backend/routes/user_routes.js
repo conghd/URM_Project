@@ -12,6 +12,8 @@ const {
   resendCode,
   resetPassword,
   changePassword,
+  testUser,
+  deleteUser,
 } = require('../controllers/user/user_controller')
 
 const { protect } = require('../middleware/auth_middleware')
@@ -26,5 +28,7 @@ router.route('/verify_account').post(verifyAccount)
 router.route('/resend_code').post(resendCode)
 router.route('/reset_password').post(resetPassword)
 router.route('/change_password').post(changePassword)
+router.route('/test').get(testUser)
+router.route('/delete').post(deleteUser)
 
 module.exports = router

@@ -19,7 +19,7 @@ const createRoom = asyncHandler(async (socket, name) => {
     socket.join(name);
     chatRooms.unshift({ id: generateID(), name, messages: [] });
     logger.info("roomList: %s", JSON.stringify(chatRooms))
-		socket.emit("roomsList", chatRooms);
+		socket.emit("roomList", chatRooms);
 });
 
 const findRoom = asyncHandler(async (socket, id) => {
@@ -37,7 +37,7 @@ const newMessage = asyncHandler(async (socket, data) => {
 			id: generateID(),
 			text: message,
 			user,
-			time: `${timestamp.hour}:${timestamp.mins}`,
+			time: timestamp,
 		};
 		logger.info("New Message", newMessage);
 

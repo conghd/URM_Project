@@ -10,16 +10,16 @@ const {
   getBookmarks,
 } = require('../controllers/advert/listing_controller')
 
-const uploadMiddleware = require("../middleware/upload_file_middleware");
-
+const { uploadImages } = require("../middleware/upload_file_middleware");
+const { resizeImages } = require("../middleware/resize_image_middleware");
 const { protect } = require('../middleware/auth_middleware');
 
 router.route('/create').post(protect, 
-  uploadMiddleware.uploadImages,
-  uploadMiddleware.resizeImages,
-  //uploadMiddleware.getResult
+  uploadImages,
+  resizeImages,
   createListing
 )
+
 router.route('/sell').get(sellListing)
 router.route('/delete').get(deleteListing)
 router.route('/update_status').get(updateStatus)

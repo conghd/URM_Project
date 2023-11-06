@@ -1,7 +1,5 @@
 const util = require("util");
 const multer = require("multer");
-const sharp = require("sharp");
-const crypto = require("crypto")
 
 const multerStorage = multer.memoryStorage();
 
@@ -34,49 +32,7 @@ const uploadImages = (req, res, next) => {
   });
 };
 
-/**
- * Resize Images
- */
-
-const resizeImages = async (req, res, next) => {
-  if (!req.files) return next();
-
-  req.body.images = [];
-  await Promise.all(
-    req.files.map(async (file, index) => {
-      //const filename = file.originalname.replace(/\..+$/, "");
-      const filename = crypto.randomBytes(16).toString("base64url");
-      const newFilename = `urm-${Date.now()}-${filename}.jpeg`;
-
-      await sharp(file.buffer)
-        //.resize(640, 320)
-        .resize(640)
-        .toFormat("jpeg")
-        .jpeg({ quality: 90 })
-        .toFile(`public/upload/images/${newFilename}`);
-
-      req.body.images.push(newFilename);
-    })
-  );
-
-  next();
-};
-
-const getResult = async (req, res) => {
-  if (req.body.images.length <= 0) {
-    return res.send(`You must select at least 1 image.`);
-  }
-
-  const images = req.body.images
-    .map(image => "" + image + "")
-    .join("");
-
-  return res.send(`Images were uploaded:${images}`);
-};
-
 
 module.exports = {
-  uploadImages: uploadImages,
-  resizeImages: resizeImages,
-  getResult: getResult
+  uploadImages
 }
