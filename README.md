@@ -1,4 +1,4 @@
-# CS739_Capstone_Project
+# UR Marketplace Project 
 
 
 How to run the project
