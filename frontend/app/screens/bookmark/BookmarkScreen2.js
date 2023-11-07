@@ -73,10 +73,14 @@ const BookmarkScreen2 = () => {
           closeOnPressMask={false}
           customStyles={{
             wrapper: {
-              backgroundColor: "transparent",
+              // backgroundColor: "#fff",
             },
             draggableIcon: {
               backgroundColor: "#000",
+            },
+            container: {
+              borderTopLeftRadius: 10,
+              borderTopRightRadius: 10,
             },
           }}
         >

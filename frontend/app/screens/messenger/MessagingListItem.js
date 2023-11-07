@@ -4,9 +4,9 @@ import {Ionicons} from "@expo/vector-icons";
 import {useNavigation} from "@react-navigation/native";
 import {styles} from "./MessengerStyles";
 
-const ChatItem = ({item}) => {
+const MessagingListItem = ({item}) => {
   const navigation = useNavigation();
-  const [messages, setMessages] = useState({});
+  const [messages, setMessages] = useState([]);
 
   // 👇🏻 Retrieves the last message in the array from the item prop
   useLayoutEffect(() => {
@@ -48,4 +48,4 @@ const ChatItem = ({item}) => {
   );
 };
 
-export default ChatItem;
+export default MessagingListItem;

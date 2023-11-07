@@ -9,13 +9,15 @@ import {createAdvert, resetCreateAdvertState as reset}
   from "../../services/advert/advertSlice";
 import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
 import {theme} from "../../constants";
+import {Picker} from "@react-native-picker/picker";
 
 const CreationScreen = ({navigation, route}) => {
   const [selectedId, setSelectedId] = useState(null);
   const dispatch = useDispatch();
   const {loc, book} = route.params;
-
+  const [selectedLanguage, setSelectedLanguage] = useState();
   const listRef = useRef();
+  const pickerRef = useRef();
 
   const [formData, setFormData] = useState({
     title: "",
@@ -328,7 +330,12 @@ const CreationScreen = ({navigation, route}) => {
             right={<TextInput.Icon icon="menu-down" />}
           />
         </View>
+        <View style={[theme.STYLE.row, styles.row]}>
+        </View>
 
+        {/**
+         *
+         */}
         <View style={[theme.STYLE.row, styles.row]}>
           <TextInput
             style={[theme.STYLE.textInput, styles.textInput]}

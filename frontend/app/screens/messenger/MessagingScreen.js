@@ -1,5 +1,6 @@
 import React, {useEffect, useLayoutEffect, useState} from "react";
 import {View, TextInput, Text, FlatList, Pressable} from "react-native";
+import moment from "moment";
 import socket from "../../utils/socket";
 import {styles} from "./MessengerStyles";
 import MessagingItem from "./MessagingItem";
@@ -12,22 +13,12 @@ const MessagingScreen = ({route, navigation}) => {
   const [message, setMessage] = useState("");
 
   const handleNewMessage = () => {
-    const hour =
-			new Date().getHours() < 10 ?
-				`0${new Date().getHours()}` :
-				`${new Date().getHours()}`;
-
-    const mins =
-			new Date().getMinutes() < 10 ?
-				`0${new Date().getMinutes()}` :
-				`${new Date().getMinutes()}`;
-
     if (user) {
       socket.emit("newMessage", {
         message,
         room_id: id,
         user,
-        timestamp: {hour, mins},
+        timestamp: moment().format("HH:mm"),
       });
     }
   };
@@ -36,12 +27,21 @@ const MessagingScreen = ({route, navigation}) => {
     navigation.setOptions({title: name});
     // getUsername();
     socket.emit("findRoom", id);
-    socket.on("foundRoom", (roomChats) => setChatMessages(roomChats));
+    socket.on("foundRoom", (roomChats) => {
+      console.log("foundRoom1");
+      setChatMessages(roomChats);
+    });
   }, []);
 
+  /*
   useEffect(() => {
-    socket.on("foundRoom", (roomChats) => setChatMessages(roomChats));
+    socket.on("foundRoom", (roomChats) => {
+      console.log("foundRoom2");
+      setChatMessages(roomChats);
+    });
   }, [socket]);
+
+  */
 
   return (
     <View style={styles.messagingscreen}>
@@ -52,16 +52,16 @@ const MessagingScreen = ({route, navigation}) => {
         ]}
       >
         {chatMessages[0] ? (
-					<FlatList
-					  data={chatMessages}
-					  renderItem={({item}) => (
-					    <MessagingItem item={item} user={user} />
-					  )}
-					  keyExtractor={(item) => item.id}
-					/>
-				) : (
-					""
-				)}
+        <FlatList
+          data={chatMessages}
+          renderItem={({item}) => (
+            <MessagingItem item={item} user={user} />
+          )}
+          keyExtractor={(item) => item.id}
+        />
+        ) : (
+          ""
+        )}
       </View>
 
       <View style={styles.messaginginputContainer}>

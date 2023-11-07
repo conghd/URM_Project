@@ -2,38 +2,35 @@ import React, {useState, useEffect, useLayoutEffect} from "react";
 import {Text, View, StyleSheet, Pressable, SafeAreaView, FlatList}
   from "react-native";
 import {Feather} from "@expo/vector-icons";
-import ChatItem from "./ChatItem";
+import MessagingListItem from "./MessagingListItem";
 import {styles} from "./MessengerStyles";
-import {rooms} from "./rooms";
 import socket from "../../utils/socket";
 
 
-const ChatScreen = ({navigation, route}) => {
+const MessagingListScreen = ({navigation, route}) => {
+  const [roomList, setRoomList] = useState([]);
+
   useEffect(() => {
     console.log("Messenger::useEffect()");
   }, []);
 
   useLayoutEffect(() => {
-    navigation.setOptions({
-      headerRight: () => (
-        <Pressable onPress={() => {
-          socket.emit("createRoom", "Hoang Duc Cong's room");
-        }}
-        >
-          <Feather name='edit' size={24} color='green' />
-        </Pressable>
-      ),
-    });
   }, [navigation]);
 
+  useEffect(() => {
+    socket.on("roomList", (newRoomList) => {
+      console.log("roomList: " + JSON.stringify(newRoomList));
+      setRoomList(newRoomList);
+    });
+  }, [socket]);
 
   return (
     <SafeAreaView style={styles.chatscreen}>
       <View style={styles.chatlistContainer}>
-        {rooms.length > 0 ? (
+        {roomList.length > 0 ? (
             <FlatList
-              data={rooms}
-              renderItem={({item}) => <ChatItem item={item} />}
+              data={roomList}
+              renderItem={({item}) => <MessagingListItem item={item} />}
               keyExtractor={(item) => item.id}
             />
         ) : (
@@ -59,4 +56,4 @@ const styles = StyleSheet.create({
 });
 */
 
-export default ChatScreen;
+export default MessagingListScreen;

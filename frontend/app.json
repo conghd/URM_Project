@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "UR Marketplace",
-    "slug": "frontend",
+    "slug": "urm",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",

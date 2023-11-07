@@ -10,6 +10,7 @@ import LocationScreen from "../screens/listing/LocationScreen";
 import MyListing from "../screens/account/MyListing";
 import MessagingScreen from "../screens/messenger/MessagingScreen";
 import BookmarkScreen from "../screens/bookmark/BookmarkScreen";
+import BookmarkScreen2 from "../screens/bookmark/BookmarkScreen2";
 // import SearchStack from "../screens/SearchStack";
 
 const Stack = createNativeStackNavigator();
@@ -87,7 +88,7 @@ const AppNavigator = () => {
           }
         )}
       />
-      <Stack.Screen name="BookmarkScreen" component={BookmarkScreen}
+      <Stack.Screen name="BookmarkScreen" component={BookmarkScreen2}
         options={({navigation, route}) => (
           {
             title: "My Favorites",

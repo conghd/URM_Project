@@ -24,9 +24,9 @@ const MessagingItem = ({item, user}) => {
           />
           <View
             style={
-							status ?
-								styles.mmessage :
-								[styles.mmessage, {backgroundColor: "rgb(194, 243, 194)"}]
+              status ?
+              styles.mmessage :
+              [styles.mmessage, {backgroundColor: "rgb(194, 243, 194)"}]
             }
           >
             <Text>{item.text}</Text>
